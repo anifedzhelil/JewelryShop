@@ -1,0 +1,56 @@
+﻿@model  JewelryShop.Web.ViewModels.Administration.Jewelry.IndexViewModel
+@{
+    ViewData["Title"] = "Galilani";
+}
+<a class="btn-link" asp-area="Administration" asp-controller="Jewelry" asp-action="Create">Добави продукт</a>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Снимка
+            </th>
+            <th>
+                Име
+            </th>
+            <th>
+                Цена
+            </th>
+            <th>
+                Брой
+            </th>
+            <th>
+                Активиран
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Jewelry)
+        {
+            <tr>
+                <td>
+                    <img src="@item.ImageUr" style="width:100px" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Count)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsActive)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.JewelId">Редактирай</a> |
+                    <a asp-action="Details" asp-route-id="@item.JewelId">Детайл</a> |
+                    <a asp-action="Delete" asp-route-id="@item.JewelId">Изтрий</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

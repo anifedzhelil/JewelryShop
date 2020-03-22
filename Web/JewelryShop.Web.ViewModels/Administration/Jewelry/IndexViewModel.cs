@@ -1,4 +1,4 @@
-﻿namespace JewelryShop.Web.ViewModels.Home
+﻿namespace JewelryShop.Web.ViewModels.Administration.Jewelry
 {
     using System;
     using System.Collections.Generic;
