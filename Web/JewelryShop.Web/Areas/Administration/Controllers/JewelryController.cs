@@ -6,13 +6,14 @@
     using System.Threading.Tasks;
 
     using CloudinaryDotNet;
+    using JewelryShop.Data.Models;
     using JewelryShop.Services.Data;
     using JewelryShop.Web.Controllers;
     using JewelryShop.Web.ViewModels.Administration.Jewelry;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
-    [Authorize]
+    [Authorize(Roles = "Administrator")]
     [Area("Administration")]
     public class JewelryController : BaseController
     {
@@ -37,7 +38,7 @@
 
         public IActionResult Create()
         {
-            return this.View();
+                return this.View();
         }
     }
 }
