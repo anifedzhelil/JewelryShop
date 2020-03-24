@@ -1,0 +1,68 @@
+﻿@model JewelryShop.Web.ViewModels.Home.JewerlyDetailViewModel
+
+@{
+    ViewData["Title"] = "Details";
+    var num = 0;
+    var imageCount = Model.Images.Count();
+}
+<div style="width: 100%; display: table;">
+    <div style="display: table-row; height: 100px;">
+        <div style="width: 50%; display: table-cell; padding:5%;">
+            <div style="width:100%;">
+                <img src="@Model.Images.ElementAt(0)" style="width:100%">
+            </div>
+
+            @if (imageCount > 1)
+            {
+                <div style="display: table-row; height: 100%;">
+                    @for (num = 1; num < 3; num++)
+                    {
+                        @if (imageCount > num)
+                        {
+                            <div style="display: table-cell; width:30%;">
+
+                                <img src="@Model.Images.ElementAt(num)" style="width:100%">
+
+                            </div>
+                        }
+                        else
+                        {
+                            <div style=" padding: 100px; width: 30%; display: table-cell;"></div>
+                        }
+                    }
+                </div>
+            }
+        </div>
+        <div style="display: table-cell;padding:5%; top:10px; vertical-align: top;" class="col-md-6 mb-4">
+            <h3>@Model.Name</h3>
+            @if (Model.SaleDate > DateTime.UtcNow)
+            {
+                <p>Стара цена: @Model.Price лв</p>
+                <p>Промоционална цена: @Model.SalePrice</p>
+                <p>Дата на промоцията: @Model.SaleDate.ToString("MM/dd/yyyy")</p>
+            }
+            else
+            {
+                <h4>@Model.Price лв</h4>
+
+            }
+            <p>@Model.Description</p>
+
+            <p>Брой: @Model.Count</p>
+            <div class="rate">
+                <input type="radio" id="star5" name="rate" value="5" />
+                <label for="star5" title="text">5 stars</label>
+                <input type="radio" id="star4" name="rate" value="4" />
+                <label for="star4" title="text">4 stars</label>
+                <input type="radio" id="star3" name="rate" value="3" />
+                <label for="star3" title="text">3 stars</label>
+                <input type="radio" id="star2" name="rate" value="2" />
+                <label for="star2" title="text">2 stars</label>
+                <input type="radio" id="star1" name="rate" value="1" />
+                <label for="star1" title="text">1 star</label>
+            </div>
+
+            <input type="submit" value="Купи" class="btn btn-primary" />
+        </div>
+    </div>
+</div>

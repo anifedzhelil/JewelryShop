@@ -4,11 +4,12 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+
     using AutoMapper;
     using JewelryShop.Data.Models;
     using JewelryShop.Services.Mapping;
 
-    public class IndexJewelryViewModel : IMapFrom<Jewel>, IHaveCustomMappings
+    public class JewerlyDetailViewModel : IMapFrom<Jewel>, IHaveCustomMappings
     {
         public int Id { get; set; }
 
@@ -22,14 +23,18 @@
 
         public DateTime SaleDate { get; set; }
 
-        public string ImageUrl { get; set; }
+        public int Count { get; set; }
+
+        public int Category { get; set; }
+
+        public IEnumerable<string> Images { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
         {
-            configuration.CreateMap<Jewel, IndexJewelryViewModel>()
+            configuration.CreateMap<Jewel, JewerlyDetailViewModel>()
             .ForMember(
-                d => d.ImageUrl,
-                opt => opt.MapFrom(x => x.Images.Select(t => t.ImageUrl).FirstOrDefault()));
+                d => d.Images,
+                opt => opt.MapFrom(x => x.Images.Select(t => t.ImageUrl)));
         }
     }
 }

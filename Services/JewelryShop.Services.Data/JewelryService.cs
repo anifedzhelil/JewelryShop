@@ -28,5 +28,57 @@
 
             return query.To<T>().ToArray();
         }
+
+        public IEnumerable<T> GetAllActived<T>(int? count = null)
+        {
+            IQueryable<Jewel> query = this.jewelryRepository.All()
+             .OrderBy(c => c.CreatedOn)
+             .Where(x => x.IsArchived == false);
+
+            if (count.HasValue)
+            {
+                query = query.Take(count.Value);
+            }
+
+            return query.To<T>().ToArray();
+        }
+
+        public IEnumerable<T> GetAllActivedByCategories<T>(int? category, int? count = null)
+        {
+            if (category.HasValue)
+            {
+                IQueryable<Jewel> query = this.jewelryRepository.All()
+                .OrderBy(c => c.CreatedOn)
+                .Where(x => x.IsArchived == false && x.Category == category);
+
+                if (count.HasValue)
+                {
+                    query = query.Take(count.Value);
+                }
+
+                return query.To<T>().ToArray();
+            }
+            else
+            {
+                IQueryable<Jewel> query = this.jewelryRepository.All()
+                   .OrderBy(c => c.CreatedOn)
+                   .Where(x => x.IsArchived == false);
+
+                if (count.HasValue)
+                {
+                    query = query.Take(count.Value);
+                }
+
+                return query.To<T>().ToArray();
+            }
+        }
+
+        public T GetById<T>(int id)
+        {
+            return this.jewelryRepository.All()
+                .Where(c => c.Id == id)
+                .To<T>()
+                .FirstOrDefault();
+        }
     }
 }

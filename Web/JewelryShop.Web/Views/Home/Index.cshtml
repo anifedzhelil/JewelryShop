@@ -1,9 +1,68 @@
-﻿@using JewelryShop.Common
+﻿@model JewelryShop.Web.ViewModels.Home.IndexViewModel
+@inject JewelryShop.Services.Data.IJewelryCategoriesService  jewelryCategoriesService
 @{
     this.ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome to @GlobalConstants.SystemName!</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <img src="~/images/banner.jpeg" />
+
+    <form>
+        <input type="search" class="form-control" />
+    </form>
 </div>
+
+<!-- /.col-lg-3 -->
+<div class="container">
+
+    <div class="row">
+
+        <div class="col-lg-3">
+
+            <h1 class="my-4">Shop Name</h1>
+            <div class="list-group">
+
+                @foreach (var item in jewelryCategoriesService.GetJewelryCategories())
+                {
+                    <a class="list-group-item" asp-area="" asp-controller="Home" asp-route-category="@item.Key" asp-action="Index">@item.Value</a>
+                    <hr>
+
+                }
+            </div>
+        </div>
+        <!-- /.col-lg-3 -->
+
+        <div class="col-lg-9">
+            <div class="row">
+                @foreach (var item in this.Model.Jewelry)
+                {
+                    <div class="col-lg-4 col-md-3 mb-4">
+                        <div class="card h-100" style="align-content:center">
+                            <a asp-action="Details" asp-route-id="@item.Id" asp-controller="Home"><img class="card-img-bottom" style="height:200px;" src="@item.ImageUrl" alt=""></a>
+                            <div class="card-body">
+                                <h4 class="card-title">
+                                    <a href="#">@item.Name</a>
+                                </h4>
+                                @if (item.SaleDate > DateTime.Now)
+                                {
+                                    <p>Промоционална цена:<br/> @item.SalePrice лв</p>
+                                    <p class="card-text">Дата на промоцията:<br /> @item.SaleDate.Date.ToShortDateString()</p>
+
+                                }
+                                else
+                                {
+                                    <h5>@item.Price лв</h5>
+                                }
+                            </div>
+                            <div class="card-footer">
+                                <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <!-- /.row -->
+        </div>
+    </div>
+</div>
+

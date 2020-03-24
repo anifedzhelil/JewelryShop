@@ -3,8 +3,8 @@
     using System.Diagnostics;
     using System.Linq;
 
-    using JewelryShop.Data.Common.Repositories;
     using JewelryShop.Data.Models;
+    using JewelryShop.Services.Data;
     using JewelryShop.Services.Mapping;
     using JewelryShop.Web.ViewModels;
     using JewelryShop.Web.ViewModels.Home;
@@ -12,21 +12,19 @@
 
     public class HomeController : BaseController
     {
-        private readonly IDeletableEntityRepository<Jewel> jewelryRepository;
+        private readonly IJewelryService jewelryService;
 
-        public HomeController(IDeletableEntityRepository<Jewel> jewelryRepository)
+        public HomeController(IJewelryService jewelryService)
         {
-            this.jewelryRepository = jewelryRepository;
+            this.jewelryService = jewelryService;
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Index(int? category)
         {
-            IQueryable<Jewel> query = this.jewelryRepository.All();
-
             IndexViewModel viewModel = new IndexViewModel()
             {
-                Jewelry = query.To<IndexJewelryViewModel>().ToArray(),
+                Jewelry = this.jewelryService.GetAllActivedByCategories<IndexJewelryViewModel>(category),
             };
 
             return this.View(viewModel);
@@ -37,6 +35,18 @@
             return this.View();
         }
 
+        public IActionResult Details(int id)
+        {
+            if (id < 0)
+            {
+                return this.NotFound();
+            }
+
+            JewerlyDetailViewModel viewModel = this.jewelryService.GetById<JewerlyDetailViewModel>(id);
+
+            return this.View(viewModel);
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
@@ -44,4 +54,5 @@
                 new ErrorViewModel { RequestId = Activity.Current?.Id ?? this.HttpContext.TraceIdentifier });
         }
     }
+
 }
