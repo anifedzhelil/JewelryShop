@@ -5,6 +5,8 @@
     using System.ComponentModel.DataAnnotations;
     using System.Text;
 
+    using JewelryShop.Web.ViewModels.ValidationAttributes;
+
     public class CreateJewelViewModel
     {
         [Required(ErrorMessage = "Моля въведете име")]
@@ -17,17 +19,18 @@
         [Required(ErrorMessage = "Моля въведете описание")]
         public string Description { get; set; }
 
-        [Required(ErrorMessage = "Моля изберете тип")]
-        public int? JewelType { get; set; }
-
         [DataType(DataType.Currency)]
-        public decimal SalePrice { get; set; }
+        [SalePriceLessThan("Price", "SaleDate")]
+        public decimal? SalePrice { get; set; }
 
-        public DateTime SaleDate { get; set; }
+        [SaleDateLessThan("SalePrice")]
+        [DataType(DataType.DateTime)]
+        public DateTime? SaleDate { get; set; }
 
         [Required(ErrorMessage = "Моля въведете брой")]
         public int Count { get; set; }
 
+        [Required(ErrorMessage = "Моля  изберете категория")]
         public int Category { get; set; }
 
         public bool IsArchived { get; set; }

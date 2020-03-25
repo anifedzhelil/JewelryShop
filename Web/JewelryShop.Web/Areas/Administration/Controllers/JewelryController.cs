@@ -37,8 +37,21 @@
         }
 
         public IActionResult Create()
+         {
+                 return this.View();
+         }
+
+        [HttpPost]
+        public ActionResult Create(CreateJewelViewModel input)
         {
-                return this.View();
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(input);
+            }
+            else
+            {
+                return this.RedirectToAction("Index");
+            }
         }
     }
 }
