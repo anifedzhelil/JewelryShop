@@ -74,6 +74,7 @@
             services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<IJewelryService, JewelryService>();
+            services.AddTransient<IJewelryImagesService, JewelryImagesService>();
             services.AddTransient<IJewelryCategoriesService, JewelryCategoriesService>();
         }
 

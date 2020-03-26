@@ -3,10 +3,12 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
 
     using JewelryShop.Data.Common.Repositories;
     using JewelryShop.Data.Models;
     using JewelryShop.Services.Mapping;
+    using JewelryShop.Web.ViewModels.Administration.Jewelry;
 
     public class JewelryService : IJewelryService
     {
@@ -15,6 +17,25 @@
         public JewelryService(IDeletableEntityRepository<Jewel> jewelryRepository)
         {
             this.jewelryRepository = jewelryRepository;
+        }
+
+        public async Task<int> AddAsync(CreateJewelViewModel createJewelModel)
+        {
+            var jewel = new Jewel
+            {
+                Name = createJewelModel.Name,
+                Price = createJewelModel.Price,
+                Description = createJewelModel.Description,
+                Category = createJewelModel.Category,
+                SalePrice = createJewelModel.SalePrice,
+                SaleDate = createJewelModel.SaleDate,
+                Count = createJewelModel.Count,
+                IsArchived = createJewelModel.IsArchived,
+            };
+
+            await this.jewelryRepository.AddAsync(jewel);
+            await this.jewelryRepository.SaveChangesAsync();
+            return jewel.Id;
         }
 
         public IEnumerable<T> GetAll<T>(int? count = null)

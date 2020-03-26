@@ -1,12 +1,12 @@
-﻿using JewelryShop.Data.Models;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Reflection;
-using System.Text;
-
-namespace JewelryShop.Services.Data
+﻿namespace JewelryShop.Services.Data
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.Reflection;
+    using System.Text;
+
+    using JewelryShop.Data.Models;
 
     public class JewelryCategoriesService : IJewelryCategoriesService
     {

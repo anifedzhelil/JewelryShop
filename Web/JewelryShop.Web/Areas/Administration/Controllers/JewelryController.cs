@@ -8,9 +8,11 @@
     using CloudinaryDotNet;
     using JewelryShop.Data.Models;
     using JewelryShop.Services.Data;
+    using JewelryShop.Web.CloudinaryHelper;
     using JewelryShop.Web.Controllers;
     using JewelryShop.Web.ViewModels.Administration.Jewelry;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 
     [Authorize(Roles = "Administrator")]
@@ -19,11 +21,13 @@
     {
         private readonly Cloudinary cloudinary;
         private readonly IJewelryService jewelryService;
+        private readonly IJewelryImagesService jewelryImagesService;
 
-        public JewelryController(Cloudinary cloudinary, IJewelryService jewelryService)
+        public JewelryController(Cloudinary cloudinary, IJewelryService jewelryService, IJewelryImagesService jewelryImagesService)
         {
             this.jewelryService = jewelryService;
             this.cloudinary = cloudinary;
+            this.jewelryImagesService = jewelryImagesService;
         }
 
         public IActionResult Index()
@@ -42,14 +46,21 @@
          }
 
         [HttpPost]
-        public ActionResult Create(CreateJewelViewModel input)
+        public async Task<ActionResult> CreateAsync(CreateJewelViewModel createJewel, ICollection<IFormFile> imagesFiles)
         {
             if (!this.ModelState.IsValid)
             {
-                return this.View(input);
+                return this.View(createJewel);
             }
             else
             {
+                int jewelId = await this.jewelryService.AddAsync(createJewel);
+                if (jewelId > 0)
+                {
+                    var listUrls = await CloudinaryExtention.UploadAsync(this.cloudinary, imagesFiles);
+                    await this.jewelryImagesService.AddAsync(jewelId, listUrls);
+                }
+
                 return this.RedirectToAction("Index");
             }
         }

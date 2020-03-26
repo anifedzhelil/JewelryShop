@@ -3,6 +3,9 @@
     using System;
     using System.Collections.Generic;
     using System.Text;
+    using System.Threading.Tasks;
+
+    using JewelryShop.Web.ViewModels.Administration.Jewelry;
 
     public interface IJewelryService
     {
@@ -13,5 +16,8 @@
         IEnumerable<T> GetAllActivedByCategories<T>(int? category, int? count = null);
 
         T GetById<T>(int id);
+
+        Task<int> AddAsync(CreateJewelViewModel createJewelModel);
+
     }
 }
