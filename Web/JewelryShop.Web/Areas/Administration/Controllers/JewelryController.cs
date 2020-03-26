@@ -64,5 +64,17 @@
                 return this.RedirectToAction("Index");
             }
         }
+
+        public IActionResult Edit(int id)
+        {
+            if (id < 0)
+            {
+                return this.NotFound();
+            }
+
+            EditJewelViewModel editViewModel = this.jewelryService.GetById<EditJewelViewModel>(id);
+
+            return this.View(editViewModel);
+        }
     }
 }

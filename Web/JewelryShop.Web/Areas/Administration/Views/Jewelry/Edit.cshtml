@@ -1,0 +1,65 @@
+﻿@model JewelryShop.Web.ViewModels.Administration.Jewelry.EditJewelViewModel
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Update" asp-route-id="@Model.Id" asp-controller="Jewelry" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label">Име</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label">Цена</label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label">Описание</label>
+                <textarea asp-for="Description" class="form-control" rows="10" cols="50"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Category" class="control-label">Тип бижута</label>
+                <select asp-for="Category" class="form-control" asp-items="@Html.GetEnumSelectList(typeof(JewelryShop.Data.Models.JewelryCategories.JewelryCategoriesEnum))">
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="SalePrice" class="control-label">Промоционална цена</label>
+                <input asp-for="SalePrice" class="form-control" type="number" />
+            </div>
+            <div class="form-group">
+                <label asp-for="SaleDate" class="control-label">Дата на промоцията</label>
+                <input asp-for="SaleDate" class="form-control" type="date" />
+            </div>
+            <div class="form-group">
+                <label class="control-label"></label>
+                <input type="file" />
+            </div>
+            @foreach (var item in Model.Images)
+            {
+                <div class="form-group">
+                    <img src="@item" width="100px" />
+                </div>
+            }
+            <div class="form-group">
+                <label asp-for="Count" class="control-label">Брой</label>
+                <input asp-for="Count" class="form-control" type="number" />
+                <span asp-validation-for="Count" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsArchived" /> Архивиран
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Запази" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

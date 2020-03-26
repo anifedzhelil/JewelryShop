@@ -18,6 +18,5 @@
         T GetById<T>(int id);
 
         Task<int> AddAsync(CreateJewelViewModel createJewelModel);
-
     }
 }
