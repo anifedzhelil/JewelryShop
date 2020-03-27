@@ -30,6 +30,8 @@
 
         public DbSet<JewelImages> JewelryImages { get; set; }
 
+        public DbSet<Raiting> JewelryRaitings { get; set; }
+
         public override int SaveChanges() => this.SaveChanges(true);
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
