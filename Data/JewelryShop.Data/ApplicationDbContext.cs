@@ -30,7 +30,7 @@
 
         public DbSet<JewelImages> JewelryImages { get; set; }
 
-        public DbSet<Raiting> JewelryRaitings { get; set; }
+        public DbSet<Rating> JewelryRatings { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
 

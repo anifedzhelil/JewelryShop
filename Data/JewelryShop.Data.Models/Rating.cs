@@ -7,7 +7,7 @@
 
     using JewelryShop.Data.Common.Models;
 
-    public class Raiting : BaseModel<int>
+    public class Rating : BaseModel<int>
     {
         public int JewelId { get; set; }
 
@@ -18,6 +18,8 @@
 
         public virtual ApplicationUser User { get; set; }
 
-        public RaitingType Type { get; set; }
+        public string? Review { get; set; }
+
+        public RatingType Type { get; set; }
     }
 }

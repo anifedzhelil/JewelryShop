@@ -1,10 +1,6 @@
 ﻿namespace JewelryShop.Data.Models
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-
-    public enum RaitingType
+{ 
+    public enum RatingType
     {
         Poor = 1,
         Fair = 2,

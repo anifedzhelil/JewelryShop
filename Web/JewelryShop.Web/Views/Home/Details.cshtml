@@ -46,23 +46,119 @@
                 <h4>@Model.Price лв</h4>
 
             }
-            <p>@Model.Description</p>
+            <div id="totalRatings">@Model.Ratings</div>
 
             <p>Брой: @Model.Count</p>
-            <div class="rate">
-                <input type="radio" id="star5" name="rate" value="5" />
-                <label for="star5" title="text">5 stars</label>
-                <input type="radio" id="star4" name="rate" value="4" />
-                <label for="star4" title="text">4 stars</label>
-                <input type="radio" id="star3" name="rate" value="3" />
-                <label for="star3" title="text">3 stars</label>
-                <input type="radio" id="star2" name="rate" value="2" />
-                <label for="star2" title="text">2 stars</label>
-                <input type="radio" id="star1" name="rate" value="1" />
-                <label for="star1" title="text">1 star</label>
-            </div>
-
+            <p></p>
             <input type="submit" value="Купи" class="btn btn-primary" />
         </div>
     </div>
 </div>
+
+
+<div class="tabs" style="width:100%;">
+    <div class="tab-button-outer">
+        <ul id="tab-button">
+            <li><a href="#tab01">Описание</a></li>
+            <li><a href="#tab02">Отзив</a></li>
+        </ul>
+    </div>
+    <div class="tab-select-outer">
+        <select id="tab-select">
+            <option value="#tab01">Описание</option>
+            <option value="#tab02">Отзив</option>
+        </select>
+    </div>
+
+    <div id="tab01" class="tab-contents">
+        <h2>Описание</h2>
+        <p>@Model.Description</p>
+    </div>
+    <div id="tab02" class="tab-contents">
+        <h2>Отзив</h2>
+        <form id="ratingsForm" method="post"></form>
+        <div class="rating">
+            <input type="radio" name="rating" value="5" id="5">
+            <label for="5">☆</label>
+            <input type="radio" name="rating" value="4" id="4">
+            <label for="4">☆</label>
+            <input type="radio" name="rating" value="3" id="3">
+            <label for="3">☆</label>
+            <input type="radio" name="rating" value="2" id="2">
+            <label for="2">☆</label>
+            <input type="radio" name="rating" value="1" id="1">
+            <label for="1">☆</label>
+        </div>
+        <br />
+        <div class="form-group">
+            <label  class="control-label">Отзив</label>
+            <textarea  id="review" class="form-control" rows="10" cols="50"></textarea>
+        </div>
+        <input type="submit" class="btn btn-primary" onclick="rate(@Model.Id)" />
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        function rate(id) {
+            var radios = document.getElementsByName('rating');
+            var length = radios.length;
+            var selected_value = -1;
+            for (var i = 0; i < length; ++i) {
+                if (radios[i].checked) {
+                    selected_value = radios[i].value;
+                    break;
+                }
+            }
+
+            var review = document.getElementById("review").value;
+            var token = $("#ratingsForm input[name=__RequestVerificationToken]").val();
+            var json = { jewelId: id, rating: parseInt(selected_value), review: review };
+
+            $.ajax({
+                url: "/api/ratings",
+                type: "POST",
+                data: JSON.stringify(json),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                headers: { 'X-CSRF-TOKEN': token },
+                success: function (data) {
+                    $("#totalRatings").html(data.avarageRating);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                }
+            });
+        }
+        $(function () {
+            var $tabButtonItem = $('#tab-button li'),
+                $tabSelect = $('#tab-select'),
+                $tabContents = $('.tab-contents'),
+                activeClass = 'is-active';
+
+            $tabButtonItem.first().addClass(activeClass);
+            $tabContents.not(':first').hide();
+
+            $tabButtonItem.find('a').on('click', function (e) {
+                var target = $(this).attr('href');
+
+                $tabButtonItem.removeClass(activeClass);
+                $(this).parent().addClass(activeClass);
+                $tabSelect.val(target);
+                $tabContents.hide();
+                $(target).show();
+                e.preventDefault();
+            });
+
+            $tabSelect.on('change', function () {
+                var target = $(this).val(),
+                    targetSelectNum = $(this).prop('selectedIndex');
+
+                $tabButtonItem.removeClass(activeClass);
+                $tabButtonItem.eq(targetSelectNum).addClass(activeClass);
+                $tabContents.hide();
+                $(target).show();
+            });
+        });
+    </script>
+}

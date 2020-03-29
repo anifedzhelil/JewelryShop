@@ -3,12 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace JewelryShop.Data.Migrations
 {
-    public partial class AddRaitings : Migration
+    public partial class JewelryRatings : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "JewelryRaitings",
+                name: "JewelryRatings",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -17,19 +17,20 @@ namespace JewelryShop.Data.Migrations
                     ModifiedOn = table.Column<DateTime>(nullable: true),
                     JewelId = table.Column<int>(nullable: false),
                     UserId = table.Column<string>(nullable: false),
+                    Review = table.Column<string>(nullable: true),
                     Type = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_JewelryRaitings", x => x.Id);
+                    table.PrimaryKey("PK_JewelryRatings", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_JewelryRaitings_Jewelry_JewelId",
+                        name: "FK_JewelryRatings_Jewelry_JewelId",
                         column: x => x.JewelId,
                         principalTable: "Jewelry",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_JewelryRaitings_AspNetUsers_UserId",
+                        name: "FK_JewelryRatings_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -37,20 +38,20 @@ namespace JewelryShop.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_JewelryRaitings_JewelId",
-                table: "JewelryRaitings",
+                name: "IX_JewelryRatings_JewelId",
+                table: "JewelryRatings",
                 column: "JewelId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_JewelryRaitings_UserId",
-                table: "JewelryRaitings",
+                name: "IX_JewelryRatings_UserId",
+                table: "JewelryRatings",
                 column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "JewelryRaitings");
+                name: "JewelryRatings");
         }
     }
 }

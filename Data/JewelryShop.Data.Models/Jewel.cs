@@ -11,6 +11,7 @@
         public Jewel()
         {
             this.Images = new HashSet<JewelImages>();
+            this.Ratings = new HashSet<Rating>();
         }
 
         public string Name { get; set; }
@@ -30,5 +31,7 @@
         public bool IsArchived { get; set; }
 
         public virtual ICollection<JewelImages> Images { get; set; }
+       
+        public virtual ICollection<Rating> Ratings { get; set; }
     }
 }

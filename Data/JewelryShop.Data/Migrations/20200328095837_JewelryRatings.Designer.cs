@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JewelryShop.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200327100310_AddRaitings")]
-    partial class AddRaitings
+    [Migration("20200328095837_JewelryRatings")]
+    partial class JewelryRatings
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -223,7 +223,7 @@ namespace JewelryShop.Data.Migrations
                     b.ToTable("JewelryImages");
                 });
 
-            modelBuilder.Entity("JewelryShop.Data.Models.Raiting", b =>
+            modelBuilder.Entity("JewelryShop.Data.Models.Rating", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -239,6 +239,9 @@ namespace JewelryShop.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Review")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
@@ -252,7 +255,7 @@ namespace JewelryShop.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("JewelryRaitings");
+                    b.ToTable("JewelryRatings");
                 });
 
             modelBuilder.Entity("JewelryShop.Data.Models.Setting", b =>
@@ -400,7 +403,7 @@ namespace JewelryShop.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("JewelryShop.Data.Models.Raiting", b =>
+            modelBuilder.Entity("JewelryShop.Data.Models.Rating", b =>
                 {
                     b.HasOne("JewelryShop.Data.Models.Jewel", "Jewel")
                         .WithMany()

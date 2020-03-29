@@ -53,6 +53,10 @@
                 configure.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             });
 
+            services.AddAntiforgery(options =>
+            {
+                options.HeaderName = "X-CSRF-TOKEN";
+            });
             services.AddRazorPages();
 
             var account = new Account(
@@ -76,6 +80,7 @@
             services.AddTransient<IJewelryService, JewelryService>();
             services.AddTransient<IJewelryImagesService, JewelryImagesService>();
             services.AddTransient<IJewelryCategoriesService, JewelryCategoriesService>();
+            services.AddTransient<IRatingService, RatingsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

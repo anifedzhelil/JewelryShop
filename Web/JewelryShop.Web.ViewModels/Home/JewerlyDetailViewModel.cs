@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
 
     using AutoMapper;
     using JewelryShop.Data.Models;
@@ -29,12 +28,17 @@
 
         public IEnumerable<string> Images { get; set; }
 
+        public double Ratings { get; set; }
+
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<Jewel, JewerlyDetailViewModel>()
             .ForMember(
                 d => d.Images,
-                opt => opt.MapFrom(x => x.Images.Select(t => t.ImageUrl)));
+                opt => opt.MapFrom(x => x.Images.Select(t => t.ImageUrl)))
+            .ForMember(
+               d => d.Ratings,
+               opt => opt.MapFrom(x => x.Ratings.Average(t => (double)t.Type)));
         }
     }
 }
