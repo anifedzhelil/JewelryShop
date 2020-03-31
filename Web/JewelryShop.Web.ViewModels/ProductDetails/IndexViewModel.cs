@@ -1,4 +1,4 @@
-﻿namespace JewelryShop.Web.ViewModels.Home
+﻿namespace JewelryShop.Web.ViewModels.ProductDetails
 {
     using System;
     using System.Collections.Generic;
@@ -9,7 +9,7 @@
     using JewelryShop.Services.Mapping;
     using JewelryShop.Web.ViewModels.Ratings;
 
-    public class JewerlyDetailViewModel : IMapFrom<Jewel>, IHaveCustomMappings
+    public class IndexViewModel : IMapFrom<Jewel>, IHaveCustomMappings
     {
         public int Id { get; set; }
 
@@ -35,7 +35,7 @@
 
         public void CreateMappings(IProfileExpression configuration)
         {
-            configuration.CreateMap<Jewel, JewerlyDetailViewModel>()
+            configuration.CreateMap<Jewel, IndexViewModel>()
             .ForMember(
                 d => d.Images,
                 opt => opt.MapFrom(x => x.Images.Select(t => t.ImageUrl)))

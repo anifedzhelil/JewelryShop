@@ -37,14 +37,7 @@
 
         public IActionResult Details(int id)
         {
-            if (id < 0)
-            {
-                return this.NotFound();
-            }
-
-            JewerlyDetailViewModel viewModel = this.jewelryService.GetById<JewerlyDetailViewModel>(id);
-
-            return this.View(viewModel);
+            return this.RedirectToAction("Index", "ProductDetails", new { id });
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
