@@ -31,9 +31,10 @@
         {
             var userId = this.userManager.GetUserId(this.User);
             await this.ratingsService.RateAsync(model.JewelId, userId, model.Rating, model.Review);
-            var ratings = this.ratingsService.GetAvarageRating(model.JewelId, userId);
+            var ratings = this.ratingsService.GetAvarageRating(model.JewelId);
 
-            return new RatingResponseModel { AvarageRating = ratings };
+            var allRatings = this.ratingsService.GetAllRatings<RatingsViewModel>(model.JewelId);
+            return new RatingResponseModel { AvarageRating = ratings, JewelryRatings = allRatings };
         }
     }
 }

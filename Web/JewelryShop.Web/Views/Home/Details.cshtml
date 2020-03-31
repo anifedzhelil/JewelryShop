@@ -47,7 +47,21 @@
 
             }
             <div id="totalRatings">@Model.Ratings</div>
-
+            <div class="average-rating">
+                <div class="average-rating-checked">
+                    @for (int i = 0; i < 5; i++)
+                    {
+                        if (i < (int)Model.Ratings)
+                        {
+                            <span class="fa fa-star checked"></span>
+                        }
+                        else
+                        {
+                            <span class="fa fa-star"></span>
+                        }
+                    }
+                </div>
+            </div>
             <p>Брой: @Model.Count</p>
             <p></p>
             <input type="submit" value="Купи" class="btn btn-primary" />
@@ -76,32 +90,79 @@
     </div>
     <div id="tab02" class="tab-contents">
         <h2>Отзив</h2>
-        <form id="ratingsForm" method="post"></form>
-        <div class="rating">
-            <input type="radio" name="rating" value="5" id="5">
-            <label for="5">☆</label>
-            <input type="radio" name="rating" value="4" id="4">
-            <label for="4">☆</label>
-            <input type="radio" name="rating" value="3" id="3">
-            <label for="3">☆</label>
-            <input type="radio" name="rating" value="2" id="2">
-            <label for="2">☆</label>
-            <input type="radio" name="rating" value="1" id="1">
-            <label for="1">☆</label>
+       
+        <div class="row bootstrap snippets">
+            <div class="col-md-6 col-md-offset-2 col-sm-12">
+                <div class="comment-wrapper">
+                    <div class="panel panel-info">
+                        <div class="panel-body">
+                            <form id="ratingsForm" method="post"></form>
+                            <div class="rating">
+                                <input type="radio" name="rating" value="5" id="5">
+                                <label for="5">☆</label>
+                                <input type="radio" name="rating" value="4" id="4">
+                                <label for="4">☆</label>
+                                <input type="radio" name="rating" value="3" id="3">
+                                <label for="3">☆</label>
+                                <input type="radio" name="rating" value="2" id="2">
+                                <label for="2">☆</label>
+                                <input type="radio" name="rating" value="1" id="1">
+                                <label for="1">☆</label>
+                            </div>
+                            <textarea id="review" class="form-control" rows="3" cols="50" placeholder="write a comment..."></textarea>
+                            <br>
+                            <input type="submit" class="btn btn-info pull-right" onclick="rate(@Model.Id)" />
+
+                            <div class="clearfix"></div>
+                            <hr>
+                            <ul class="media-list">
+                                @foreach (var item in Model.JewelryRatings)
+                                {
+                                   
+                                    <li class="media">
+                                        <div class="media-body">
+                                            <span class="text-muted pull-right">
+                                                <small class="text-muted">@item.CreatedOn.ToShortDateString()</small>
+                                            </span>
+                                            <span class="text-muted pull-left">
+                                                <strong>@item.UserUserName </strong>
+                                            </span>
+                                            <br/>
+                                            <div class="rating-checked">
+                                                @for (int i = 0; i < 5; i++)
+                                                {
+                                                    if (i < (int)item.Type)
+                                                    {
+                                                        <span class="fa fa-star checked"></span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="fa fa-star"></span>
+                                                    }
+                                                }
+                                            </div>
+                                            <p>
+                                                @item.Review
+                                            </p>
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
-        <br />
-        <div class="form-group">
-            <label  class="control-label">Отзив</label>
-            <textarea  id="review" class="form-control" rows="10" cols="50"></textarea>
-        </div>
-        <input type="submit" class="btn btn-primary" onclick="rate(@Model.Id)" />
     </div>
 </div>
 
 @section Scripts
 {
     <script>
+
         function rate(id) {
+
             var radios = document.getElementsByName('rating');
             var length = radios.length;
             var selected_value = -1;
@@ -124,7 +185,63 @@
                 dataType: "json",
                 headers: { 'X-CSRF-TOKEN': token },
                 success: function (data) {
+
                     $("#totalRatings").html(data.avarageRating);
+                    $("#review").html("");
+
+                    $(".media").remove();
+                    $(".average-rating-checked").remove();
+
+                    var averageRatingHtml = '<div class="average-rating-checked">';
+                    for (var i = 0; i < 5; i++) {
+                        if (i < parseInt(data.avarageRating)) {
+                            averageRatingHtml += ' <span class="fa fa-star checked"></span>';
+                        }
+                        else {
+                            averageRatingHtml += '<span class="fa fa-star"></span>';
+                        }
+                    }
+
+                    averageRatingHtml += '</div>';
+                    $(".average-rating").append(averageRatingHtml);
+
+                    var htmlMedia = "";
+                    for (var item in data.jewelryRatings) {
+                        var date = new Date(data.jewelryRatings[item].createdOn);
+                        var mydate = date.toLocaleDateString();
+
+                        htmlMedia = ' <li class="media">';
+
+                        htmlMedia += '<div class="media-body">';
+                        htmlMedia += '   <span class="text-muted pull-right">';
+                        htmlMedia += '       <small class="text-muted">' + mydate + '</small>';
+                        htmlMedia += '    </span>';
+                        htmlMedia += '    <span class="text-muted pull-left">';
+                        htmlMedia += '       <strong>' + data.jewelryRatings[item].userUserName + '</strong>';
+                        htmlMedia += '    </span><br/>';
+                        htmlMedia += '    <div class="rating-checked">';
+
+                        for (var i = 0; i < 5; i++) {
+                            if (i < parseInt(data.jewelryRatings[item].type)) {
+                                htmlMedia += ' <span class="fa fa-star checked"></span>';
+                            }
+                            else {
+                                htmlMedia += '<span class="fa fa-star"></span>';
+                            }
+                        }
+
+                        htmlMedia += ' </div>';
+                        htmlMedia += '        <p>';
+                        htmlMedia += data.jewelryRatings[item].review;
+                        htmlMedia += '       </p>';
+
+                        htmlMedia += '     </div>';
+                        htmlMedia += '     </li >';
+                        htmlMedia += '     </li >';
+                        $(".media-list").append(htmlMedia);
+                    }
+
+
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                 }

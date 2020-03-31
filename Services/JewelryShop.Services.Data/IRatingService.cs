@@ -8,8 +8,8 @@
     {
         Task RateAsync(int jewelId, string userId, int ratingType, string review);
 
-        IEnumerable<T> GetAllRatings<T>(int jewelId, string userId);
+        IEnumerable<T> GetAllRatings<T>(int jewelId);
 
-        double GetAvarageRating(int jewelId, string userId);
+        double GetAvarageRating(int jewelId);
     }
 }

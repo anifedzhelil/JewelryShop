@@ -48,18 +48,18 @@
             await this.ratingsRepository.SaveChangesAsync();
         }
 
-        public IEnumerable<T> GetAllRatings<T>(int jewelId, string userId)
+        public IEnumerable<T> GetAllRatings<T>(int jewelId)
         {
             IQueryable<Rating> query = this.ratingsRepository.All()
-                .Where(x => x.JewelId == jewelId && x.UserId == userId);
+                .Where(x => x.JewelId == jewelId);
 
             return query.To<T>().ToArray();
         }
 
-        public double GetAvarageRating(int jewelId, string userId)
+        public double GetAvarageRating(int jewelId)
         {
             IQueryable<Rating> query = this.ratingsRepository.All()
-                 .Where(x => x.JewelId == jewelId && x.UserId == userId);
+                 .Where(x => x.JewelId == jewelId);
             var average = query.Average(x => (long)x.Type);
 
             return average;

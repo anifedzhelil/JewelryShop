@@ -7,6 +7,7 @@
     using AutoMapper;
     using JewelryShop.Data.Models;
     using JewelryShop.Services.Mapping;
+    using JewelryShop.Web.ViewModels.Ratings;
 
     public class JewerlyDetailViewModel : IMapFrom<Jewel>, IHaveCustomMappings
     {
@@ -30,6 +31,8 @@
 
         public double Ratings { get; set; }
 
+        public ICollection<RatingsViewModel> JewelryRatings { get; set; }
+
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<Jewel, JewerlyDetailViewModel>()
@@ -38,7 +41,10 @@
                 opt => opt.MapFrom(x => x.Images.Select(t => t.ImageUrl)))
             .ForMember(
                d => d.Ratings,
-               opt => opt.MapFrom(x => x.Ratings.Average(t => (double)t.Type)));
+               opt => opt.MapFrom(x => x.Ratings.Average(t => (double)t.Type)))
+            .ForMember(
+               d => d.JewelryRatings,
+               opt => opt.MapFrom(x => x.Ratings));
         }
     }
 }

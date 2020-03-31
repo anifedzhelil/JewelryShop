@@ -137,7 +137,7 @@ body {
 .rating {
     display: flex;
     flex-direction: row-reverse;
-    justify-content: center;
+    justify-content: flex-start;
 }
 
     .rating > input {
@@ -147,7 +147,7 @@ body {
     .rating > label {
         position: relative;
         width: 1em;
-        font-size: 6vw;
+        font-size: 3vw;
         color: #FFD600;
         cursor: pointer
     }
@@ -170,3 +170,40 @@ body {
     .rating:hover > input:checked ~ label:before {
         opacity: 0.4
     }
+
+    /*************************************/
+.user_name {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.comments-list .media {
+    border-bottom: 1px dotted #ccc;
+}
+
+/*******************************/
+
+.comment-wrapper .panel-body {
+    overflow: auto;
+}
+
+.comment-wrapper .media-list .media img {
+    width: 64px;
+    height: 64px;
+    border: 2px solid #e5e7e8;
+}
+
+.comment-wrapper .media-list .media {
+    border-bottom: 1px dashed #efefef;
+    margin-bottom: 25px;
+}
+
+/********************************/
+.rating-checked .checked {
+    color: orange;
+}
+
+/***********************/
+.average-rating-checked .checked {
+    color: orange;
+}
