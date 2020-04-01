@@ -64,7 +64,7 @@
             </div>
             <p>Брой: @Model.Count</p>
             <p></p>
-            <input type="submit" value="Купи" class="btn btn-primary" />
+            <input type="submit" value="Купи"  onclick="addToCart(@Model.Id)" class="btn btn-primary" />
         </div>
     </div>
 </div>
@@ -160,7 +160,23 @@
 @section Scripts
 {
     <script>
+        function addToCart(id) {
 
+            var token = $("#ratingsForm input[name=__RequestVerificationToken]").val();
+            var json = { jewelId: id, quantity: "1"};
+
+            $.ajax({
+                url: "/api/orders",
+                type: "POST",
+                data: JSON.stringify(json),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                headers: { 'X-CSRF-TOKEN': token },
+                success: function (data) {
+                }
+            });
+        }
+                
         function rate(id) {
 
             var radios = document.getElementsByName('rating');

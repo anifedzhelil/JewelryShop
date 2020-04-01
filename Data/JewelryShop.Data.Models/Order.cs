@@ -18,6 +18,8 @@
 
         public DateTime? OrderDate { get; set; }
 
+        public string? GuestId { get; set; }
+
         public virtual ICollection<OrderDetails> OrdersDetails { get; set; }
 
         public virtual ApplicationUser User { get; set; }

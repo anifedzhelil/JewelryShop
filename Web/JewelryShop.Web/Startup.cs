@@ -80,6 +80,7 @@
             services.AddTransient<IJewelryService, JewelryService>();
             services.AddTransient<IJewelryImagesService, JewelryImagesService>();
             services.AddTransient<IJewelryCategoriesService, JewelryCategoriesService>();
+            services.AddTransient<IOrdersService, OrdersService>();
             services.AddTransient<IRatingService, RatingsService>();
         }
 
@@ -114,8 +115,9 @@
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseCookiePolicy();
 
+            // ToDo
+            // app.UseCookiePolicy();
             app.UseRouting();
 
             app.UseAuthentication();
