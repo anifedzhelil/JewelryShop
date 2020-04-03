@@ -36,6 +36,8 @@
 
         public DbSet<OrderDetails> OrdersDetails { get; set; }
 
+        public DbSet<ShippingAddress> ShippingAddresses { get; set; }
+
         public override int SaveChanges() => this.SaveChanges(true);
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)

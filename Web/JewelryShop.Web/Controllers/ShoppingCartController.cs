@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -10,6 +11,7 @@
     using JewelryShop.Web.ViewModels.ShoppingCart;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using OfficeOpenXml;
 
     public class ShoppingCartController : BaseController
     {
@@ -53,5 +55,34 @@
                 return this.View("Empty");
             }
         }
+
+       /* public IActionResult GetList()
+        {
+            using (var package = new ExcelPackage(new FileInfo("wwwroot/files/EcontLimitOfficeSchedule.xlsx")))
+            {
+               /* var firstSheet = package.Workbook.Worksheets["First Sheet"];
+                Console.WriteLine("Sheet 1 Data");
+                Console.WriteLine($"Cell A2 Value   : {firstSheet.Cells["A2"].Text}");
+                Console.WriteLine($"Cell A2 Color   : {firstSheet.Cells["A2"].Style.Font.Color.LookupColor()}");
+                Console.WriteLine($"Cell B2 Formula : {firstSheet.Cells["B2"].Formula}");
+                Console.WriteLine($"Cell B2 Value   : {firstSheet.Cells["B2"].Text}");
+                Console.WriteLine($"Cell B2 Border  : {firstSheet.Cells["B2"].Style.Border.Top.Style}");
+
+                KeyValuePair<KeyValuePair<string, string> econtList =   
+                ExcelWorksheet workSheet = package.Workbook.Worksheets[0];
+                var start = workSheet.Dimension.Start;
+                var end = workSheet.Dimension.End;
+                for (int row = start.Row; row <= end.Row; row++)
+                { // Row by row...  
+                    for (int col = start.Column; col <= end.Column; col++)
+                    { // ... Cell by cell...  
+                        object cellValue = workSheet.Cells[row, col].Text; // This got me the actual value I needed.  
+                    }
+                }
+
+            }
+
+            return this.View();
+        }*/
     }
 }
