@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
     using JewelryShop.Services.Data;
     using JewelryShop.Web.ViewModels.ProductDetails;
     using Microsoft.AspNetCore.Mvc;
@@ -27,7 +28,6 @@
             IndexViewModel viewModel = this.jewelryService.GetById<IndexViewModel>(id);
 
             return this.View(viewModel);
-
         }
     }
 }

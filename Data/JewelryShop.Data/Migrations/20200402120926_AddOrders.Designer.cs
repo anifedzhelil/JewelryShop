@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JewelryShop.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200401101303_GuestId")]
-    partial class GuestId
+    [Migration("20200402120926_AddOrders")]
+    partial class AddOrders
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -298,6 +298,8 @@ namespace JewelryShop.Data.Migrations
 
                     b.HasIndex("IsDeleted");
 
+                    b.HasIndex("JewelId");
+
                     b.HasIndex("OrderId");
 
                     b.ToTable("OrdersDetails");
@@ -492,6 +494,12 @@ namespace JewelryShop.Data.Migrations
 
             modelBuilder.Entity("JewelryShop.Data.Models.OrderDetails", b =>
                 {
+                    b.HasOne("JewelryShop.Data.Models.Jewel", "Jewel")
+                        .WithMany()
+                        .HasForeignKey("JewelId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("JewelryShop.Data.Models.Order", "Order")
                         .WithMany("OrdersDetails")
                         .HasForeignKey("OrderId")

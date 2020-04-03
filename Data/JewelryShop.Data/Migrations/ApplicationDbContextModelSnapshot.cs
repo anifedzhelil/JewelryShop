@@ -296,6 +296,8 @@ namespace JewelryShop.Data.Migrations
 
                     b.HasIndex("IsDeleted");
 
+                    b.HasIndex("JewelId");
+
                     b.HasIndex("OrderId");
 
                     b.ToTable("OrdersDetails");
@@ -490,6 +492,12 @@ namespace JewelryShop.Data.Migrations
 
             modelBuilder.Entity("JewelryShop.Data.Models.OrderDetails", b =>
                 {
+                    b.HasOne("JewelryShop.Data.Models.Jewel", "Jewel")
+                        .WithMany()
+                        .HasForeignKey("JewelId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("JewelryShop.Data.Models.Order", "Order")
                         .WithMany("OrdersDetails")
                         .HasForeignKey("OrderId")

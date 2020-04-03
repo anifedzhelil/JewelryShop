@@ -13,5 +13,7 @@ namespace JewelryShop.Data.Models
         public decimal Price { get; set; }
 
         public virtual Order Order { get; set; }
+
+        public virtual Jewel Jewel { get; set; }
     }
 }

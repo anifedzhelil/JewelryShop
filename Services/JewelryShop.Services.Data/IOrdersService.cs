@@ -11,5 +11,8 @@
 
         Task AddProductAsync(string userId, int jewelId, int quantity);
 
+        T GetActiveOrder<T>(string userId);
+
+        T GetActiveGuestOrder<T>(string guestId);
     }
 }

@@ -7,6 +7,7 @@
 
     using JewelryShop.Data.Models;
     using JewelryShop.Services.Data;
+    using JewelryShop.Web.ViewModels.ShoppingCart;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
@@ -26,7 +27,7 @@
         }
 
         [HttpPost]
-        public async Task AddToCartCookieAsync(int jewelId, int quantity)
+        public async Task AddToCartCookieAsync(OrderDetailsIndexViewModel model)
         {
             var user = await this.userManager.GetUserAsync(this.User);
             if (user == null)
@@ -39,16 +40,16 @@
                 {
                     var guest_id = Guid.NewGuid();
                     this.Response.Cookies.Append(GuestId, guest_id.ToString(), option);
-                    await this.ordersService.AddGuestProductAsync(guest_id.ToString(), jewelId, quantity);
+                    await this.ordersService.AddGuestProductAsync(guest_id.ToString(), model.JewelId, model.Quantity);
                 }
                 else
                 {
-                    await this.ordersService.AddGuestProductAsync(this.Request.Cookies[GuestId], jewelId, quantity);
+                    await this.ordersService.AddGuestProductAsync(this.Request.Cookies[GuestId], model.JewelId, model.Quantity);
                 }
             }
             else
             {
-                await this.ordersService.AddProductAsync(user.Id, jewelId, quantity);
+                await this.ordersService.AddProductAsync(user.Id, model.JewelId, model.Quantity);
             }
         }
     }

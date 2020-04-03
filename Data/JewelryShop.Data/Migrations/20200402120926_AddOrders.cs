@@ -19,7 +19,8 @@ namespace JewelryShop.Data.Migrations
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     UserID = table.Column<string>(nullable: true),
                     Status = table.Column<int>(nullable: false),
-                    OrderDate = table.Column<DateTime>(nullable: true)
+                    OrderDate = table.Column<DateTime>(nullable: true),
+                    GuestId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -51,6 +52,12 @@ namespace JewelryShop.Data.Migrations
                 {
                     table.PrimaryKey("PK_OrdersDetails", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_OrdersDetails_Jewelry_JewelId",
+                        column: x => x.JewelId,
+                        principalTable: "Jewelry",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_OrdersDetails_Orders_OrderId",
                         column: x => x.OrderId,
                         principalTable: "Orders",
@@ -72,6 +79,11 @@ namespace JewelryShop.Data.Migrations
                 name: "IX_OrdersDetails_IsDeleted",
                 table: "OrdersDetails",
                 column: "IsDeleted");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrdersDetails_JewelId",
+                table: "OrdersDetails",
+                column: "JewelId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrdersDetails_OrderId",

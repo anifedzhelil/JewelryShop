@@ -1,0 +1,50 @@
+﻿@model JewelryShop.Web.ViewModels.ShoppingCart.IndexViewModel
+    <h3>
+        Съдържание на кошницата
+    </h3>
+
+@{ 
+    decimal subtotal = 0;
+}
+<div class="container">
+    <table id="cart" class="table table-hover table-condensed">
+        <thead>
+            <tr>
+                <th style="width:60%" colspan="2">Продукт</th>
+                <th style="width:15%">Цена</th>
+                <th style="width:10%">Количество</th>
+                <th style="width:15%"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OrdersDetails)
+            {
+                subtotal += item.CurrentPrice;
+            <tr>
+                <td data-th="ProductImage">
+                    <img id="shoppingImage" src="@item.ImageUrl" alt="..." class="img-responsive" />
+                </td>
+                <td>
+                    <a class="fa-linkedin" asp-action="Index" asp-route-id="@item.JewelId" asp-controller="ProductDetails">@item.JewelName</a>                     
+                </td>
+                <td data-th="Price"><span id="price">@item.CurrentPrice</span></td>
+                <td data-th="Quantity">
+                    <input type="number" class="form-control text-center" min="0" max="@item.JewelCount" value="@item.Quantity">
+                </td>
+                <td class="actions" data-th="">
+                    <button class="btn btn-info btn-sm"><i class="fa fa-refresh"></i></button>
+                    <button class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></button>
+                </td>               
+            </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td><a href="#" class="btn btn-warning"><i class="fa fa-angle-left"></i> Continue Shopping</a></td>
+                <td></td>
+                <td class="hidden-xs text-right"><strong>Сума @subtotal лв</strong></td>
+                <td colspan="2"><a href="#" class="btn btn-success btn-block">Checkout <i class="fa fa-angle-right"></i></a></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

@@ -163,8 +163,8 @@
         function addToCart(id) {
 
             var token = $("#ratingsForm input[name=__RequestVerificationToken]").val();
-            var json = { jewelId: id, quantity: "1"};
-
+            var json = { jewelId: id, quantity: 1};
+            
             $.ajax({
                 url: "/api/orders",
                 type: "POST",

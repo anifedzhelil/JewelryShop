@@ -1,10 +1,12 @@
 ﻿namespace JewelryShop.Services.Data
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
     using JewelryShop.Data.Common.Repositories;
     using JewelryShop.Data.Models;
+    using JewelryShop.Services.Mapping;
 
     public class OrdersService : IOrdersService
     {
@@ -71,6 +73,22 @@
 
             await this.orderDetailsRepository.AddAsync(orderDetails);
             await this.orderDetailsRepository.SaveChangesAsync();
+        }
+
+        public T GetActiveGuestOrder<T>(string guestId)
+        {
+            return this.orderRepository.All()
+               .Where(x => x.GuestId == guestId && x.Status == OrderStatusType.Created)
+               .To<T>()
+               .FirstOrDefault();
+        }
+
+        public T GetActiveOrder<T>(string userId)
+        {
+            return this.orderRepository.All()
+                 .Where(x => x.UserID == userId && x.Status == OrderStatusType.Created)
+                 .To<T>()
+                 .FirstOrDefault();
         }
     }
 }
