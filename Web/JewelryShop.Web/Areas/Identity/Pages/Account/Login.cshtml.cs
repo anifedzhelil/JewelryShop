@@ -97,7 +97,7 @@
 
                     if (guestUserId != null)
                     {
-                        this.orderService.UpdateUserOrderAsync(this.Input.Email, guestUserId);
+                        await this.orderService.UpdateUserOrderAsync(this.Input.Email, guestUserId);
                         this.Response.Cookies.Delete(GuestId);
                     }
 
