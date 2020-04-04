@@ -82,6 +82,7 @@
             services.AddTransient<IJewelryCategoriesService, JewelryCategoriesService>();
             services.AddTransient<IOrdersService, OrdersService>();
             services.AddTransient<IRatingService, RatingsService>();
+            services.AddTransient<IShippingAddressService, ShippingAddressService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

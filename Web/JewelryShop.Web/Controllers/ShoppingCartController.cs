@@ -8,7 +8,9 @@
 
     using JewelryShop.Data.Models;
     using JewelryShop.Services.Data;
+    using JewelryShop.Web.ViewModels.ShippingAddresses;
     using JewelryShop.Web.ViewModels.ShoppingCart;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using OfficeOpenXml;
@@ -18,22 +20,23 @@
         private const string GuestId = "guest_id";
         private readonly IOrdersService ordersService;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly IShippingAddressService shippingAddressService;
 
-        public ShoppingCartController(IOrdersService ordersService, UserManager<ApplicationUser> userManager)
+        public ShoppingCartController(
+            IOrdersService ordersService,
+            UserManager<ApplicationUser> userManager,
+            IShippingAddressService shippingAddressService)
         {
             this.ordersService = ordersService;
             this.userManager = userManager;
+            this.shippingAddressService = shippingAddressService;
         }
 
         public async Task<IActionResult> Index()
         {
             var model = new IndexViewModel();
-           /* {
-                OrdersDetails = this.ordersService.GetActiveGuestOrder<OrderDetailsIndexViewModel>(this.Request.Cookies[GuestId].ToString()),
-            };*/
+            var user = await this.userManager.GetUserAsync(this.User);
 
-        
-        var user = await this.userManager.GetUserAsync(this.User);
             if (user == null)
             {
                 if (this.Request.Cookies[GuestId] != null)
@@ -56,33 +59,17 @@
             }
         }
 
-       /* public IActionResult GetList()
+        [Authorize]
+        public async Task<IActionResult> LoadShippingAddress()
         {
-            using (var package = new ExcelPackage(new FileInfo("wwwroot/files/EcontLimitOfficeSchedule.xlsx")))
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            var model = new UserShippingAddressViewModel()
             {
-               /* var firstSheet = package.Workbook.Worksheets["First Sheet"];
-                Console.WriteLine("Sheet 1 Data");
-                Console.WriteLine($"Cell A2 Value   : {firstSheet.Cells["A2"].Text}");
-                Console.WriteLine($"Cell A2 Color   : {firstSheet.Cells["A2"].Style.Font.Color.LookupColor()}");
-                Console.WriteLine($"Cell B2 Formula : {firstSheet.Cells["B2"].Formula}");
-                Console.WriteLine($"Cell B2 Value   : {firstSheet.Cells["B2"].Text}");
-                Console.WriteLine($"Cell B2 Border  : {firstSheet.Cells["B2"].Style.Border.Top.Style}");
+                ShippingAddress = this.shippingAddressService.GetAllUsersShippingAddress<ShippingAddressViewModel>(user.Id),
+            };
 
-                KeyValuePair<KeyValuePair<string, string> econtList =   
-                ExcelWorksheet workSheet = package.Workbook.Worksheets[0];
-                var start = workSheet.Dimension.Start;
-                var end = workSheet.Dimension.End;
-                for (int row = start.Row; row <= end.Row; row++)
-                { // Row by row...  
-                    for (int col = start.Column; col <= end.Column; col++)
-                    { // ... Cell by cell...  
-                        object cellValue = workSheet.Cells[row, col].Text; // This got me the actual value I needed.  
-                    }
-                }
-
-            }
-
-            return this.View();
-        }*/
+            return this.View(model);
+        }
     }
 }
