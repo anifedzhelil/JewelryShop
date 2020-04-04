@@ -11,6 +11,8 @@
 
     public class OrderDetailsIndexViewModel : IMapFrom<OrderDetails>, IHaveCustomMappings
     {
+        public int Id { get; set; }
+
         public int JewelId { get; set; }
 
         public int JewelCount { get; set; }

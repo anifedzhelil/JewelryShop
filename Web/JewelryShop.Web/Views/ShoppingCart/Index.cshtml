@@ -10,9 +10,9 @@
     <table id="cart" class="table table-hover table-condensed">
         <thead>
             <tr>
-                <th style="width:60%" colspan="2">Продукт</th>
+                <th style="width:50%" colspan="2">Продукт</th>
                 <th style="width:15%">Цена</th>
-                <th style="width:10%">Количество</th>
+                <th style="width:20%">Количество</th>
                 <th style="width:15%"></th>
             </tr>
         </thead>
@@ -29,12 +29,18 @@
                 </td>
                 <td data-th="Price"><span id="price">@item.CurrentPrice</span></td>
                 <td data-th="Quantity">
-                    <input type="number" class="form-control text-center" min="0" max="@item.JewelCount" value="@item.Quantity">
+                    <form method="post" asp-area="" asp-controller="ShoppingCart" asp-action="EditQuantity" asp-route-id="@item.Id" asp-route-quantity="quantity">
+                        <div class="row">
+                            <input type="number" id="quantity" name="quantity"  class="form-control form-control-sm col-sm-3" min="0" max="@item.JewelCount" value="@item.Quantity">
+                            <button class="btn btn-info btn-sm" type="submit"><i class="fa fa-refresh"></i></button>
+                        </div>
+                    </form>
                 </td>
                 <td class="actions" data-th="">
-                    <button class="btn btn-info btn-sm"><i class="fa fa-refresh"></i></button>
-                    <button class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></button>
-                </td>               
+                    <form method="post" asp-area="" asp-controller="ShoppingCart" asp-action="DeleteOrder" asp-route-id="@item.Id">
+                        <button class="btn btn-danger btn-sm" asp-action="DeleteOrder" asp-route-id="@item.Id"><i class="fa fa-trash-o"></i></button>
+                     </form>
+                 </td>               
             </tr>
             }
         </tbody>

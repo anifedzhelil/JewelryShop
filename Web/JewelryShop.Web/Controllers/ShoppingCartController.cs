@@ -49,7 +49,7 @@
                 model = this.ordersService.GetActiveOrder<IndexViewModel>(user.Id);
             }
 
-            if (model.OrdersDetails != null)
+            if (model != null && model.OrdersDetails != null)
             {
                 return this.View(model);
             }
@@ -70,6 +70,27 @@
             };
 
             return this.View(model);
+        }
+
+        public async Task<IActionResult> EditQuantity(int id, int quantity)
+        {
+            if (quantity == 0)
+            {
+                await this.ordersService.DeleteOrderDetail(id);
+            }
+            else
+            {
+                await this.ordersService.UpdateOrderDetailQuantityAsync(id, quantity);
+            }
+
+            return this.RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> DeleteOrder(int id)
+        {
+            await this.ordersService.DeleteOrderDetail(id);
+
+            return this.RedirectToAction("Index");
         }
     }
 }

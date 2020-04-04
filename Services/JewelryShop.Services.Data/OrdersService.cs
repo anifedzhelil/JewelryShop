@@ -14,7 +14,7 @@
         private readonly IDeletableEntityRepository<Order> orderRepository;
         private readonly IDeletableEntityRepository<OrderDetails> orderDetailsRepository;
         private readonly IDeletableEntityRepository<ApplicationUser> userRepository;
-        
+
         public OrdersService(
             IDeletableEntityRepository<Order> orderRepository,
             IDeletableEntityRepository<OrderDetails> orderDetailsRepository,
@@ -79,7 +79,7 @@
             await this.orderDetailsRepository.SaveChangesAsync();
         }
 
-        public void UpdateUserOrder(string userEmail, string guestId)
+        public async Task UpdateUserOrderAsync(string userEmail, string guestId)
         {
             var user = this.userRepository.All()
                 .Where(c => c.Email == userEmail)
@@ -110,8 +110,8 @@
                     }
                 }
 
-                this.orderRepository.SaveChangesAsync();
-                this.orderDetailsRepository.SaveChangesAsync();
+                await this.orderRepository.SaveChangesAsync();
+                await this.orderDetailsRepository.SaveChangesAsync();
             }
         }
 
@@ -129,6 +129,52 @@
                  .Where(x => x.UserID == userId && x.Status == OrderStatusType.Created)
                  .To<T>()
                  .FirstOrDefault();
+        }
+
+        public async Task DeleteOrderDetail(int orderDetailsId)
+        {
+            var orderDetail = this.orderDetailsRepository.All()
+                 .Where(x => x.Id == orderDetailsId)
+                 .FirstOrDefault();
+
+            if (orderDetail != null)
+            {
+                orderDetail.IsDeleted = true;
+                this.orderDetailsRepository.Update(orderDetail);
+
+                var allOrderDetails = this.orderDetailsRepository.All()
+                 .Where(x => x.OrderId == orderDetail.OrderId && x.Id != orderDetail.Id)
+                 .FirstOrDefault();
+
+                if (allOrderDetails == null)
+                {
+                    var order = this.orderRepository.All()
+                        .Where(x => x.Id == orderDetail.OrderId)
+                        .FirstOrDefault();
+
+                    if (order != null)
+                    {
+                        order.IsDeleted = true;
+                        this.orderRepository.Update(order);
+                        await this.orderRepository.SaveChangesAsync();
+                    }
+                }
+                await this.orderDetailsRepository.SaveChangesAsync();
+            }
+        }
+
+        public async Task UpdateOrderDetailQuantityAsync(int orderDetailId, int quantity)
+        {
+            var orderDetail = this.orderDetailsRepository.All()
+                 .Where(x => x.Id == orderDetailId)
+                 .FirstOrDefault();
+
+            if (orderDetail != null)
+            {
+                orderDetail.Quantity = quantity;
+                this.orderDetailsRepository.Update(orderDetail);
+                await this.orderDetailsRepository.SaveChangesAsync();
+            }
         }
     }
 }
