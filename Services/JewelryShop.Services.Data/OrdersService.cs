@@ -14,15 +14,18 @@
         private readonly IDeletableEntityRepository<Order> orderRepository;
         private readonly IDeletableEntityRepository<OrderDetails> orderDetailsRepository;
         private readonly IDeletableEntityRepository<ApplicationUser> userRepository;
+        private readonly IDeletableEntityRepository<Jewel> jewelRepository;
 
         public OrdersService(
             IDeletableEntityRepository<Order> orderRepository,
             IDeletableEntityRepository<OrderDetails> orderDetailsRepository,
-            IDeletableEntityRepository<ApplicationUser> userRepository)
+            IDeletableEntityRepository<ApplicationUser> userRepository,
+            IDeletableEntityRepository<Jewel> jewelRepository)
         {
             this.orderRepository = orderRepository;
             this.orderDetailsRepository = orderDetailsRepository;
             this.userRepository = userRepository;
+            this.jewelRepository = jewelRepository;
         }
 
         public async Task AddGuestProductAsync(string guestId, int jewelId, int quantity)
@@ -41,14 +44,37 @@
                 await this.orderRepository.SaveChangesAsync();
             }
 
-            var orderDetails = new OrderDetails()
-            {
-                OrderId = order.Id,
-                JewelId = jewelId,
-                Quantity = quantity,
-            };
+            var orderDetails = this.orderDetailsRepository.All()
+                .Where(x => x.OrderId == order.Id && x.JewelId == jewelId)
+                .FirstOrDefault();
 
-            await this.orderDetailsRepository.AddAsync(orderDetails);
+            if (orderDetails == null)
+            {
+                orderDetails = new OrderDetails()
+                {
+                    OrderId = order.Id,
+                    JewelId = jewelId,
+                    Quantity = quantity,
+                };
+                await this.orderDetailsRepository.AddAsync(orderDetails);
+            }
+            else
+            {
+                var jewel = this.jewelRepository.All()
+                    .Where(x => x.Id == jewelId)
+                    .FirstOrDefault();
+
+                if(jewel.Count >= (quantity + orderDetails.Quantity))
+                {
+                    orderDetails.Quantity += quantity;
+                }
+                else
+                {
+                    orderDetails.Quantity = jewel.Count;
+                }
+                this.orderDetailsRepository.Update(orderDetails);
+            }
+
             await this.orderDetailsRepository.SaveChangesAsync();
         }
 
