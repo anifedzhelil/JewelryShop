@@ -4,49 +4,33 @@
     ViewData["Title"] = "Details";
     var num = 0;
     var imageCount = Model.Images.Count();
+    var thumbnImageId = "thumbn";
 }
-<div style="width: 100%; display: table;">
-    <div style="display: table-row; height: 100px;">
-        <div style="width: 50%; display: table-cell; padding:5%;">
-            <div style="width:100%;">
-                <img src="@Model.Images.ElementAt(0)" style="width:100%">
+<div class="container" style="margin:30px;">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="row">
+                <img src="@Model.Images.ElementAt(0)" id="mainImage" class="img-fluid" style="width:100%">
             </div>
-
-            @if (imageCount > 1)
-            {
-                <div style="display: table-row; height: 100%;">
+            <div class="row">
+                @if (imageCount > 1)
+                {
                     @for (num = 1; num < 3; num++)
                     {
                         @if (imageCount > num)
                         {
-                            <div style="display: table-cell; width:30%;">
-
-                                <img src="@Model.Images.ElementAt(num)" style="width:100%">
-
-                            </div>
-                        }
-                        else
-                        {
-                            <div style=" padding: 100px; width: 30%; display: table-cell;"></div>
+                            thumbnImageId = "imgId" + num.ToString();
+                            <a onclick="changeImage(@thumbnImageId)"><img src="@Model.Images.ElementAt(num)" id="@thumbnImageId" class="img-thumbnail" style="cursor: pointer; max-width:120px;"></a>
                         }
                     }
-                </div>
-            }
+                }
+            </div>
         </div>
-        <div style="display: table-cell;padding:5%; top:10px; vertical-align: top;" class="col-md-6 mb-4">
-            <h3>@Model.Name</h3>
-            @if (Model.SaleDate > DateTime.UtcNow)
-            {
-                <p>Стара цена: @Model.Price лв</p>
-                <p>Промоционална цена: @Model.SalePrice</p>
-                <p>Дата на промоцията: @Model.SaleDate.ToString("MM/dd/yyyy")</p>
-            }
-            else
-            {
-                <h4>@Model.Price лв</h4>
-
-            }
-            <div id="totalRatings">@Model.Ratings</div>
+        <div class="details col-md-6 border-info" style="padding-left:70px;">
+            <br />
+            <br />
+            <h3 class="product-title">@Model.Name</h3>
+            <br />
             <div class="average-rating">
                 <div class="average-rating-checked">
                     @for (int i = 0; i < 5; i++)
@@ -62,14 +46,47 @@
                     }
                 </div>
             </div>
-            <p>Брой: @Model.Count</p>
-            <p></p>
-            <input type="submit" value="Купи"  onclick="addToCart(@Model.Id)" class="btn btn-primary" />
+            <br />
+            @if (Model.SaleDate > DateTime.UtcNow)
+            {
+                <div class="card-group"><span class="text-muted">Промоционална цена:</span><h2> @Model.SalePrice лв</h2></div>
+                <div class="form-group"><span class="text-muted">Стара цена: </span>@Model.Price лв</div>
+                <div class="form-group"><span class="text-muted">Дата на промоцията: </span> @Model.SaleDate.ToString("MM/dd/yyyy")</div>
+            }
+            else
+            {
+                <div class="form-group">
+                    <p>
+                        <span class="text-muted">Цена: </span><h2>@Model.Price лв</h2>
+
+                    </p>
+                </div>
+            }
+            <br />
+            <div class="input-group">
+                <span class="text-muted">Брой:  </span>
+                <span class="input-group-btn">
+                    <button type="button" class="quantity-left-minus btn  btn-warning" data-type="minus" data-field="">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </span>
+                <input  type="text" readonly id="quantity" name="quantity" class="form-control input-number" style="max-width:50px;" value="1" min="1" max="@Model.Count">
+                <span class="input-group-btn">
+                    <button type="button" class="quantity-right-plus btn btn-warning" data-type="plus" data-field="">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </span>
+            </div>
+            <br />
+            <div>
+                <input type="submit" value="Купи" onclick="addToCart(@Model.Id)" class="btn btn-info pull-right" />
+            </div>
         </div>
     </div>
-</div>
+ </div>
 
-
+<br/>
+<br />
 <div class="tabs" style="width:100%;">
     <div class="tab-button-outer">
         <ul id="tab-button">
@@ -112,13 +129,16 @@
                             <textarea id="review" class="form-control" rows="3" cols="50" placeholder="write a comment..."></textarea>
                             <br>
                             <input type="submit" class="btn btn-info pull-right" onclick="rate(@Model.Id)" />
-
+                            <div class="alert alert-danger alert-dismissible" id="alertLogin" style="visibility:hidden;">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <strong>За да оставите отзив, моля влезте във Вашия профил!</strong> .
+                            </div>
                             <div class="clearfix"></div>
                             <hr>
                             <ul class="media-list">
                                 @foreach (var item in Model.JewelryRatings)
                                 {
-                                   
+
                                     <li class="media">
                                         <div class="media-body">
                                             <span class="text-muted pull-right">
@@ -127,7 +147,7 @@
                                             <span class="text-muted pull-left">
                                                 <strong>@item.UserUserName </strong>
                                             </span>
-                                            <br/>
+                                            <br />
                                             <div class="rating-checked">
                                                 @for (int i = 0; i < 5; i++)
                                                 {
@@ -160,11 +180,19 @@
 @section Scripts
 {
     <script>
+
+        function changeImage(image) {
+            mainImage = document.getElementById("mainImage").src;
+            document.getElementById("mainImage").src = image.src;
+            image.src = mainImage;
+        }
+
         function addToCart(id) {
 
             var token = $("#ratingsForm input[name=__RequestVerificationToken]").val();
-            var json = { jewelId: id, quantity: 1};
-            
+            var quantityValue = parseInt($("#quantity").val());
+            var json = { jewelId: id, quantity: quantityValue };
+            alert(JSON.stringify(json));
             $.ajax({
                 url: "/api/orders",
                 type: "POST",
@@ -176,7 +204,7 @@
                 }
             });
         }
-                
+
         function rate(id) {
 
             var radios = document.getElementsByName('rating');
@@ -260,6 +288,9 @@
 
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
+                    if (errorThrown == "Unauthorized") {
+                        $("#alertLogin").css('visibility', 'visible');
+                    }
                 }
             });
         }
@@ -291,6 +322,40 @@
                 $tabButtonItem.eq(targetSelectNum).addClass(activeClass);
                 $tabContents.hide();
                 $(target).show();
+            });
+        });
+
+        $(document).ready(function () {
+            $('.quantity-right-plus').click(function (e) {
+
+                // Stop acting like a button
+                e.preventDefault();
+                // Get the field name
+                var quantity = parseInt($('#quantity').val());
+
+                // If is not undefined
+                var maxQuantity = parseInt($('#quantity').attr('max'));
+                if (quantity < maxQuantity) {
+                    $('#quantity').val(quantity + 1);
+                }
+
+
+                // Increment
+
+            });
+
+            $('.quantity-left-minus').click(function (e) {
+                // Stop acting like a button
+                e.preventDefault();
+                // Get the field name
+                var quantity = parseInt($('#quantity').val());
+
+                // If is not undefined
+
+                // Increment
+                if (quantity > 1) {
+                    $('#quantity').val(quantity - 1);
+                }
             });
         });
     </script>

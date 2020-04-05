@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "1.0",
   "defaultProvider": "jsdelivr",
   "libraries": [
@@ -58,6 +58,11 @@
         "css/all.css",
         "css/all.min.css"
       ]
+    },
+    {
+      "provider": "cdnjs",
+      "library": "font-awesome@5.13.0",
+      "destination": "wwwroot/lib/font-awesome/"
     }
   ]
 }
