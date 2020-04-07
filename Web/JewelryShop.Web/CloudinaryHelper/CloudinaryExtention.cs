@@ -1,6 +1,5 @@
 ﻿namespace JewelryShop.Web.CloudinaryHelper
 {
-    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -42,6 +41,17 @@
             }
 
             return list;
+        }
+
+        public static async Task DeleteImageAsync(Cloudinary cloudinary, string imageUrl)
+        {
+            var delParams = new DeletionParams(imageUrl)
+            {
+                PublicId = imageUrl,
+                ResourceType = ResourceType.Image,
+            };
+
+            var result = await cloudinary.DestroyAsync(delParams);
         }
     }
 }

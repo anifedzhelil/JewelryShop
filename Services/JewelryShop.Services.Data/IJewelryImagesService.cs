@@ -8,5 +8,7 @@
     public interface IJewelryImagesService
     {
         Task<bool> AddAsync(int jewelId, List<string> urls);
+
+        void DeleteImage(int jewelId, string imageUrl);
     }
 }

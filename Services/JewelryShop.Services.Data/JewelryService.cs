@@ -101,5 +101,16 @@
                 .To<T>()
                 .FirstOrDefault();
         }
+
+        public async Task DeleteByIdAsync(int id)
+        {
+            var jewel = this.jewelryRepository.All().FirstOrDefault(d => d.Id == id);
+            if (jewel != null)
+            {
+                jewel.IsDeleted = true;
+                this.jewelryRepository.Update(jewel);
+                await this.jewelryRepository.SaveChangesAsync();
+            }
+        }
     }
 }

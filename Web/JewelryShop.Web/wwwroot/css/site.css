@@ -278,3 +278,16 @@ body {
     width: 100px;
     height: 100px;
 }
+
+
+/************************/
+/* CSS used here will be applied after bootstrap.css */
+.img-container {
+    display: inline;
+    position: relative;
+}
+
+.close {
+    position: absolute;
+    right: 0;
+}

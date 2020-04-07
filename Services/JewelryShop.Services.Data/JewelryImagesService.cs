@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
 
@@ -32,6 +33,19 @@
             }
 
             return true;
+        }
+
+        public void DeleteImage(int jewelId, string imageUrl)
+        {
+            var image = this.jewelryImagesRepository.All()
+                .Where(x => x.JewelId == jewelId && x.ImageUrl == imageUrl)
+                .FirstOrDefault();
+
+            if (image != null)
+            {
+                this.jewelryImagesRepository.Delete(image);
+                this.jewelryImagesRepository.SaveChangesAsync();
+            }
         }
     }
 }

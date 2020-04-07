@@ -1,9 +1,11 @@
 ﻿@model JewelryShop.Web.ViewModels.Administration.Jewelry.EditJewelViewModel
-
-<hr />
+@{
+    var num = 0;
+    var imageId = "";
+}
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Update" asp-route-id="@Model.Id" asp-controller="Jewelry" method="post">
+        <form asp-action="Update" asp-route-id="@Model.Id" asp-controller="Jewelry" method="post" id="editForm">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label">Име</label>
@@ -38,11 +40,19 @@
                 <input type="file" />
             </div>
             @foreach (var item in Model.Images)
-            {
-                <div class="form-group">
-                    <img src="@item" width="100px" />
-                </div>
-            }
+                    {
+                        imageId = "image" + num.ToString();
+                        num += 1;
+                <div class="form-group" id="@imageId" >
+                    <div class="img-container" ng-repeat="file in imagefinaldata">
+                    <img style="height:120px" class="imgResponsiveMax" src="@item" />
+                    <button class="close" type="button" id="openmodalpopup" name="openmodalpopup" data-modal-action="openconfimdialog"
+                         data-url="@item" data-jewelId="@Model.Id" data-divId="@imageId">
+                             ×
+                    </button>
+                 </div>
+              </div>
+             }
             <div class="form-group">
                 <label asp-for="Count" class="control-label">Брой</label>
                 <input asp-for="Count" class="form-control" type="number" />
@@ -63,3 +73,75 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+
+<div class="modal" tabindex="-1" role="dialog" id="myModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Внимание!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Сигурни ли сте, че искате да изтриете избраната снимка?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Не</button>
+                <button type="button" class="btn btn-primary" data-modal-action="yes">Да</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts
+{
+    <script>
+        var imageUrl = "";
+        var jewelid = "";
+        var divId = "";
+        $("[data-modal-action=openconfimdialog]").click(function () {
+            imageUrl = $(this).attr("data-url");
+            jewelid = $(this).attr("data-jewelId");
+            divId = $(this).attr("data-divId");
+            $("#myModal").modal("show");
+        });
+
+        /*  <button type="button" class="btn btn-primary" data-modal-action="yes"> Yes</button> */
+        // when user click yes, already you stored the value in id, you can pass the vales in ajax and delete action
+
+        $("[data-modal-action=yes]").click(function () {
+            //call the delete ajax method
+            deleteAward(imageUrl, jewelid, divId);  //calling delete method
+            $("#myModal").modal("hide");
+        });
+
+
+        function deleteAward(imageUrl, jewelid, divId) {
+            var divElement = $("#" + divId);
+
+            var json = {
+                imageUrl: imageUrl,
+                jewelId: parseInt(jewelid)
+            };
+            var token = $("#editForm input[name=__RequestVerificationToken]").val();
+          
+            $.ajax({
+                url: "/api/images",
+                type: "POST",
+                data: JSON.stringify(json),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                headers: { 'X-CSRF-TOKEN': token },
+                success: function (data) {
+                    $("#" + divId).remove()                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    if (errorThrown == "Unauthorized") {
+                    }
+                }
+            });
+        }
+
+    </script>
+}
