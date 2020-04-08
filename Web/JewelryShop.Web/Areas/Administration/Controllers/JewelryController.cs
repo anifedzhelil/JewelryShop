@@ -76,5 +76,29 @@
 
             return this.View(editViewModel);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditJewelViewModel jewel, ICollection<IFormFile> imagesFiles)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                jewel.Images = this.jewelryImagesService.GetJewelImages(jewel.Id);
+                return this.View(jewel);
+            }
+            else
+            {
+                var listUrls = await CloudinaryExtention.UploadAsync(this.cloudinary, imagesFiles);
+                await jewelryImagesService.AddAsync(jewel.Id, listUrls);
+                await this.jewelryService.Update(jewel);
+            }
+
+            return this.RedirectToAction("Index");
+        }
+
+        public async Task<RedirectToActionResult> DeleteAsync(int id)
+        {
+            await this.jewelryService.DeleteByIdAsync(id);
+            return this.RedirectToAction("Index");
+        }
     }
 }

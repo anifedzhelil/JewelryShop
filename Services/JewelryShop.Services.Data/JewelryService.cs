@@ -38,6 +38,28 @@
             return jewel.Id;
         }
 
+        public async Task Update(EditJewelViewModel jewelModel)
+        {
+            var jewel = this.jewelryRepository.All()
+                  .Where(x => x.Id == jewelModel.Id)
+                  .FirstOrDefault();
+
+            if (jewel != null)
+            {
+                jewel.Name = jewelModel.Name;
+                jewel.Price = jewelModel.Price;
+                jewel.Description = jewelModel.Description;
+                jewel.Category = jewelModel.Category;
+                jewel.SalePrice = jewelModel.SalePrice;
+                jewel.SaleDate = jewelModel.SaleDate;
+                jewel.Count = jewelModel.Count;
+                jewel.IsArchived = jewelModel.IsArchived;
+
+                this.jewelryRepository.Update(jewel);
+                await this.jewelryRepository.SaveChangesAsync();
+            }
+        }
+
         public IEnumerable<T> GetAll<T>(int? count = null)
         {
             IQueryable<Jewel> query = this.jewelryRepository.All()

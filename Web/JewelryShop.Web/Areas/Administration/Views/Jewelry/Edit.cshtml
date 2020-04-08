@@ -5,8 +5,8 @@
 }
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Update" asp-route-id="@Model.Id" asp-controller="Jewelry" method="post" id="editForm">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <form asp-action="Edit" asp-route-id="@Model.Id" asp-controller="Jewelry" method="post" id="editForm" enctype="multipart/form-data">
+            <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label">Име</label>
                 <input asp-for="Name" class="form-control" />
@@ -14,7 +14,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Price" class="control-label">Цена</label>
-                <input asp-for="Price" class="form-control" />
+                <input asp-for="Price" class="form-control" type="number" step="any" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -29,33 +29,34 @@
             </div>
             <div class="form-group">
                 <label asp-for="SalePrice" class="control-label">Промоционална цена</label>
-                <input asp-for="SalePrice" class="form-control" type="number" />
+                <input asp-for="SalePrice" class="form-control" type="number" step="any" data-val="false" formnovalidate="formnovalidate" />
             </div>
             <div class="form-group">
                 <label asp-for="SaleDate" class="control-label">Дата на промоцията</label>
-                <input asp-for="SaleDate" class="form-control" type="date" />
+                <input asp-for="SaleDate" class="form-control" type="date" data-val="false" formnovalidate="formnovalidate" />
             </div>
             <div class="form-group">
                 <label class="control-label"></label>
-                <input type="file" />
+                <input type="file" accept="image/*"
+                       multiple="multiple" name="imagesFiles" />
             </div>
             @foreach (var item in Model.Images)
-                    {
-                        imageId = "image" + num.ToString();
-                        num += 1;
-                <div class="form-group" id="@imageId" >
+            {
+                imageId = "image" + num.ToString();
+                num += 1;
+                <div class="form-group" id="@imageId">
                     <div class="img-container" ng-repeat="file in imagefinaldata">
-                    <img style="height:120px" class="imgResponsiveMax" src="@item" />
-                    <button class="close" type="button" id="openmodalpopup" name="openmodalpopup" data-modal-action="openconfimdialog"
-                         data-url="@item" data-jewelId="@Model.Id" data-divId="@imageId">
-                             ×
-                    </button>
-                 </div>
-              </div>
-             }
+                        <img style="height:120px" class="imgResponsiveMax" src="@item" />
+                        <button class="close" type="button" id="openmodalpopup" name="openmodalpopup" data-modal-action="openconfimdialog"
+                                data-url="@item" data-jewelId="@Model.Id" data-divId="@imageId">
+                            ×
+                        </button>
+                    </div>
+                </div>
+            }
             <div class="form-group">
                 <label asp-for="Count" class="control-label">Брой</label>
-                <input asp-for="Count" class="form-control" type="number" />
+                <input asp-for="Count" class="form-control" type="number" min="0" />
                 <span asp-validation-for="Count" class="text-danger"></span>
             </div>
             <div class="form-group form-check">

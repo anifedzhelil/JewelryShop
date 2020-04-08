@@ -19,6 +19,8 @@
 
         Task<int> AddAsync(CreateJewelViewModel createJewelModel);
 
+        Task Update(EditJewelViewModel createJewelModel);
+
         Task DeleteByIdAsync(int id);
     }
 }

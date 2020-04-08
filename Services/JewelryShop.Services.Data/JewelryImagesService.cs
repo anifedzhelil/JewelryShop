@@ -47,5 +47,14 @@
                 this.jewelryImagesRepository.SaveChangesAsync();
             }
         }
+
+        public IEnumerable<string> GetJewelImages(int jewelId)
+        {
+            return this.jewelryImagesRepository.All()
+               .Where(x => x.JewelId == jewelId)
+               .Select(x => x.ImageUrl)
+               .ToList();
+
+        }
     }
 }
