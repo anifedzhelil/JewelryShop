@@ -45,6 +45,18 @@
                  return this.View();
          }
 
+        public IActionResult Details(int id)
+        {
+            if (id < 0)
+            {
+                return this.NotFound();
+            }
+
+            DetailsViewModel viewModel = this.jewelryService.GetById<DetailsViewModel>(id);
+
+            return this.View(viewModel);
+        }
+
         [HttpPost]
         public async Task<ActionResult> CreateAsync(CreateJewelViewModel createJewel, ICollection<IFormFile> imagesFiles)
         {

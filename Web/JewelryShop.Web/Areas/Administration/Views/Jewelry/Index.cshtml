@@ -12,7 +12,7 @@
     </div>
 }
 
-<a class="btn btn-primary stretched-link" asp-area="Administration" asp-controller="Jewelry" asp-action="Create">Добави продукт</a>
+<a  asp-area="Administration" asp-controller="Jewelry" asp-action="Create">Добави продукт</a>
 
 
 <table class="table table-striped">
@@ -50,9 +50,9 @@
                     @Html.DisplayFor(modelItem => item.Count)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Редактирай</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Детайл</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Изтрий</a>
+                    <a asp-action="Edit"  asp-area="Administration" asp-controller="Jewelry" asp-route-id="@item.Id">Редактирай</a> |
+                    <a asp-action="Details" asp-area="Administration" asp-controller="Jewelry" asp-route-id="@item.Id">Детайл</a> |
+                    <a asp-action="Delete" asp-area="Administration" asp-controller="Jewelry" asp-route-id="@item.Id">Изтрий</a>
                 </td>
             </tr>
         }

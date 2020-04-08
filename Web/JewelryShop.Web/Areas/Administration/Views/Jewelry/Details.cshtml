@@ -1,0 +1,98 @@
+﻿@model JewelryShop.Web.ViewModels.Administration.Jewelry.DetailsViewModel
+
+@{
+    ViewData["Title"] = "Details";
+    var num = 0;
+    var imageCount = Model.Images.Count();
+    var thumbnImageId = "thumbn";
+}
+<div class="container" style="margin:30px;">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="row">
+                <img src="@Model.Images.ElementAt(0)" id="mainImage" class="img-fluid" style="width:100%">
+            </div>
+            <br/>
+            <div class="row">
+                @if (imageCount > 1)
+                {
+                    @for (num = 1; num < 3; num++)
+                    {
+                        @if (imageCount > num)
+                        {
+                            thumbnImageId = "imgId" + num.ToString();
+                            <a onclick="changeImage(@thumbnImageId)"><img src="@Model.Images.ElementAt(num)" id="@thumbnImageId" class="img-thumbnail" style="cursor: pointer; max-width:120px;"></a>
+                        }
+                    }
+                }
+            </div>
+        </div>
+        <div class="details col-md-6 border-info" style="padding-left:70px;">
+            <br />
+            <br />
+            <h3 class="product-title">@Model.Name</h3>
+            <br />
+            <div class="average-rating">
+                <div class="average-rating-checked">
+                    @for (int i = 0; i < 5; i++)
+                    {
+                        if (i < (int)Model.Ratings)
+                        {
+                            <span class="fa fa-star checked"></span>
+                        }
+                        else
+                        {
+                            <span class="fa fa-star"></span>
+                        }
+                    }
+                 <span class="font-weight-bolder text-primary">@Model.Ratings</span> <small> от 5</small>
+                    <br />
+                    <small>@Model.TypeCount гласували </small>
+
+                </div>
+            </div>
+            <br/>
+            <div class="form-group">
+                <span class="text-muted">Дата на добавяне: </span>@Model.CreatedOn.ToShortDateString()
+            </div>
+            <div class="form-group">
+                <span class="text-muted">Дата на редактиране: </span>@Model.ModifiedOn.ToShortDateString()
+            </div>
+            @if (Model.SaleDate > DateTime.UtcNow)
+            {
+                <div class="form-group"><span class="text-muted">Промоционална цена: </span><h2> @Model.SalePrice лв</h2></div>
+                <div class="form-group"><span class="text-muted">Стара цена: </span>@Model.Price лв</div>
+                <div class="form-group"><span class="text-muted">Дата на промоцията: </span> @Model.SaleDate.ToString("MM/dd/yyyy")</div>
+            }
+            else
+            {
+                <div class="form-group">
+                    <p>
+                        <span class="text-muted">Цена: </span><h5>@Model.Price лв</h5>
+
+                    </p>
+                </div>
+            }
+            <div class="form-group">
+                <span class="text-muted">Описание: </span>@Model.Description
+            </div>
+            <div class="form-group">
+                <span class="text-muted">Брой: </span>@Model.Count
+            </div>
+            <br />
+            <br />
+        </div>
+    </div>
+</div>
+
+
+@section Scripts
+{
+    <script>
+        function changeImage(image) {
+            mainImage = document.getElementById("mainImage").src;
+            document.getElementById("mainImage").src = image.src;
+            image.src = mainImage;
+        }
+    </script>
+}
