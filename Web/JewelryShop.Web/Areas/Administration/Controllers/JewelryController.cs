@@ -61,6 +61,7 @@
                     await this.jewelryImagesService.AddAsync(jewelId, listUrls);
                 }
 
+                this.TempData["InfoMessage"] = "Продуктът успешно е добавен.";
                 return this.RedirectToAction("Index");
             }
         }
@@ -88,16 +89,18 @@
             else
             {
                 var listUrls = await CloudinaryExtention.UploadAsync(this.cloudinary, imagesFiles);
-                await jewelryImagesService.AddAsync(jewel.Id, listUrls);
+                await this.jewelryImagesService.AddAsync(jewel.Id, listUrls);
                 await this.jewelryService.Update(jewel);
             }
-
+            
+            this.TempData["InfoMessage"] = "Продуктът успешно е редактиран.";
             return this.RedirectToAction("Index");
         }
 
         public async Task<RedirectToActionResult> DeleteAsync(int id)
         {
             await this.jewelryService.DeleteByIdAsync(id);
+            this.TempData["InfoMessage"] = "Продуктът е изтрит.";
             return this.RedirectToAction("Index");
         }
     }

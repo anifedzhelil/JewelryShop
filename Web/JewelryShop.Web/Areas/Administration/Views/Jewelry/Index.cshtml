@@ -2,10 +2,20 @@
 @{
     ViewData["Title"] = "Galilani";
 }
-<a class="btn-link" asp-area="Administration" asp-controller="Jewelry" asp-action="Create">Добави продукт</a>
+@if (this.TempData["InfoMessage"] != null)
+{
+    <div class="alert alert-success">
+        @this.TempData["InfoMessage"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
+<a class="btn btn-primary stretched-link" asp-area="Administration" asp-controller="Jewelry" asp-action="Create">Добави продукт</a>
 
 
-<table class="table">
+<table class="table table-striped">
     <thead>
         <tr>
             <th>
@@ -19,9 +29,6 @@
             </th>
             <th>
                 Брой
-            </th>
-            <th>
-                Активиран
             </th>
             <th></th>
         </tr>
@@ -41,9 +48,6 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Count)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsActive)
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Редактирай</a> |
