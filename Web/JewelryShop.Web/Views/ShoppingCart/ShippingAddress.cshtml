@@ -1,0 +1,78 @@
+﻿@model JewelryShop.Web.ViewModels.ShippingAddresses.UserShippingAddressViewModel
+
+
+@if (Model.ShippingAddress != null)
+{
+    var num = 1;
+    <div class="custom-control custom-radio">
+
+        @foreach (var item in Model.ShippingAddressesCollection)
+        {
+            <div class="mb-3">
+                <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input" />
+                <label class="custom-control-label" for="customRadio1">Адрес @num</label>
+            </div>
+
+            <div class="card bg-light mb-3" style="max-width: 18rem;" for="customRadio1">
+                <div class="card-header">
+                    <div>@item.FirstName @item.LastName</div>
+                    <div align="right">
+                        <a asp-action="EditShippingAddress" asp-route-id="@item.Id"><i class="far fa-edit"></i></a>
+                        <a asp-action="DeleteShippingAddress" asp-route-id="@item.Id"><i class="far fa-trash-alt"></i></a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">тел. @item.Phone</p>
+                    <p class="card-text">гр./с. @item.City  П.К. @item.PostCode</p>
+                    <p class="card-text">адрес: @item.Address</p>
+                    @if (item.AdditioanalAddress != null)
+                    {
+                        <p class="card-text">@item.AdditioanalAddress</p>
+
+                    }
+                </div>
+            </div>
+            num++;
+        }
+    </div>
+}
+else
+{
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        <strong>Нямате добавен адрес.</strong> Моля добавете адрес!
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
+<div class="row">
+    <a href="#" id="newAddress" class="btn btn-primary" role="button">Добавете нов адрес</a>
+</div>
+<br />
+
+@if (this.TempData["ShippingAddressIsValid"] != null && (bool)this.TempData["ShippingAddressIsValid"] == false)
+{
+    <div id="partialView" class="border col-md-8">
+        @await this.Html.PartialAsync("_InputShippingAddress", @Model.ShippingAddress)
+    </div>
+}
+else
+{
+    <div id="partialView" style="visibility:hidden;" class="border col-md-8">
+        @await this.Html.PartialAsync("_InputShippingAddress", @Model.ShippingAddress)
+    </div>
+
+}
+
+@section Scripts
+{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#newAddress").click(function () {
+                $("#partialView").css('visibility', 'visible');
+            })
+        });
+    </script>
+}

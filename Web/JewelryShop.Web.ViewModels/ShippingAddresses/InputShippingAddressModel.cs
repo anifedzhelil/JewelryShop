@@ -2,8 +2,13 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    public class CreateShippingAddressModel
+    using JewelryShop.Data.Models;
+    using JewelryShop.Services.Mapping;
+
+    public class InputShippingAddressModel : IMapFrom<ShippingAddress>
     {
+        public int Id { get; set; }
+
         [Required(ErrorMessage = "Моля въведете име")]
         public string FirstName { get; set; }
 
@@ -26,5 +31,7 @@
         [RegularExpression("[0-9]{4}")]
         [StringLength(4, MinimumLength = 4)]
         public string PostCode { get; set; }
+
+        public string UserID { get; set; }
     }
 }

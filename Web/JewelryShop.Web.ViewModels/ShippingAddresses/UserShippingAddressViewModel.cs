@@ -7,6 +7,8 @@
 
     public class UserShippingAddressViewModel : IMapFrom<ShippingAddress>
     {
-        public IEnumerable<ShippingAddressViewModel> ShippingAddress { get; set; }
+        public IEnumerable<ShippingAddressViewModel> ShippingAddressesCollection { get; set; }
+
+        public InputShippingAddressModel ShippingAddress { get; set; }
     }
 }
