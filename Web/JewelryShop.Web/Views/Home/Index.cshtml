@@ -5,13 +5,13 @@
 }
 
 <div class="text-center">
-    <img src="~/images/banner.jpeg"  />
+    <img src="~/images/banner.jpeg" />
 </div>
 
 <!-- /.col-lg-3 -->
 
 <div class="container">
-    <div  class="row">
+    <div class="row">
         <hr />
     </div>
     <div class="row">
@@ -20,10 +20,10 @@
             <div class="list-group">
                 <a href="#" class="list-group-item list-group-item-action disabled">Категории</a>
 
-                    @foreach (var item in jewelryCategoriesService.GetJewelryCategories())
-                    {
-                        <a class="list-group-item list-group-item-action" asp-area="" asp-controller="Home" asp-route-category="@item.Key" asp-action="Index">@item.Value</a>
-                    }
+                @foreach (var item in jewelryCategoriesService.GetJewelryCategories())
+                {
+                    <a class="list-group-item list-group-item-action" asp-area="" asp-controller="Home" asp-route-category="@item.Key" asp-action="Index">@item.Value</a>
+                }
             </div>
         </div>
         <!-- /.col-lg-3 -->
@@ -52,15 +52,15 @@
                                 @if (item.SaleDate > DateTime.Now)
                                 {
                                     <h5>@item.SalePrice лв</h5>
-                                        <span class="text-muted oldprice">@item.Price лв</span>
-                                    
+                                    <span class="text-muted oldprice">@item.Price лв</span>
+
                                 }
                                 else
-                                {   
-                                    Цена: <h5>@item.Price лв</h5>
+                                {
+                                    <span>Цена:</span> <h5>@item.Price лв</h5>
                                 }
                             </div>
-                            <div class="card-footer">                               
+                            <div class="card-footer">
                                 @for (var num = 0; num < 5; num++)
                                 {
                                     if (num < (int)item.Ratings)
@@ -71,7 +71,7 @@
                                     {
                                         <small class="text-muted">&#9734;</small>
                                     }
-                                }                               
+                                }
                             </div>
                         </div>
                     </div>
@@ -94,7 +94,6 @@
         {
             <li class="page-item">
                 <a class="page-link"
-                   asp-route="forumCategory"
                    asp-route-category="@this.Model.Category"
                    asp-route-page="@(this.Model.CurrentPage - 1)">Предишен</a>
             </li>

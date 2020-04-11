@@ -13,9 +13,9 @@
 
     public class HomeController : BaseController
     {
-        private readonly IJewelryService jewelryService;
-
         private const int ItemsPerPage = 2;
+
+        private readonly IJewelryService jewelryService;
 
         public HomeController(IJewelryService jewelryService)
         {
@@ -23,7 +23,7 @@
         }
 
         [HttpGet]
-        public IActionResult Index(int? category, int page = 1)
+        public IActionResult Index(CategoryType? category, int page = 1)
         {
             var count = this.jewelryService.GetCount(category);
 
@@ -39,7 +39,12 @@
                 viewModel.PagesCount = 1;
             }
 
+            if (category.HasValue)
+            { 
+                viewModel.Category = (CategoryType)category;
+            }
             viewModel.CurrentPage = page;
+
             return this.View(viewModel);
         }
 
@@ -60,5 +65,4 @@
                 new ErrorViewModel { RequestId = Activity.Current?.Id ?? this.HttpContext.TraceIdentifier });
         }
     }
-
 }

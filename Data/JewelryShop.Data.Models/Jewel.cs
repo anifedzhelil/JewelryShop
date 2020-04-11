@@ -20,7 +20,7 @@
 
         public string Description { get; set; }
 
-        public int Category { get; set; }
+        public CategoryType Category { get; set; }
 
         public decimal? SalePrice { get; set; }
 
@@ -31,7 +31,7 @@
         public bool IsArchived { get; set; }
 
         public virtual ICollection<JewelImages> Images { get; set; }
-       
+
         public virtual ICollection<Rating> Ratings { get; set; }
     }
 }

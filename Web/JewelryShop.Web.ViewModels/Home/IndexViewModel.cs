@@ -2,6 +2,8 @@
 {
     using System.Collections.Generic;
 
+    using JewelryShop.Data.Models;
+
     public class IndexViewModel
     {
         public IEnumerable<IndexJewelryViewModel> Jewelry { get; set; }
@@ -10,7 +12,6 @@
 
         public int PagesCount { get; set; }
 
-        public int Category { get; set; }
-
+        public CategoryType Category { get; set; }
     }
 }

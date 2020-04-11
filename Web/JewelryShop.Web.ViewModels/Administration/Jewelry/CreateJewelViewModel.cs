@@ -3,8 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.Text;
 
+    using JewelryShop.Data.Models;
     using JewelryShop.Web.ViewModels.ValidationAttributes;
 
     public class CreateJewelViewModel
@@ -31,7 +31,7 @@
         public int Count { get; set; }
 
         [Required(ErrorMessage = "Моля  изберете категория")]
-        public int Category { get; set; }
+        public CategoryType Category { get; set; }
 
         public bool IsArchived { get; set; }
     }

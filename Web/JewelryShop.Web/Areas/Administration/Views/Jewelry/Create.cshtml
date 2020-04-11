@@ -29,7 +29,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Category" class="control-label">Тип бижута</label>
-                <select asp-for="Category" class="form-control" asp-items="@Html.GetEnumSelectList(typeof(JewelryShop.Data.Models.JewelryCategories.JewelryCategoriesEnum))">
+                <select asp-for="Category" class="form-control" asp-items="@Html.GetEnumSelectList(typeof(JewelryShop.Data.Models.CategoryType))">
                     <option disabled selected>--- Изберете категория ---</option>
                 </select>
             </div>

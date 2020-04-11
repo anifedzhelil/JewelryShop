@@ -25,8 +25,6 @@
 
         public int Count { get; set; }
 
-        public int Category { get; set; }
-
         public IEnumerable<string> Images { get; set; }
 
         public double Ratings { get; set; }

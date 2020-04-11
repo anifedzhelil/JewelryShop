@@ -86,21 +86,7 @@
             return query.To<T>().ToArray();
         }
 
-        /*
-        public IEnumerable<T> GetByCategoryId<T>(int categoryId, int? take = null, int skip = 0)
-        {
-            var query = this.postsRepository.All()
-                .OrderByDescending(x => x.CreatedOn)
-                .Where(x => x.CategoryId == categoryId).Skip(skip);
-            if (take.HasValue)
-            {
-                query = query.Take(take.Value);
-            }
-
-            return query.To<T>().ToList();
-        }
-        */
-        public IEnumerable<T> GetAllActivedByCategories<T>(int? category, int? take = null, int skip = 0)
+        public IEnumerable<T> GetAllActivedByCategories<T>(CategoryType? category, int? take = null, int skip = 0)
         {
             IQueryable<Jewel> query;
             if (category > 0)
@@ -123,7 +109,7 @@
 
             return query.To<T>().ToArray();
         }
-        
+
         public T GetById<T>(int id)
         {
             return this.jewelryRepository.All()
@@ -143,14 +129,14 @@
             }
         }
 
-        public int GetCount(int? category)
+        public int GetCount(CategoryType? category)
         {
-            if (category>0)
+            if (category > 0)
             {
-                return this.jewelryRepository.All().Count(x => x.Category == category);
+                return this.jewelryRepository.All().Count(x => x.IsArchived == false && x.Category == category && x.Count > 0);
             }
 
-            return this.jewelryRepository.All().Count();
+            return this.jewelryRepository.All().Count(x => x.IsArchived == false && x.Count > 0);
         }
     }
 }

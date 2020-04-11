@@ -13,7 +13,7 @@
         public Dictionary<int, string> GetJewelryCategories()
         {
             Dictionary<int, string> dictJewelTypes = new Dictionary<int, string>();
-            foreach (JewelryCategories.JewelryCategoriesEnum value in Enum.GetValues(typeof(JewelryCategories.JewelryCategoriesEnum)))
+            foreach (CategoryType value in Enum.GetValues(typeof(CategoryType)))
             {
                 Type enumType = value.GetType();
                 var enumValue = Enum.GetName(enumType, value);

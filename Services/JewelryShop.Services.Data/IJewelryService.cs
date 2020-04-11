@@ -1,10 +1,9 @@
 ﻿namespace JewelryShop.Services.Data
 {
-    using System;
     using System.Collections.Generic;
-    using System.Text;
     using System.Threading.Tasks;
 
+    using JewelryShop.Data.Models;
     using JewelryShop.Web.ViewModels.Administration.Jewelry;
 
     public interface IJewelryService
@@ -13,7 +12,7 @@
 
         IEnumerable<T> GetAllActived<T>(int? count = null);
 
-        IEnumerable<T> GetAllActivedByCategories<T>(int? category, int? take = null, int skip = 0);
+        IEnumerable<T> GetAllActivedByCategories<T>(CategoryType? category, int? take = null, int skip = 0);
 
         T GetById<T>(int id);
 
@@ -23,6 +22,6 @@
 
         Task DeleteByIdAsync(int id);
 
-        int GetCount(int? category);
+        int GetCount(CategoryType? category);
     }
 }
