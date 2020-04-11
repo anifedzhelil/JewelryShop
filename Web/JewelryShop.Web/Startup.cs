@@ -117,8 +117,8 @@
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            // ToDo
-            // app.UseCookiePolicy();
+            app.UseCookiePolicy();
+
             app.UseRouting();
 
             app.UseAuthentication();

@@ -5,34 +5,40 @@
 }
 
 <div class="text-center">
-    <img src="~/images/banner.jpeg" />
-
-    <form>
-        <input type="search" class="form-control" />
-    </form>
+    <img src="~/images/banner.jpeg"  />
 </div>
 
 <!-- /.col-lg-3 -->
-<div class="container">
 
+<div class="container">
+    <div  class="row">
+        <hr />
+    </div>
     <div class="row">
 
         <div class="col-lg-3">
-
-            <h1 class="my-4">Shop Name</h1>
             <div class="list-group">
+                <a href="#" class="list-group-item list-group-item-action disabled">Категории</a>
 
-                @foreach (var item in jewelryCategoriesService.GetJewelryCategories())
-                {
-                    <a class="list-group-item" asp-area="" asp-controller="Home" asp-route-category="@item.Key" asp-action="Index">@item.Value</a>
-                    <hr>
-
-                }
+                    @foreach (var item in jewelryCategoriesService.GetJewelryCategories())
+                    {
+                        <a class="list-group-item list-group-item-action" asp-area="" asp-controller="Home" asp-route-category="@item.Key" asp-action="Index">@item.Value</a>
+                    }
             </div>
         </div>
         <!-- /.col-lg-3 -->
 
         <div class="col-lg-9">
+            <div id="custom-search-input">
+                <div class="input-group">
+                    <input type="text" class="search-query form-control" placeholder="Search" />
+                    <span class="input-group-btn">
+                        <button type="button" disabled>
+                            <span class="fa fa-search"></span>
+                        </button>
+                    </span>
+                </div>
+            </div>
             <div class="row">
                 @foreach (var item in this.Model.Jewelry)
                 {
@@ -40,18 +46,18 @@
                         <div class="card h-100" style="align-content:center">
                             <a asp-action="Details" asp-route-id="@item.Id" asp-controller="Home"><img class="card-img-bottom" style="height:200px;" src="@item.ImageUrl" alt=""></a>
                             <div class="card-body">
-                                <h4 class="card-title">
-                                    <a href="#">@item.Name</a>
-                                </h4>
+                                <h5 class="card-title">
+                                    <a asp-action="Details" asp-route-id="@item.Id" asp-controller="Home">@item.Name</a>
+                                </h5>
                                 @if (item.SaleDate > DateTime.Now)
                                 {
-                                    <p>Промоционална цена:<br/> @item.SalePrice лв</p>
-                                    <p class="card-text">Дата на промоцията:<br /> @item.SaleDate.Date.ToShortDateString()</p>
-
+                                    <h5>@item.SalePrice лв</h5>
+                                        <span class="text-muted oldprice">@item.Price лв</span>
+                                    
                                 }
                                 else
-                                {
-                                    <h5>@item.Price лв</h5>
+                                {   
+                                    Цена: <h5>@item.Price лв</h5>
                                 }
                             </div>
                             <div class="card-footer">
@@ -66,3 +72,4 @@
     </div>
 </div>
 
+b
