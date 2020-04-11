@@ -13,7 +13,7 @@
 
         IEnumerable<T> GetAllActived<T>(int? count = null);
 
-        IEnumerable<T> GetAllActivedByCategories<T>(int? category, int? count = null);
+        IEnumerable<T> GetAllActivedByCategories<T>(int? category, int? take = null, int skip = 0);
 
         T GetById<T>(int id);
 
@@ -22,5 +22,7 @@
         Task Update(EditJewelViewModel createJewelModel);
 
         Task DeleteByIdAsync(int id);
+
+        int GetCount(int? category);
     }
 }

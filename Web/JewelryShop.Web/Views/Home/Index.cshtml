@@ -81,3 +81,48 @@
         </div>
     </div>
 </div>
+
+<nav>
+    <ul class="pagination justify-content-center">
+        @if (this.Model.CurrentPage == 1)
+        {
+            <li class="page-item disabled">
+                <a class="page-link" href="#">Предишен</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item">
+                <a class="page-link"
+                   asp-route="forumCategory"
+                   asp-route-category="@this.Model.Category"
+                   asp-route-page="@(this.Model.CurrentPage - 1)">Предишен</a>
+            </li>
+        }
+
+        @for (int i = 1; i <= this.Model.PagesCount; i++)
+        {
+            var active = i == this.Model.CurrentPage ? "active" : string.Empty;
+            <li class="page-item @active">
+                <a class="page-link"
+                   asp-route-category="@this.Model.Category"
+                   asp-route-page="@i">@i</a>
+            </li>
+        }
+
+        @if (this.Model.CurrentPage == this.Model.PagesCount)
+        {
+            <li class="page-item disabled">
+                <a class="page-link" href="#">Следващ</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item">
+                <a class="page-link"
+                   asp-route-name="@this.Model.Category"
+                   asp-route-page="@(this.Model.CurrentPage + 1)">Селдващ</a>
+            </li>
+        }
+    </ul>
+</nav>

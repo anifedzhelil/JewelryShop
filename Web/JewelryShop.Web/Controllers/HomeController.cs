@@ -1,5 +1,6 @@
 ﻿namespace JewelryShop.Web.Controllers
 {
+    using System;
     using System.Diagnostics;
     using System.Linq;
 
@@ -14,19 +15,31 @@
     {
         private readonly IJewelryService jewelryService;
 
+        private const int ItemsPerPage = 2;
+
         public HomeController(IJewelryService jewelryService)
         {
             this.jewelryService = jewelryService;
         }
 
         [HttpGet]
-        public IActionResult Index(int? category)
+        public IActionResult Index(int? category, int page = 1)
         {
+            var count = this.jewelryService.GetCount(category);
+
             IndexViewModel viewModel = new IndexViewModel()
             {
-                Jewelry = this.jewelryService.GetAllActivedByCategories<IndexJewelryViewModel>(category),
+                Jewelry = this.jewelryService.GetAllActivedByCategories<IndexJewelryViewModel>(category, ItemsPerPage, (page - 1) * ItemsPerPage),
             };
 
+            viewModel.PagesCount = (int)Math.Ceiling((double)count / ItemsPerPage);
+
+            if (viewModel.PagesCount == 0)
+            {
+                viewModel.PagesCount = 1;
+            }
+
+            viewModel.CurrentPage = page;
             return this.View(viewModel);
         }
 

@@ -86,36 +86,44 @@
             return query.To<T>().ToArray();
         }
 
-        public IEnumerable<T> GetAllActivedByCategories<T>(int? category, int? count = null)
+        /*
+        public IEnumerable<T> GetByCategoryId<T>(int categoryId, int? take = null, int skip = 0)
         {
-            if (category.HasValue)
+            var query = this.postsRepository.All()
+                .OrderByDescending(x => x.CreatedOn)
+                .Where(x => x.CategoryId == categoryId).Skip(skip);
+            if (take.HasValue)
             {
-                IQueryable<Jewel> query = this.jewelryRepository.All()
+                query = query.Take(take.Value);
+            }
+
+            return query.To<T>().ToList();
+        }
+        */
+        public IEnumerable<T> GetAllActivedByCategories<T>(int? category, int? take = null, int skip = 0)
+        {
+            IQueryable<Jewel> query;
+            if (category > 0)
+            {
+                query = this.jewelryRepository.All()
                 .OrderBy(c => c.CreatedOn)
-                .Where(x => x.IsArchived == false && x.Category == category);
-
-                if (count.HasValue)
-                {
-                    query = query.Take(count.Value);
-                }
-
-                return query.To<T>().ToArray();
+                .Where(x => x.IsArchived == false && x.Category == category && x.Count > 0).Skip(skip);
             }
             else
             {
-                IQueryable<Jewel> query = this.jewelryRepository.All()
-                   .OrderBy(c => c.CreatedOn)
-                   .Where(x => x.IsArchived == false);
-
-                if (count.HasValue)
-                {
-                    query = query.Take(count.Value);
-                }
-
-                return query.To<T>().ToArray();
+                query = this.jewelryRepository.All()
+                .OrderBy(c => c.CreatedOn)
+                .Where(x => x.IsArchived == false && x.Count > 0).Skip(skip);
             }
-        }
 
+            if (take.HasValue)
+            {
+                query = query.Take(take.Value);
+            }
+
+            return query.To<T>().ToArray();
+        }
+        
         public T GetById<T>(int id)
         {
             return this.jewelryRepository.All()
@@ -133,6 +141,16 @@
                 this.jewelryRepository.Update(jewel);
                 await this.jewelryRepository.SaveChangesAsync();
             }
+        }
+
+        public int GetCount(int? category)
+        {
+            if (category>0)
+            {
+                return this.jewelryRepository.All().Count(x => x.Category == category);
+            }
+
+            return this.jewelryRepository.All().Count();
         }
     }
 }

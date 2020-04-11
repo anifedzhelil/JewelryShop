@@ -1,11 +1,16 @@
 ﻿namespace JewelryShop.Web.ViewModels.Home
 {
-    using System;
     using System.Collections.Generic;
-    using System.Text;
 
     public class IndexViewModel
     {
         public IEnumerable<IndexJewelryViewModel> Jewelry { get; set; }
+
+        public int CurrentPage { get; set; }
+
+        public int PagesCount { get; set; }
+
+        public int Category { get; set; }
+
     }
 }
