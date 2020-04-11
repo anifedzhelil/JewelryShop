@@ -24,12 +24,17 @@
 
         public string ImageUrl { get; set; }
 
+        public double Ratings { get; set; }
+
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<Jewel, IndexJewelryViewModel>()
             .ForMember(
                 d => d.ImageUrl,
-                opt => opt.MapFrom(x => x.Images.Select(t => t.ImageUrl).FirstOrDefault()));
+                opt => opt.MapFrom(x => x.Images.Select(t => t.ImageUrl).FirstOrDefault()))
+              .ForMember(
+               d => d.Ratings,
+               opt => opt.MapFrom(x => x.Ratings.Average(t => (double)t.Type)));
         }
     }
 }
