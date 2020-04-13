@@ -44,6 +44,7 @@
                             <span class="fa fa-star"></span>
                         }
                     }
+
                 </div>
             </div>
             <br />
@@ -79,7 +80,7 @@
             </div>
             <br />
             <div>
-                <input type="submit" value="Купи" onclick="addToCart(@Model.Id)" class="btn btn-info pull-right" />
+                <a id="addProduct" class="btn  btn-success" asp-action="Create" asp-controller="Orders" asp-route-id="@Model.Id" asp-route-quantity="quantityval">Купи</a>
             </div>
         </div>
     </div>
@@ -181,28 +182,23 @@
 {
     <script>
 
+        $("#addProduct").click(function (e) {
+            // Stop the normal navigation
+            e.preventDefault();
+
+            //Build the new URL
+            var url = $(this).attr("href");
+            // Stop the normal navigation
+            var quantity = $("#quantity").val();
+            url = url.replace("quantityval", quantity);
+            //Navigate to the new URL
+            window.location.href = url;
+
+        });
         function changeImage(image) {
             mainImage = document.getElementById("mainImage").src;
             document.getElementById("mainImage").src = image.src;
             image.src = mainImage;
-        }
-
-        function addToCart(id) {
-
-            var token = $("#ratingsForm input[name=__RequestVerificationToken]").val();
-            var quantityValue = parseInt($("#quantity").val());
-            var json = { jewelId: id, quantity: quantityValue };
-            alert(JSON.stringify(json));
-            $.ajax({
-                url: "/api/orders",
-                type: "POST",
-                data: JSON.stringify(json),
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                headers: { 'X-CSRF-TOKEN': token },
-                success: function (data) {
-                }
-            });
         }
 
         function rate(id) {
@@ -230,9 +226,7 @@
                 headers: { 'X-CSRF-TOKEN': token },
                 success: function (data) {
 
-                    $("#totalRatings").html(data.avarageRating);
-                    $("#review").html("");
-
+                    $("#review").val("");
                     $(".media").remove();
                     $(".average-rating-checked").remove();
 

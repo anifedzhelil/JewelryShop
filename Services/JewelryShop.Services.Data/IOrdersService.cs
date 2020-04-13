@@ -20,5 +20,9 @@
         Task DeleteOrderDetail(int orderDetailId);
 
         Task UpdateOrderDetailQuantityAsync(int orderDetailId, int quantity);
+
+        int GetActiveOrderCount(string userId);
+
+        int GetActiveGuestOrderCount(string guestId);
     }
 }

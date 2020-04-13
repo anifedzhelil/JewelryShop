@@ -29,7 +29,7 @@
 
         public int Count { get; set; }
 
-        public int Category { get; set; }
+        public CategoryType Category { get; set; }
 
         public IEnumerable<string> Images { get; set; }
 

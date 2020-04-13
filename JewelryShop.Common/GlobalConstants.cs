@@ -7,5 +7,9 @@
         public const string AdministratorRoleName = "Administrator";
 
         public const string WebsiteTitle = "Galilani";
+
+        public const string UserRoleName = "User";
+
+        public const string GuestId = "guest_id";
     }
 }

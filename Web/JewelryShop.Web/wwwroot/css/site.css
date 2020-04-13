@@ -368,3 +368,9 @@ body {
 .card .oldprice {
     text-decoration: line-through;
 }
+
+
+/****************************************/
+#shopName {
+    color: #763E4A;
+}

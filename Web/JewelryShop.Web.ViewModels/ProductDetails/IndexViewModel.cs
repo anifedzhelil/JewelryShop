@@ -25,6 +25,8 @@
 
         public int Count { get; set; }
 
+        public int TypeCount { get; set; }
+
         public IEnumerable<string> Images { get; set; }
 
         public double Ratings { get; set; }
@@ -42,7 +44,10 @@
                opt => opt.MapFrom(x => x.Ratings.Average(t => (double)t.Type)))
             .ForMember(
                d => d.JewelryRatings,
-               opt => opt.MapFrom(x => x.Ratings));
+               opt => opt.MapFrom(x => x.Ratings))
+               .ForMember(
+               d => d.TypeCount,
+               opt => opt.MapFrom(x => x.Ratings.Count()));
         }
     }
 }

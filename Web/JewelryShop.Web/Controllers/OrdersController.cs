@@ -7,14 +7,13 @@
 
     using JewelryShop.Data.Models;
     using JewelryShop.Services.Data;
+    using JewelryShop.Web.Components;
     using JewelryShop.Web.ViewModels.ShoppingCart;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
-    [ApiController]
-    [Route("api/[controller]")]
-    public class OrdersController : BaseController
+    public class OrdersController : Controller
     {
         private const string GuestId = "guest_id";
         private readonly IOrdersService ordersService;
@@ -26,8 +25,7 @@
             this.userManager = userManager;
         }
 
-        [HttpPost]
-        public async Task AddToCartCookieAsync(OrderDetailsIndexViewModel model)
+        public async Task<IActionResult> Create(int id, int quantity)
         {
             var user = await this.userManager.GetUserAsync(this.User);
             if (user == null)
@@ -40,17 +38,19 @@
                 {
                     var guest_id = Guid.NewGuid();
                     this.Response.Cookies.Append(GuestId, guest_id.ToString(), option);
-                    await this.ordersService.AddGuestProductAsync(guest_id.ToString(), model.JewelId, model.Quantity);
+                    await this.ordersService.AddGuestProductAsync(guest_id.ToString(), id, quantity);
                 }
                 else
                 {
-                    await this.ordersService.AddGuestProductAsync(this.Request.Cookies[GuestId], model.JewelId, model.Quantity);
+                    await this.ordersService.AddGuestProductAsync(this.Request.Cookies[GuestId], id, quantity);
                 }
             }
             else
             {
-                await this.ordersService.AddProductAsync(user.Id, model.JewelId, model.Quantity);
+                 await this.ordersService.AddProductAsync(user.Id, id, quantity);
             }
+
+            return this.RedirectToAction("Index", "ProductDetails", new { id = id });
         }
     }
 }

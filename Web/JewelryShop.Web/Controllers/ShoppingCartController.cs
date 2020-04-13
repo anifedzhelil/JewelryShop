@@ -5,7 +5,7 @@
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using JewelryShop.Common;
     using JewelryShop.Data.Models;
     using JewelryShop.Services.Data;
     using JewelryShop.Web.ViewModels.ShippingAddresses;
@@ -17,7 +17,6 @@
 
     public class ShoppingCartController : BaseController
     {
-        private const string GuestId = "guest_id";
         private readonly IOrdersService ordersService;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IShippingAddressService shippingAddressService;
@@ -39,9 +38,9 @@
 
             if (user == null)
             {
-                if (this.Request.Cookies[GuestId] != null)
+                if (this.Request.Cookies[GlobalConstants.GuestId] != null)
                 {
-                    model = this.ordersService.GetActiveGuestOrder<IndexViewModel>(this.Request.Cookies[GuestId].ToString());
+                    model = this.ordersService.GetActiveGuestOrder<IndexViewModel>(this.Request.Cookies[GlobalConstants.GuestId].ToString());
                 }
             }
             else

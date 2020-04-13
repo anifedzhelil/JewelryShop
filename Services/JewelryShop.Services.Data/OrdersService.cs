@@ -28,6 +28,43 @@
             this.jewelRepository = jewelRepository;
         }
 
+        public async Task AddOrderDetailAsync(int orderId, int jewelId, int quantity)
+        {
+            var orderDetails = this.orderDetailsRepository.All()
+                .Where(x => x.OrderId == orderId && x.JewelId == jewelId)
+                .FirstOrDefault();
+
+            if (orderDetails == null)
+            {
+                orderDetails = new OrderDetails()
+                {
+                    OrderId = orderId,
+                    JewelId = jewelId,
+                    Quantity = quantity,
+                };
+                await this.orderDetailsRepository.AddAsync(orderDetails);
+            }
+            else
+            {
+                var jewel = this.jewelRepository.All()
+                    .Where(x => x.Id == jewelId)
+                    .FirstOrDefault();
+
+                if (jewel.Count >= (quantity + orderDetails.Quantity))
+                {
+                    orderDetails.Quantity += quantity;
+                }
+                else
+                {
+                    orderDetails.Quantity = jewel.Count;
+                }
+
+                this.orderDetailsRepository.Update(orderDetails);
+            }
+
+            await this.orderDetailsRepository.SaveChangesAsync();
+        }
+
         public async Task AddGuestProductAsync(string guestId, int jewelId, int quantity)
         {
             var order = this.orderRepository.All()
@@ -44,38 +81,7 @@
                 await this.orderRepository.SaveChangesAsync();
             }
 
-            var orderDetails = this.orderDetailsRepository.All()
-                .Where(x => x.OrderId == order.Id && x.JewelId == jewelId)
-                .FirstOrDefault();
-
-            if (orderDetails == null)
-            {
-                orderDetails = new OrderDetails()
-                {
-                    OrderId = order.Id,
-                    JewelId = jewelId,
-                    Quantity = quantity,
-                };
-                await this.orderDetailsRepository.AddAsync(orderDetails);
-            }
-            else
-            {
-                var jewel = this.jewelRepository.All()
-                    .Where(x => x.Id == jewelId)
-                    .FirstOrDefault();
-
-                if(jewel.Count >= (quantity + orderDetails.Quantity))
-                {
-                    orderDetails.Quantity += quantity;
-                }
-                else
-                {
-                    orderDetails.Quantity = jewel.Count;
-                }
-                this.orderDetailsRepository.Update(orderDetails);
-            }
-
-            await this.orderDetailsRepository.SaveChangesAsync();
+            await this.AddOrderDetailAsync(order.Id, jewelId, quantity);
         }
 
         public async Task AddProductAsync(string userId, int jewelId, int quantity)
@@ -94,15 +100,7 @@
                 await this.orderRepository.SaveChangesAsync();
             }
 
-            var orderDetails = new OrderDetails()
-            {
-                OrderId = order.Id,
-                JewelId = jewelId,
-                Quantity = quantity,
-            };
-
-            await this.orderDetailsRepository.AddAsync(orderDetails);
-            await this.orderDetailsRepository.SaveChangesAsync();
+            await this.AddOrderDetailAsync(order.Id, jewelId, quantity);
         }
 
         public async Task UpdateUserOrderAsync(string userEmail, string guestId)
@@ -126,13 +124,38 @@
                 }
                 else
                 {
-                    IEnumerable<OrderDetails> orderDetails = this.orderDetailsRepository.All()
+                    IEnumerable<OrderDetails> guestOrderDetails = this.orderDetailsRepository.All()
                         .Where(x => x.OrderId == guestUserOrder.Id);
 
-                    foreach (var item in orderDetails)
+                    foreach (var item in guestOrderDetails)
                     {
-                        item.OrderId = userOrder.Id;
-                        this.orderDetailsRepository.Update(item);
+                        var currentOrderDetail = this.orderDetailsRepository.All()
+                            .Where(x => x.OrderId == guestUserOrder.Id && x.JewelId == item.JewelId)
+                            .FirstOrDefault();
+
+                        if (currentOrderDetail != null)
+                        {
+                            var count = this.jewelRepository.All()
+                            .Where(x => x.Id == item.JewelId)
+                            .Select(x => x.Count)
+                            .FirstOrDefault();
+
+                            if (item.Quantity + currentOrderDetail.Quantity < count)
+                            {
+                                currentOrderDetail.Quantity += item.Quantity;
+                            }
+                            else
+                            {
+                                currentOrderDetail.Quantity = count;
+                            }
+
+                            this.orderDetailsRepository.Update(currentOrderDetail);
+                        }
+                        else
+                        {
+                            item.OrderId = userOrder.Id;
+                            this.orderDetailsRepository.Update(item);
+                        }
                     }
                 }
 
@@ -147,6 +170,37 @@
                .Where(x => x.GuestId == guestId && x.Status == OrderStatusType.Created)
                .To<T>()
                .FirstOrDefault();
+        }
+
+        public int GetActiveGuestOrderCount(string guestId)
+        {
+            var order = this.orderRepository.All()
+              .Where(x => x.GuestId == guestId && x.Status == OrderStatusType.Created)
+              .FirstOrDefault();
+            if (order == null)
+            {
+                return 0;
+            }
+
+            return this.orderDetailsRepository.All()
+                .Where(x => x.OrderId == order.Id)
+                .Sum(x => x.Quantity);
+        }
+
+        public int GetActiveOrderCount(string userId)
+        {
+            var order = this.orderRepository.All()
+              .Where(x => x.UserID == userId && x.Status == OrderStatusType.Created)
+              .FirstOrDefault();
+
+            if (order == null)
+            {
+                return 0;
+            }
+
+            return this.orderDetailsRepository.All()
+                .Where(x => x.OrderId == order.Id)
+                .Sum(x => x.Quantity);
         }
 
         public T GetActiveOrder<T>(string userId)
@@ -165,8 +219,7 @@
 
             if (orderDetail != null)
             {
-                orderDetail.IsDeleted = true;
-                this.orderDetailsRepository.Update(orderDetail);
+                this.orderDetailsRepository.Delete(orderDetail);
 
                 var allOrderDetails = this.orderDetailsRepository.All()
                  .Where(x => x.OrderId == orderDetail.OrderId && x.Id != orderDetail.Id)
@@ -180,11 +233,11 @@
 
                     if (order != null)
                     {
-                        order.IsDeleted = true;
-                        this.orderRepository.Update(order);
+                        this.orderRepository.Delete(order);
                         await this.orderRepository.SaveChangesAsync();
                     }
                 }
+
                 await this.orderDetailsRepository.SaveChangesAsync();
             }
         }
