@@ -19,16 +19,13 @@
     {
         private readonly IOrdersService ordersService;
         private readonly UserManager<ApplicationUser> userManager;
-        private readonly IShippingAddressService shippingAddressService;
 
         public ShoppingCartController(
             IOrdersService ordersService,
-            UserManager<ApplicationUser> userManager,
-            IShippingAddressService shippingAddressService)
+            UserManager<ApplicationUser> userManager)
         {
             this.ordersService = ordersService;
             this.userManager = userManager;
-            this.shippingAddressService = shippingAddressService;
         }
 
         public async Task<IActionResult> Index()
@@ -58,24 +55,7 @@
             }
         }
 
-        [Authorize]
-        public async Task<IActionResult> ShippingAddress()
-        {
-            var user = await this.userManager.GetUserAsync(this.User);
-
-            var model = new UserShippingAddressViewModel();
-            model.ShippingAddressesCollection = this.shippingAddressService.GetAllUsersShippingAddress<ShippingAddressViewModel>(user.Id);
-            model.ShippingAddress = new InputShippingAddressModel()
-            {
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Phone = user.PhoneNumber,
-                UserID = user.Id,
-            };
-
-            return this.View(model);
-        }
-
+       
         public async Task<IActionResult> EditQuantity(int id, int quantity)
         {
             if (quantity == 0)
@@ -96,64 +76,6 @@
 
             return this.RedirectToAction("Index");
         }
-
-        [HttpPost]
-        public async Task<IActionResult> CreateShippingAddress(InputShippingAddressModel model, int? id)
-        {
-            var user = await this.userManager.GetUserAsync(this.User);
-
-            if (!this.ModelState.IsValid)
-            {
-                var shippingAddressesModel = new UserShippingAddressViewModel();
-                shippingAddressesModel.ShippingAddressesCollection = this.shippingAddressService.GetAllUsersShippingAddress<ShippingAddressViewModel>(user.Id);
-                shippingAddressesModel.ShippingAddress = model;
-                this.TempData["ShippingAddressIsValid"] = false;
-                return this.View("ShippingAddress", shippingAddressesModel);
-            }
-            else
-            {
-                if (id > 0)
-                {
-                    await this.shippingAddressService.UpdateAsync(model);
-                }
-                else
-                {
-                    model.UserID = user.Id;
-                    await this.shippingAddressService.AddAsync(model);
-                }
-            }
-
-            return this.RedirectToAction("ShippingAddress");
-        }
-
-        public async Task<IActionResult> EditShippingAddressAsync(int id)
-        {
-            var user = await this.userManager.GetUserAsync(this.User);
-
-            var model = this.shippingAddressService.GetShippingAddressById<InputShippingAddressModel>(id);
-            if (model == null)
-            {
-                return this.NotFound();
-            }
-
-            this.TempData["ShippingAddressIsValid"] = false;
-
-            var shippingAddressesModel = new UserShippingAddressViewModel();
-            shippingAddressesModel.ShippingAddressesCollection = this.shippingAddressService.GetAllUsersShippingAddress<ShippingAddressViewModel>(user.Id);
-            shippingAddressesModel.ShippingAddress = model;
-
-            return this.View("ShippingAddress", shippingAddressesModel);
-        }
-
-        public async Task<IActionResult> DeleteShippingAddressAsync(int id)
-        {
-            var user = await this.userManager.GetUserAsync(this.User);
-
-            await this.shippingAddressService.DeleteShippingAddress(id);
-            var shippingAddressesModel = new UserShippingAddressViewModel();
-            shippingAddressesModel.ShippingAddressesCollection = this.shippingAddressService.GetAllUsersShippingAddress<ShippingAddressViewModel>(user.Id);
-            shippingAddressesModel.ShippingAddress = new InputShippingAddressModel();
-            return this.View("ShippingAddress", shippingAddressesModel);
-        }
+       
     }
 }
