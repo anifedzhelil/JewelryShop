@@ -7,6 +7,7 @@
 
     using JewelryShop.Data.Common.Repositories;
     using JewelryShop.Data.Models;
+    using JewelryShop.Data.Models.Enums;
     using JewelryShop.Services.Mapping;
     using JewelryShop.Web.ViewModels.Administration.Jewelry;
 

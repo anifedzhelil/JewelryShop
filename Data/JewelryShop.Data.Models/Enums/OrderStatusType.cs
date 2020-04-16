@@ -1,4 +1,4 @@
-﻿namespace JewelryShop.Data.Models
+﻿namespace JewelryShop.Data.Models.Enums
 {
     public enum OrderStatusType
     {

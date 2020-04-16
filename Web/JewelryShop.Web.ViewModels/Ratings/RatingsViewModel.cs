@@ -6,6 +6,7 @@
 
     using AutoMapper;
     using JewelryShop.Data.Models;
+    using JewelryShop.Data.Models.Enums;
     using JewelryShop.Services.Mapping;
 
     public class RatingsViewModel : IMapFrom<Rating>

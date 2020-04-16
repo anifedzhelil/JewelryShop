@@ -4,6 +4,7 @@
     using System.Threading.Tasks;
 
     using JewelryShop.Data.Models;
+    using JewelryShop.Data.Models.Enums;
     using JewelryShop.Web.ViewModels.Administration.Jewelry;
 
     public interface IJewelryService

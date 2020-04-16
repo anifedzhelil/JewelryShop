@@ -3,6 +3,7 @@
     using System.Collections.Generic;
 
     using JewelryShop.Data.Models;
+    using JewelryShop.Data.Models.Enums;
 
     public class IndexViewModel
     {

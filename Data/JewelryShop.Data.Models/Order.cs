@@ -4,6 +4,7 @@
     using System.Collections.Generic;
 
     using JewelryShop.Data.Common.Models;
+    using JewelryShop.Data.Models.Enums;
 
     public class Order : BaseDeletableModel<int>
     {

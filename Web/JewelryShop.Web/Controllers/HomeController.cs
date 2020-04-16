@@ -5,6 +5,7 @@
     using System.Linq;
 
     using JewelryShop.Data.Models;
+    using JewelryShop.Data.Models.Enums;
     using JewelryShop.Services.Data;
     using JewelryShop.Services.Mapping;
     using JewelryShop.Web.ViewModels;
@@ -28,7 +29,6 @@
         {
             var count = this.jewelryService.GetCount(category);
 
-            
             IndexViewModel viewModel = new IndexViewModel()
             {
                 Jewelry = this.jewelryService.GetAllActivedByCategories<IndexJewelryViewModel>(category, search, ItemsPerPage, (page - 1) * ItemsPerPage),
@@ -42,9 +42,10 @@
             }
 
             if (category.HasValue)
-            { 
+            {
                 viewModel.Category = (CategoryType)category;
             }
+
             viewModel.CurrentPage = page;
             viewModel.Search = search;
             return this.View(viewModel);

@@ -1,5 +1,5 @@
-﻿namespace JewelryShop.Data.Models
-{ 
+﻿namespace JewelryShop.Data.Models.Enums
+{
     public enum RatingType
     {
         Poor = 1,

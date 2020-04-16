@@ -5,6 +5,7 @@
     using System.ComponentModel.DataAnnotations;
 
     using JewelryShop.Data.Models;
+    using JewelryShop.Data.Models.Enums;
     using JewelryShop.Web.ViewModels.ValidationAttributes;
 
     public class CreateJewelViewModel

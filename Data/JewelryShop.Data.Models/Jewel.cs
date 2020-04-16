@@ -5,6 +5,7 @@
     using System.Text;
 
     using JewelryShop.Data.Common.Models;
+    using JewelryShop.Data.Models.Enums;
 
     public class Jewel : BaseDeletableModel<int>
     {

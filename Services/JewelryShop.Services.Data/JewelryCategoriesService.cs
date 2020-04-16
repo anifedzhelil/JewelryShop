@@ -7,6 +7,7 @@
     using System.Text;
 
     using JewelryShop.Data.Models;
+    using JewelryShop.Data.Models.Enums;
 
     public class JewelryCategoriesService : IJewelryCategoriesService
     {
