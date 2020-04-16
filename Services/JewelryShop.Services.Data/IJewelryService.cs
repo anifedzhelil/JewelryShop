@@ -12,7 +12,7 @@
 
         IEnumerable<T> GetAllActived<T>(int? count = null);
 
-        IEnumerable<T> GetAllActivedByCategories<T>(CategoryType? category, int? take = null, int skip = 0);
+        IEnumerable<T> GetAllActivedByCategories<T>(CategoryType? category, string search, int? take = null, int skip = 0);
 
         T GetById<T>(int id);
 

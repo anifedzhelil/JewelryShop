@@ -9,9 +9,11 @@
     using JewelryShop.Services.Data;
     using JewelryShop.Web.ViewModels.ShippingAddresses;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Cors;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
+    [EnableCors]
     public class ShippingAddressController : Controller
     {
         private readonly IShippingAddressService shippingAddressService;

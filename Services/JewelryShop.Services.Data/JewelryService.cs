@@ -86,18 +86,24 @@
             return query.To<T>().ToArray();
         }
 
-        public IEnumerable<T> GetAllActivedByCategories<T>(CategoryType? category, int? take = null, int skip = 0)
+        public IEnumerable<T> GetAllActivedByCategories<T>(CategoryType? category, string search, int? take = null, int skip = 0)
         {
-            IQueryable<Jewel> query;
+            IQueryable<Jewel> query = this.jewelryRepository.All();
+
+            if (search != null)
+            {
+                query = query.Where(x => x.Name.Contains(search) || x.Description.Contains(search));
+            }
+
             if (category > 0)
             {
-                query = this.jewelryRepository.All()
+                query = query
                 .OrderBy(c => c.CreatedOn)
                 .Where(x => x.IsArchived == false && x.Category == category && x.Count > 0).Skip(skip);
             }
             else
             {
-                query = this.jewelryRepository.All()
+                query = query
                 .OrderBy(c => c.CreatedOn)
                 .Where(x => x.IsArchived == false && x.Count > 0).Skip(skip);
             }

@@ -10,6 +10,7 @@
     using JewelryShop.Web.ViewModels;
     using JewelryShop.Web.ViewModels.Home;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
 
     public class HomeController : BaseController
     {
@@ -23,13 +24,14 @@
         }
 
         [HttpGet]
-        public IActionResult Index(CategoryType? category, int page = 1)
+        public IActionResult Index(CategoryType? category, string search, int page = 1)
         {
             var count = this.jewelryService.GetCount(category);
 
+            
             IndexViewModel viewModel = new IndexViewModel()
             {
-                Jewelry = this.jewelryService.GetAllActivedByCategories<IndexJewelryViewModel>(category, ItemsPerPage, (page - 1) * ItemsPerPage),
+                Jewelry = this.jewelryService.GetAllActivedByCategories<IndexJewelryViewModel>(category, search, ItemsPerPage, (page - 1) * ItemsPerPage),
             };
 
             viewModel.PagesCount = (int)Math.Ceiling((double)count / ItemsPerPage);
@@ -44,7 +46,7 @@
                 viewModel.Category = (CategoryType)category;
             }
             viewModel.CurrentPage = page;
-
+            viewModel.Search = search;
             return this.View(viewModel);
         }
 

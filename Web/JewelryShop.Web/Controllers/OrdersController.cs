@@ -25,6 +25,8 @@
             this.userManager = userManager;
         }
 
+        [HttpPost]
+
         public async Task<IActionResult> Create(int id, int quantity)
         {
             var user = await this.userManager.GetUserAsync(this.User);

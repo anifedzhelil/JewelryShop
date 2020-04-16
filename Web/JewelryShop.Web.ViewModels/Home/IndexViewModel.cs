@@ -12,6 +12,8 @@
 
         public int PagesCount { get; set; }
 
+        public string Search { get; set; }
+
         public CategoryType Category { get; set; }
     }
 }
