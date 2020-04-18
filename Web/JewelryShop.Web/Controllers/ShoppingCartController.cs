@@ -5,6 +5,7 @@
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
+
     using JewelryShop.Common;
     using JewelryShop.Data.Models;
     using JewelryShop.Services.Data;
@@ -54,7 +55,6 @@
             }
         }
 
-       
         public async Task<IActionResult> EditQuantity(int id, int quantity)
         {
             if (quantity == 0)
@@ -75,6 +75,5 @@
 
             return this.RedirectToAction("Index");
         }
-       
     }
 }

@@ -1,8 +1,9 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace JewelryShop.Data.Migrations
+﻿namespace JewelryShop.Data.Migrations
 {
+    using System;
+
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class AddShipingAddress : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -24,7 +25,7 @@ namespace JewelryShop.Data.Migrations
                     AdditionalAddress = table.Column<string>(nullable: true),
                     Phone = table.Column<string>(nullable: true),
                     PostCode = table.Column<string>(nullable: true),
-                    UserID = table.Column<string>(nullable: true)
+                    UserID = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {

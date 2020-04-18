@@ -5,6 +5,7 @@
     using System.IO;
     using System.Threading.Tasks;
 
+    using CommandLine;
     using JewelryShop.Data;
     using JewelryShop.Data.Common;
     using JewelryShop.Data.Common.Repositories;
@@ -13,9 +14,6 @@
     using JewelryShop.Data.Seeding;
     using JewelryShop.Services.Data;
     using JewelryShop.Services.Messaging;
-
-    using CommandLine;
-
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;

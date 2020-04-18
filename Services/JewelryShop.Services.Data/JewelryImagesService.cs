@@ -54,7 +54,6 @@
                .Where(x => x.JewelId == jewelId)
                .Select(x => x.ImageUrl)
                .ToList();
-
         }
     }
 }

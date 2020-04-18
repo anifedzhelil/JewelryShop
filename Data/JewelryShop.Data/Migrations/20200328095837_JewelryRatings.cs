@@ -1,8 +1,9 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace JewelryShop.Data.Migrations
+﻿namespace JewelryShop.Data.Migrations
 {
+    using System;
+
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class JewelryRatings : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,7 +19,7 @@ namespace JewelryShop.Data.Migrations
                     JewelId = table.Column<int>(nullable: false),
                     UserId = table.Column<string>(nullable: false),
                     Review = table.Column<string>(nullable: true),
-                    Type = table.Column<int>(nullable: false)
+                    Type = table.Column<int>(nullable: false),
                 },
                 constraints: table =>
                 {

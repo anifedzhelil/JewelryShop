@@ -32,9 +32,6 @@
             this.configuration = configuration;
         }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors(options =>
@@ -48,7 +45,6 @@
                             .AllowAnyMethod();
                     });
             });
-
 
             services.AddDbContext<ApplicationDbContext>(
                 options => options.UseSqlServer(this.configuration.GetConnectionString("DefaultConnection")));
@@ -136,7 +132,7 @@
 
             app.UseRouting();
 
-           app.UseCors();
+            app.UseCors();
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -144,8 +140,6 @@
             app.UseEndpoints(
                 endpoints =>
                     {
-                       // endpoints.MapControllerRoute("orders", "{controller=Orders}/{action=Index}/{id?}");
-
                         endpoints.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
                         endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
                         endpoints.MapRazorPages();

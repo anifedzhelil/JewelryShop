@@ -104,7 +104,7 @@
                 await this.jewelryImagesService.AddAsync(jewel.Id, listUrls);
                 await this.jewelryService.Update(jewel);
             }
-            
+
             this.TempData["InfoMessage"] = "Продуктът успешно е редактиран.";
             return this.RedirectToAction("Index");
         }

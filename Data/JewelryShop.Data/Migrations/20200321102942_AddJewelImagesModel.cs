@@ -1,8 +1,9 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace JewelryShop.Data.Migrations
+﻿namespace JewelryShop.Data.Migrations
 {
+    using System;
+
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class AddJewelImagesModel : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,7 +17,7 @@ namespace JewelryShop.Data.Migrations
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     ModifiedOn = table.Column<DateTime>(nullable: true),
                     ImageUrl = table.Column<string>(nullable: true),
-                    JewelId = table.Column<int>(nullable: false)
+                    JewelId = table.Column<int>(nullable: false),
                 },
                 constraints: table =>
                 {

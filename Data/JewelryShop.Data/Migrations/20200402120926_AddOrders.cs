@@ -1,8 +1,9 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace JewelryShop.Data.Migrations
+﻿namespace JewelryShop.Data.Migrations
 {
+    using System;
+
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class AddOrders : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -20,7 +21,7 @@ namespace JewelryShop.Data.Migrations
                     UserID = table.Column<string>(nullable: true),
                     Status = table.Column<int>(nullable: false),
                     OrderDate = table.Column<DateTime>(nullable: true),
-                    GuestId = table.Column<string>(nullable: true)
+                    GuestId = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -46,7 +47,7 @@ namespace JewelryShop.Data.Migrations
                     OrderId = table.Column<int>(nullable: false),
                     JewelId = table.Column<int>(nullable: false),
                     Quantity = table.Column<int>(nullable: false),
-                    Price = table.Column<decimal>(nullable: false)
+                    Price = table.Column<decimal>(nullable: false),
                 },
                 constraints: table =>
                 {

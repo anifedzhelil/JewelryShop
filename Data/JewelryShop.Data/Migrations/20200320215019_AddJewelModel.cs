@@ -1,8 +1,9 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace JewelryShop.Data.Migrations
+﻿namespace JewelryShop.Data.Migrations
 {
+    using System;
+
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class AddJewelModel : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -24,7 +25,7 @@ namespace JewelryShop.Data.Migrations
                     SalePrice = table.Column<decimal>(nullable: true),
                     SaleDate = table.Column<DateTime>(nullable: true),
                     Count = table.Column<int>(nullable: false),
-                    IsArchived = table.Column<bool>(nullable: false)
+                    IsArchived = table.Column<bool>(nullable: false),
                 },
                 constraints: table =>
                 {
