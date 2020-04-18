@@ -48,14 +48,9 @@
 
             var orderModel = this.ordersService.GetActiveOrder<OrderViewModel>(user.Id);
             model.OrdersDetails = orderModel.OrdersDetails;
+            model.OrderId = orderModel.OrdersDetails.FirstOrDefault().OrderId;
 
             return this.View(model);
-        }
-
-        public IActionResult Complete(string delivery)
-        {
-            ;
-            return this.RedirectToAction("Index");
         }
 
         [HttpPost]

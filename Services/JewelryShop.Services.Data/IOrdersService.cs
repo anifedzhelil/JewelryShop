@@ -5,6 +5,8 @@
     using System.Text;
     using System.Threading.Tasks;
 
+    using JewelryShop.Data.Models.Enums;
+
     public interface IOrdersService
     {
         Task AddGuestProductAsync(string guestId, int jewelId, int quantity);
@@ -24,5 +26,7 @@
         int GetActiveOrderCount(string userId);
 
         int GetActiveGuestOrderCount(string guestId);
+
+        Task<bool> CompleteOrderAsync(int orderId, DeliveryType deliveryType, int? shippingAddressId, string officeAddres, decimal shippingPrice);
     }
 }

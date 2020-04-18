@@ -17,8 +17,8 @@
                                 <div class="form-group col-md-6">
 
                                     <div class="custom-control custom-radio">
-                                        <input type="radio" class="custom-control-input" id="radioEccont" name="delivery" value="Eccont">
-                                        <label class="custom-control-label" for="radioEccont">Еконт</label>
+                                        <input type="radio" class="custom-control-input" id="radioEcont" name="delivery" value="Econt">
+                                        <label class="custom-control-label" for="radioEcont">Еконт</label>
                                     </div>
                                 </div>
                                 <div class="form-group col-md-6">
@@ -169,7 +169,8 @@
                         </tr>
                         <tr>
                             <td colspan="4">
-                                <input type="button" id="completeOrder" class="btn btn-success" value="Завърши поръчката" />
+                                <input type="hidden" id="orderId" value="@Model.OrderId"/>
+                                <a id="completeOrder" class="btn btn-success" asp-action="Complete" asp-controller="ShippingAddress" value="Завърши поръчката" />
                             </td>
                         </tr>
                     </tfoot>
@@ -188,7 +189,7 @@
     <script type="text/javascript">
         $('#myForm input').on('change', function () {
             var value = $('input[name=delivery]:checked', '#myForm').val();
-            if (value == "Eccont") {
+            if (value == "Econt") {
                 $("#divSpeedy").hide();
             }
             else {
@@ -200,20 +201,59 @@
             var addresValue = $('input[name="address"]:checked').val();
             var select = $('.select2').val();
 
+            var isComplete = changeAddress(addresValue);
+
             if (select < 0 && addresValue == "Speedy") {
                 $("#speedyMessage").text("Моля изберете офис на Спиди.");
+                isComplete = false;
             }
             else {
                 $("#speedyMessage").text("");
             }
 
-            changeAddress(addresValue);
 
-            //var data = $(".select2 option:selected").text();
-         });
+            if (isComplete) {
+                var orderId = $("#orderId").val();
+                var fullAddress;
+                if (addresValue == "Speedy") {
+                    fullAddress = $(".select2 option:selected").text();
+                }
+                else
+                {
+                    fullAddress = null;
+                }
+                var deliveryValue = $('input[name=delivery]:checked', '#myForm').val();
+                var shippingAddressId = addresValue != "Speedy" ? parseInt(addresValue) : null;
+                var shippingPrice = addresValue != "Speedy" ? 6 : 4;
 
-        function changeAddress(addresValue)
-        {
+                var json = {
+                    orderId: parseInt(orderId),
+                    deliveryMethod: deliveryValue,
+                    shippingAddressId: shippingAddressId,
+                    speedyOfficeAddress: fullAddress,
+                    shippingPrice: shippingPrice
+                };
+                var token = $("#formSpeedy input[name=__RequestVerificationToken]").val();
+
+                $.ajax({
+                    url: "/api/orderComplete",
+                    type: "POST",
+                    data: JSON.stringify(json),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    headers: { 'X-CSRF-TOKEN': token },
+                    success: function (data) {
+
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                      
+                    }
+                });
+            }
+        });
+
+        function changeAddress(addresValue) {
             var selectMessage = $("#selectMessage");
             var addresValue = $('input[name="address"]:checked').val();
             var deliveryValue = $('input[name=delivery]:checked', '#myForm').val();
@@ -221,6 +261,7 @@
             var totalPrice = $("#totalPrice");
             var subPrice = $("#subPrice");
             var price = parseInt($("#subPrice").text());
+            var isComplete = false;
 
             if (addresValue == undefined) {
                 selectMessage.text("Моля изберете адрес за доставка.");
@@ -241,7 +282,11 @@
                     price += 4;
                     totalPrice.text(price.toString() + " лв");
                 }
+
+                isComplete = true;
             }
+
+            return isComplete;
         }
 
         $('.select2').select2();

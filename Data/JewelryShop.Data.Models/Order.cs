@@ -17,7 +17,9 @@
 
         public OrderStatusType Status { get; set; }
 
-        public DateTime? OrderDate { get; set; }
+        public DateTime? CompleteDate { get; set; }
+
+        public DateTime? ShippedDate { get; set; }
 
         public string? GuestId { get; set; }
 

@@ -8,6 +8,8 @@
 
     public class IndexViewModel : IMapFrom<ShippingAddress>
     {
+        public int OrderId { get; set; }
+
         public IEnumerable<ShippingAddressViewModel> ShippingAddressesCollection { get; set; }
 
         public InputShippingAddressModel ShippingAddress { get; set; }
@@ -15,6 +17,5 @@
         public string DeliveryCheked { get; set; }
 
         public IEnumerable<OrderDetailsViewModel> OrdersDetails { get; set; }
-
     }
 }

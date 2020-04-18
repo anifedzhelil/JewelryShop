@@ -4,14 +4,16 @@ using JewelryShop.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace JewelryShop.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200418094136_AddOrderDates")]
+    partial class AddOrderDates
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -271,7 +273,9 @@ namespace JewelryShop.Data.Migrations
 
                     b.HasIndex("IsDeleted");
 
-                    b.HasIndex("ShippingAddressId");
+                    b.HasIndex("ShippingAddressId")
+                        .IsUnique()
+                        .HasFilter("[ShippingAddressId] IS NOT NULL");
 
                     b.HasIndex("UserID");
 
@@ -421,9 +425,6 @@ namespace JewelryShop.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("OrderId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
 
@@ -558,8 +559,8 @@ namespace JewelryShop.Data.Migrations
             modelBuilder.Entity("JewelryShop.Data.Models.Order", b =>
                 {
                     b.HasOne("JewelryShop.Data.Models.ShippingAddress", "ShippingAddress")
-                        .WithMany("Orders")
-                        .HasForeignKey("ShippingAddressId");
+                        .WithOne("Order")
+                        .HasForeignKey("JewelryShop.Data.Models.Order", "ShippingAddressId");
 
                     b.HasOne("JewelryShop.Data.Models.ApplicationUser", "User")
                         .WithMany()

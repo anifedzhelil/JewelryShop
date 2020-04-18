@@ -14,6 +14,8 @@
 
         public decimal CurrentPrice { get; set; }
 
+        public int OrderId { get; set; }
+
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<OrderDetails, OrderDetailsViewModel>()

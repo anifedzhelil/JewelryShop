@@ -1,5 +1,6 @@
 ﻿namespace JewelryShop.Services.Data
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -255,6 +256,57 @@
                 this.orderDetailsRepository.Update(orderDetail);
                 await this.orderDetailsRepository.SaveChangesAsync();
             }
+        }
+
+        public async Task<bool> CompleteOrderAsync(int orderId, DeliveryType deliveryType, int? shippingAddressId, string officeAddres, decimal shippingPrice)
+        {
+            var order = this.orderRepository.All()
+                .Where(x => x.Id == orderId)
+                .FirstOrDefault();
+
+            if (order == null)
+            {
+                return false;
+            }
+
+            order.Delivery = deliveryType;
+            order.Status = OrderStatusType.Completed;
+            order.CompleteDate = DateTime.UtcNow;
+            order.ShippingAddressId = shippingAddressId;
+            order.OfficeAddres = officeAddres;
+            order.ShippingPrice = shippingPrice;
+
+            this.orderRepository.Update(order);
+            var value = await this.orderRepository.SaveChangesAsync();
+
+            var orderDetails = this.orderDetailsRepository.All()
+                .Where(x => x.OrderId == orderId)
+                .ToList();
+
+            foreach (var item in orderDetails)
+            {
+                var jewel = this.jewelRepository.All()
+                      .Where(x => x.Id == item.JewelId)
+                      .FirstOrDefault();
+
+                jewel.Count = jewel.Count - item.Quantity;
+                this.jewelRepository.Update(jewel);
+                await this.jewelRepository.SaveChangesAsync();
+
+                if (jewel.SaleDate > DateTime.UtcNow)
+                {
+                    item.Price = (decimal)jewel.SalePrice;
+                }
+                else
+                {
+                    item.Price = jewel.Price;
+                }
+
+                this.orderDetailsRepository.Update(item);
+                await this.orderDetailsRepository.SaveChangesAsync();
+            }
+
+            return true;
         }
     }
 }

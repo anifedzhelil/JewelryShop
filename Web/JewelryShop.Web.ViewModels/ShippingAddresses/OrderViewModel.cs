@@ -1,8 +1,9 @@
 ﻿namespace JewelryShop.Web.ViewModels.ShippingAddresses
 {
+    using System.Collections.Generic;
+
     using JewelryShop.Data.Models;
     using JewelryShop.Services.Mapping;
-    using System.Collections.Generic;
 
     public class OrderViewModel : IMapFrom<Order>
     {
