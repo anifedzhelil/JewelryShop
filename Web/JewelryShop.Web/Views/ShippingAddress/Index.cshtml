@@ -1,99 +1,255 @@
-﻿@model JewelryShop.Web.ViewModels.ShippingAddresses.UserShippingAddressViewModel
+﻿@model JewelryShop.Web.ViewModels.ShippingAddresses.IndexViewModel
 
-<div class="row">
-    <div class="col-6">
-        @if (Model.ShippingAddress != null)
-        {
-            var num = 1;
-            <div class="custom-control custom-radio">
-
-                @foreach (var item in Model.ShippingAddressesCollection)
-                {
-                    <div class="mb-3">
-                        <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input" />
-                        <label class="custom-control-label" for="customRadio1">Адрес @num</label>
-                    </div>
-
-                    <div class="card bg-light mb-3" style="max-width: 18rem;" for="customRadio1">
-                        <div class="card-header">
-                            <div>@item.FirstName @item.LastName</div>
-                            <div align="right">
-                                <a asp-action="EditShippingAddress" asp-route-id="@item.Id"><i class="far fa-edit"></i></a>
-                                <a asp-action="DeleteShippingAddress" asp-route-id="@item.Id"><i class="far fa-trash-alt"></i></a>
-                            </div>
+@{
+    var numProduct = 0;
+    decimal subPrice = 0;
+}
+    <div class="container-fluid">
+        <div class="row col-12">
+            <div class="col-6">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <h6 class="text-info">Изберете начин на доставка:</h6>
                         </div>
-                        <div class="card-body">
-                            <p class="card-text">тел. @item.Phone</p>
-                            <p class="card-text">гр./с. @item.City  П.К. @item.PostCode</p>
-                            <p class="card-text">адрес: @item.Address</p>
-                            @if (item.AdditioanalAddress != null)
+                        <form id="myForm">
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" class="custom-control-input" id="radioEccont" name="delivery" value="Eccont">
+                                        <label class="custom-control-label" for="radioEccont">Еконт</label>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" class="custom-control-input" id="radioSpeedy" name="delivery" value="Speedy">
+                                        <label class="custom-control-label" for="radioSpeedy">Спиди</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <br />
+                    </div>
+                    <br />
+                    <hr />
+
+
+                    <div class="row">
+                        <h6 class="text-info">Изберете адрес за доставка:</h6>
+
+                    </div>
+                    <div class="row">
+                        <p style="margin:10px;">
+                            Доставка до адрес
+                            <span class="text-muted">(+6 лв)</span>
+                        </p>
+                    </div>
+                    <div class="row">
+                        <div class=" bd-callout bd-callout-info col-12">
+                            @if (Model.ShippingAddress != null)
                             {
-                                <p class="card-text">@item.AdditioanalAddress</p>
+                                var num = 1;
+                                var name = "address";
+                                <div class="custom-control custom-radio">
+
+                                    @foreach (var item in Model.ShippingAddressesCollection)
+                                    {
+                                        name = name + num.ToString();
+                                        <div class="mb-3">
+                                            <input type="radio" onchange="changeAddress(@item.Id)" name="address" id="@name" value="@item.Id" />
+
+
+                                        </div>
+
+                                        <div class="card bg-light mb-3" style="max-width: 18rem;" for="customRadio1">
+                                            <div class="card-header">
+                                                <div>@item.FirstName @item.LastName</div>
+                                                <div align="right">
+                                                    <a asp-action="EditShippingAddress" asp-route-id="@item.Id"><i class="far fa-edit"></i></a>
+                                                    <a asp-action="DeleteShippingAddress" asp-route-id="@item.Id"><i class="far fa-trash-alt"></i></a>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <p class="card-text">тел. @item.Phone</p>
+                                                <p class="card-text">гр./с. @item.City  П.К. @item.PostCode</p>
+                                                <p class="card-text">адрес: @item.Address</p>
+                                                @if (item.AdditioanalAddress != null)
+                                                {
+                                                    <p class="card-text">@item.AdditioanalAddress</p>
+
+                                                }
+                                            </div>
+                                        </div>
+                                        num++;
+                                    }
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                    <strong>Нямате добавен адрес.</strong> Моля добавете адрес!
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            }
+                            <div class="row">
+                                <a href="#" id="newAddress" role="button"><i class="fas fa-plus"></i> Добавете нов адрес</a>
+                            </div>
+                            <br />
+
+                            @if (this.TempData["ShippingAddressIsValid"] != null && (bool)this.TempData["ShippingAddressIsValid"] == false)
+                            {
+                                <div id="partialView" class="border col-md-12">
+                                    @await this.Html.PartialAsync("_InputShippingAddress", @Model.ShippingAddress)
+                                </div>
+                            }
+                            else
+                            {
+                                <div id="partialView" style="display:none;" class="border col-md-12">
+                                    @await this.Html.PartialAsync("_InputShippingAddress", @Model.ShippingAddress)
+                                </div>
 
                             }
                         </div>
                     </div>
-                    num++;
-                }
+                    <div class="row col-12" style="display:none;" id="divSpeedy">
+                        <div class="col-12">
+                            <p style="margin:10px;" class="text-info">
+                                <input type="radio" name="address" id="speedy" value="Speedy" onchange="changeAddress('Speedy')" />
+                                Доставка до офиса на Спиди
+                                <span class="text-muted">(+4 лв)</span>
+                            </p>
+                        </div>
+                        <form class="col-md-12" id="formSpeedy" method="post">
+                            <select id="mySelect2" class="form-control select2">
+                                <option value="-1">Изберете............................</option>
+                            </select>
+                        </form>
+                    </div>
+                </div>
             </div>
-        }
-        else
-        {
-            <div class="alert alert-info alert-dismissible fade show" role="alert">
-                <strong>Нямате добавен адрес.</strong> Моля добавете адрес!
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        }
-        <div class="row">
-            <a href="#" id="officeAddress" onclick="rate()">klk нов адрес</a>
-        </div>
-        <div class="row">
-            <a href="#" id="newAddress" class="btn btn-primary" role="button">Добавете нов адрес</a>
-        </div>
-        <br />
+            <div class="col-6">
+                <h6 class="text-info">Вашите поръчки</h6>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Продукт</th>
+                            <th scope="col">Брой</th>
+                            <th scope="col">Цена</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.OrdersDetails)
+                        {
+                            numProduct++;
+                            <tr>
+                                <td>@numProduct</td>
+                                <td>@item.JewelName</td>
+                                <td>@item.Quantity</td>
+                                <td>@item.CurrentPrice лв</td>
+                            </tr>
+                            subPrice = (subPrice + item.Quantity * item.CurrentPrice);
+                        }
+                    <tfoot>
+                        <tr>
+                            <td colspan="3">Междинна сума</td>
+                            <td><span id="subPrice">@subPrice</span>лв</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Крайна сума
+                                <span class="text-muted" id="deliveryPrice"></span>
+                            </td>
+                            <td>
+                                <span id="totalPrice"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">
+                                <input type="button" id="completeOrder" class="btn btn-success" value="Завърши поръчката" />
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <div>
+                    <span class="text-danger" id="selectMessage"></span>
+                    <span class="text-danger" id="speedyMessage"></span>
+                </div>
 
-        @if (this.TempData["ShippingAddressIsValid"] != null && (bool)this.TempData["ShippingAddressIsValid"] == false)
-        {
-            <div id="partialView" class="border col-md-8">
-                @await this.Html.PartialAsync("_InputShippingAddress", @Model.ShippingAddress)
             </div>
-        }
-        else
-        {
-            <div id="partialView" style="visibility:hidden;" class="border col-md-8">
-                @await this.Html.PartialAsync("_InputShippingAddress", @Model.ShippingAddress)
             </div>
-
-        }
     </div>
-    <div class="col-6">
-
-        <div class="container">
-            <div class="row">
-                <form class="col-md-12">
-                    <label> Офиси на Спиди:</label>
-                    <select id="mySelect2" class="form-control select2">
-                        <option>Изберете....</option>
-                    </select>
-                </form>
-            </div>
-        </div>
-
-    </div>
-</div>
-<form id="ratingsForm" method="post"></form>
-
 @section Scripts
 {
 
     <script type="text/javascript">
+        $('#myForm input').on('change', function () {
+            var value = $('input[name=delivery]:checked', '#myForm').val();
+            if (value == "Eccont") {
+                $("#divSpeedy").hide();
+            }
+            else {
+                $("#divSpeedy").show();
+            }
+        });
+
+        $("#completeOrder").click(function () {
+            var addresValue = $('input[name="address"]:checked').val();
+            var select = $('.select2').val();
+
+            if (select < 0 && addresValue == "Speedy") {
+                $("#speedyMessage").text("Моля изберете офис на Спиди.");
+            }
+            else {
+                $("#speedyMessage").text("");
+            }
+
+            changeAddress(addresValue);
+
+            //var data = $(".select2 option:selected").text();
+         });
+
+        function changeAddress(addresValue)
+        {
+            var selectMessage = $("#selectMessage");
+            var addresValue = $('input[name="address"]:checked').val();
+            var deliveryValue = $('input[name=delivery]:checked', '#myForm').val();
+            var deliveryPrice = $("#deliveryPrice");
+            var totalPrice = $("#totalPrice");
+            var subPrice = $("#subPrice");
+            var price = parseInt($("#subPrice").text());
+
+            if (addresValue == undefined) {
+                selectMessage.text("Моля изберете адрес за доставка.");
+            }
+            else if (deliveryValue == undefined) {
+                selectMessage.text("Моля изберете метод за доставка.");
+            }
+            else {
+                selectMessage.text("");
+
+                if (addresValue > 0) {
+                    deliveryPrice.text("(доставка 6 лв)");
+                    price += 6;
+                    totalPrice.text(price.toString() + " лв");
+                }
+                else {
+                    deliveryPrice.text("(доставка 4 лв)");
+                    price += 4;
+                    totalPrice.text(price.toString() + " лв");
+                }
+            }
+        }
+
         $('.select2').select2();
 
         // Fetch the preselected item, and add to the control
-        var token = $("#ratingsForm input[name=__RequestVerificationToken]").val();
-        var studentSelect = $('#mySelect2');
+        var token = $("#formSpeedy input[name=__RequestVerificationToken]").val();
+        var officeSelect = $('#mySelect2');
+
         $.ajax({
             url: "/api/speedy",
             type: "POST",
@@ -102,10 +258,9 @@
             headers: { 'X-CSRF-TOKEN': token },
         }).then(function (data) {
             // create the option and append to Select2
-            debugger;
             for (var num = 0; num < data.addresses.length; num++) {
                 var option = new Option(data.addresses[num].fullAddress, data.addresses[num].id, false, false);
-                studentSelect.append($("<option />").val(data.addresses[num].id).text(data.addresses[num].fullAddress));
+                officeSelect.append($("<option />").val(data.addresses[num].id).text(data.addresses[num].fullAddress));
             }
 
         });
@@ -114,7 +269,7 @@
 
         $(document).ready(function () {
             $("#newAddress").click(function () {
-                $("#partialView").css('visibility', 'visible');
+                $("#partialView").show();
             })
         });
 

@@ -18,11 +18,16 @@
     {
         private readonly IShippingAddressService shippingAddressService;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly IOrdersService ordersService;
 
-        public ShippingAddressController(UserManager<ApplicationUser> userManager, IShippingAddressService shippingAddressService)
+        public ShippingAddressController(
+            UserManager<ApplicationUser> userManager,
+            IShippingAddressService shippingAddressService,
+            IOrdersService ordersService)
         {
             this.shippingAddressService = shippingAddressService;
             this.userManager = userManager;
+            this.ordersService = ordersService;
         }
 
         [Authorize]
@@ -30,8 +35,9 @@
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
-            var model = new UserShippingAddressViewModel();
+            var model = new IndexViewModel();
             model.ShippingAddressesCollection = this.shippingAddressService.GetAllUsersShippingAddress<ShippingAddressViewModel>(user.Id);
+            model.DeliveryCheked = "uncheked";
             model.ShippingAddress = new InputShippingAddressModel()
             {
                 FirstName = user.FirstName,
@@ -40,7 +46,16 @@
                 UserID = user.Id,
             };
 
+            var orderModel = this.ordersService.GetActiveOrder<OrderViewModel>(user.Id);
+            model.OrdersDetails = orderModel.OrdersDetails;
+
             return this.View(model);
+        }
+
+        public IActionResult Complete(string delivery)
+        {
+            ;
+            return this.RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -50,7 +65,7 @@
 
             if (!this.ModelState.IsValid)
             {
-                var shippingAddressesModel = new UserShippingAddressViewModel();
+                var shippingAddressesModel = new IndexViewModel();
                 shippingAddressesModel.ShippingAddressesCollection = this.shippingAddressService.GetAllUsersShippingAddress<ShippingAddressViewModel>(user.Id);
                 shippingAddressesModel.ShippingAddress = model;
                 this.TempData["ShippingAddressIsValid"] = false;
@@ -84,7 +99,7 @@
 
             this.TempData["ShippingAddressIsValid"] = false;
 
-            var shippingAddressesModel = new UserShippingAddressViewModel();
+            var shippingAddressesModel = new IndexViewModel();
             shippingAddressesModel.ShippingAddressesCollection = this.shippingAddressService.GetAllUsersShippingAddress<ShippingAddressViewModel>(user.Id);
             shippingAddressesModel.ShippingAddress = model;
 
@@ -96,7 +111,7 @@
             var user = await this.userManager.GetUserAsync(this.User);
 
             await this.shippingAddressService.DeleteShippingAddress(id);
-            var shippingAddressesModel = new UserShippingAddressViewModel();
+            var shippingAddressesModel = new IndexViewModel();
             shippingAddressesModel.ShippingAddressesCollection = this.shippingAddressService.GetAllUsersShippingAddress<ShippingAddressViewModel>(user.Id);
             shippingAddressesModel.ShippingAddress = new InputShippingAddressModel();
             return this.View("Index", shippingAddressesModel);

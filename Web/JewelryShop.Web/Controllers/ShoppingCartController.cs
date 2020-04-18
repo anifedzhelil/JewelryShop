@@ -8,7 +8,6 @@
     using JewelryShop.Common;
     using JewelryShop.Data.Models;
     using JewelryShop.Services.Data;
-    using JewelryShop.Web.ViewModels.ShippingAddresses;
     using JewelryShop.Web.ViewModels.ShoppingCart;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
