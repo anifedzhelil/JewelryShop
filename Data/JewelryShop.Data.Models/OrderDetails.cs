@@ -1,7 +1,7 @@
-﻿using JewelryShop.Data.Common.Models;
-
-namespace JewelryShop.Data.Models
+﻿namespace JewelryShop.Data.Models
 {
+    using JewelryShop.Data.Common.Models;
+
     public class OrderDetails : BaseDeletableModel<int>
     {
         public int OrderId { get; set; }
