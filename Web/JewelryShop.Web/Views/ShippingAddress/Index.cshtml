@@ -124,9 +124,24 @@
                             </p>
                         </div>
                         <form class="col-md-12" id="formSpeedy" method="post">
-                            <select id="mySelect2" class="form-control select2">
-                                <option value="-1">Изберете............................</option>
-                            </select>
+                            <div class="form-row">
+                                <label for="@Model.ShippingAddress.FirstName">Име</label>
+                                <input type="text" id="firstName" class="form-control" asp-for="@Model.ShippingAddress.FirstName" />
+                            </div>
+                            <div class="form-row">
+                                <label for="@Model.ShippingAddress.FirstName">Фамилия</label>
+                                <input type="text" id="lastName" class="form-control" asp-for="@Model.ShippingAddress.LastName" />
+                            </div>
+                            <div class="form-row">
+                                <label for="@Model.ShippingAddress.Phone">Телефон</label>
+                                <input class="form-control" id="phone" type="tel" asp-for="@Model.ShippingAddress.Phone" />
+                            </div>
+                            <div class="form-row">
+                                <span>Офис</span>
+                                <select id="mySelect2" class="select2" style="width:100% !important;">
+                                    <option value="-1">Изберете............................</option>
+                                </select>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -200,6 +215,9 @@
         $("#completeOrder").click(function () {
             var addresValue = $('input[name="address"]:checked').val();
             var select = $('.select2').val();
+            var firstName = $("#firstName").val();
+            var lastName = $("#lastName").val();
+            var phone = $("#phone").val();
 
             var isComplete = changeAddress(addresValue);
 
@@ -207,12 +225,24 @@
                 $("#speedyMessage").text("Моля изберете офис на Спиди.");
                 isComplete = false;
             }
+            else if (firstName == "") {
+                $("#speedyMessage").text("Моля въведете име.");
+                isComplete = false;
+            }
+            else if (lastName == "") {
+                $("#speedyMessage").text("Моля въведете фамилия.");
+                isComplete = false;
+            }
+            else if (phone == "") {
+                $("#speedyMessage").text("Моля въведете телефон.");
+                isComplete = false;
+            }
             else {
                 $("#speedyMessage").text("");
             }
 
-
-            if (isComplete) {
+            if (isComplete)
+            {
                 var orderId = $("#orderId").val();
                 var fullAddress;
                 if (addresValue == "Speedy") {
@@ -231,7 +261,10 @@
                     deliveryMethod: deliveryValue,
                     shippingAddressId: shippingAddressId,
                     speedyOfficeAddress: fullAddress,
-                    shippingPrice: shippingPrice
+                    shippingPrice: shippingPrice,
+                    firstName: firstName,
+                    lastName: lastName,
+                    phone: phone
                 };
                 var token = $("#formSpeedy input[name=__RequestVerificationToken]").val();
 
@@ -242,12 +275,11 @@
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     headers: { 'X-CSRF-TOKEN': token },
-                    success: function (data) {
-
-
+                    success: function (data) 
+                        window.location.href = '@Url.Action("CompleteSuccess", "ShippingAddress")';
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
-                      
+
                     }
                 });
             }

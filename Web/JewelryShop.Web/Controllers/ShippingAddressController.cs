@@ -75,7 +75,7 @@
                 else
                 {
                     model.UserID = user.Id;
-                    await this.shippingAddressService.AddAsync(model);
+                    await this.shippingAddressService.AddAddressAsync(model);
                 }
             }
 
@@ -110,6 +110,11 @@
             shippingAddressesModel.ShippingAddressesCollection = this.shippingAddressService.GetAllUsersShippingAddress<ShippingAddressViewModel>(user.Id);
             shippingAddressesModel.ShippingAddress = new InputShippingAddressModel();
             return this.View("Index", shippingAddressesModel);
+        }
+
+        public IActionResult CompleteSuccess()
+        {
+            return this.View();
         }
     }
 }

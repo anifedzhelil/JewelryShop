@@ -19,7 +19,7 @@
             this.shippingAddressRepository = shippingAddressRepository;
         }
 
-        public async Task AddAsync(InputShippingAddressModel model)
+        public async Task AddAddressAsync(InputShippingAddressModel model)
         {
             var shippingAddress = new ShippingAddress()
             {
@@ -35,6 +35,22 @@
 
             await this.shippingAddressRepository.AddAsync(shippingAddress);
             await this.shippingAddressRepository.SaveChangesAsync();
+        }
+
+        public async Task<int> AddOfficeAddressAsync(string firstName, string lastName, string phone, string officeAddres)
+        {
+            var shippingAddress = new ShippingAddress()
+            {
+                FirstName = firstName,
+                LastName = lastName,
+                Phone = phone,
+                OfficeAddres = officeAddres,
+            };
+
+            await this.shippingAddressRepository.AddAsync(shippingAddress);
+            await this.shippingAddressRepository.SaveChangesAsync();
+
+            return shippingAddress.Id;
         }
 
         public async Task UpdateAsync(InputShippingAddressModel model)

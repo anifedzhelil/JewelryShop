@@ -258,7 +258,7 @@
             }
         }
 
-        public async Task<bool> CompleteOrderAsync(int orderId, DeliveryType deliveryType, int? shippingAddressId, string officeAddres, decimal shippingPrice)
+        public async Task<bool> CompleteOrderAsync(int orderId, DeliveryType deliveryType, int shippingAddressId, decimal shippingPrice)
         {
             var order = this.orderRepository.All()
                 .Where(x => x.Id == orderId)
@@ -273,7 +273,6 @@
             order.Status = OrderStatusType.Completed;
             order.CompleteDate = DateTime.UtcNow;
             order.ShippingAddressId = shippingAddressId;
-            order.OfficeAddres = officeAddres;
             order.ShippingPrice = shippingPrice;
 
             this.orderRepository.Update(order);

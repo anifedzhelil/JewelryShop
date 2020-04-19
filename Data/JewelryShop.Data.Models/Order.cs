@@ -27,8 +27,6 @@
 
         public decimal? ShippingPrice { get; set; }
 
-        public string? OfficeAddres { get; set; }
-
         public int? ShippingAddressId { get; set; }
 
         public virtual ShippingAddress ShippingAddress { get; set; }

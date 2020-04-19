@@ -19,7 +19,7 @@
 
         public string Address { get; set; }
 
-        public string? AdditionalAddress { get; set; }
+        public string AdditionalAddress { get; set; }
 
         public string Phone { get; set; }
 
@@ -28,6 +28,8 @@
         public string UserID { get; set; }
 
         public string OrderId { get; set; }
+
+        public string OfficeAddres { get; set; }
 
         public virtual ApplicationUser User { get; set; }
 

@@ -7,7 +7,9 @@
 
     public interface IShippingAddressService
     {
-        Task AddAsync(InputShippingAddressModel model);
+        Task AddAddressAsync(InputShippingAddressModel model);
+
+        Task<int> AddOfficeAddressAsync(string firstName, string lastName, string phone, string officeAddres);
 
         Task UpdateAsync(InputShippingAddressModel model);
 

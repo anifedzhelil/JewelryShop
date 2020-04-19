@@ -13,10 +13,14 @@
     public class OrderCompleteController : Controller
     {
         private readonly IOrdersService orderService;
+        private readonly IShippingAddressService shippingAddressService;
 
-        public OrderCompleteController(IOrdersService orderService)
+        public OrderCompleteController(
+            IOrdersService orderService,
+            IShippingAddressService shippingAddressService)
         {
             this.orderService = orderService;
+            this.shippingAddressService = shippingAddressService;
         }
 
         [HttpPost]
@@ -24,9 +28,20 @@
         public async Task<bool> CompleteAsync(OrderViewModel model)
         {
             DeliveryType delivery = model.DeliveryMethod == "Econt" ? DeliveryType.Econt : DeliveryType.Speedy;
-            var result = await this.orderService.CompleteOrderAsync(model.OrderId, delivery, model.ShippingAddressId, model.SpeedyOfficeAddress, model.ShippingPrice);
+            var addressId = -1;
 
-            return true;
+            if (model.ShippingAddressId == null)
+            {
+                addressId = await this.shippingAddressService.AddOfficeAddressAsync(model.FirstName, model.LastName, model.Phone, model.SpeedyOfficeAddress);
+            }
+            else
+            {
+                addressId = (int)model.ShippingAddressId;
+            }
+
+            var result = await this.orderService.CompleteOrderAsync(model.OrderId, delivery, addressId, model.ShippingPrice);
+
+            return result;
         }
     }
 }

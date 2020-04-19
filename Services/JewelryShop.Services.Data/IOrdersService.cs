@@ -27,6 +27,6 @@
 
         int GetActiveGuestOrderCount(string guestId);
 
-        Task<bool> CompleteOrderAsync(int orderId, DeliveryType deliveryType, int? shippingAddressId, string officeAddres, decimal shippingPrice);
+        Task<bool> CompleteOrderAsync(int orderId, DeliveryType deliveryType, int shippingAddressId, decimal shippingPrice);
     }
 }
