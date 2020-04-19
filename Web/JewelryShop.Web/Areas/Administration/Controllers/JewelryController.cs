@@ -17,7 +17,7 @@
 
     [Authorize(Roles = "Administrator")]
     [Area("Administration")]
-    public class JewelryController : BaseController
+    public class JewelryController : AdministrationController
     {
         private readonly Cloudinary cloudinary;
         private readonly IJewelryService jewelryService;
