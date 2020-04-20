@@ -1,9 +1,8 @@
 ﻿namespace JewelryShop.Web.ViewModels.Settings
 {
+    using AutoMapper;
     using JewelryShop.Data.Models;
     using JewelryShop.Services.Mapping;
-
-    using AutoMapper;
 
     public class SettingViewModel : IMapFrom<Setting>, IHaveCustomMappings
     {

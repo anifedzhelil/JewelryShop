@@ -16,7 +16,7 @@
 
         public DateTime CompleteDate { get; set; }
 
-        public int OrderDetailsCount { get; set; }
+        public int OrdersDetailsCount { get; set; }
 
         public OrderStatusType Status { get; set; }
 
@@ -27,7 +27,7 @@
             configuration.CreateMap<Order, IndexItemViewModel>()
                   .ForMember(
                     d => d.TotalSum,
-                    opt => opt.MapFrom(x => x.OrderDetails.Sum(t => t.Price) + x.ShippingPrice));
+                    opt => opt.MapFrom(x => x.OrdersDetails.Sum(t => t.Price) + x.ShippingPrice));
         }
     }
 }

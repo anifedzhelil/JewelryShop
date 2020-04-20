@@ -23,6 +23,6 @@
 
         public ShippingAddress ShippingAddress { get; set; }
 
-        public ICollection<OrderDetailsItemViewModel> OrderDetails { get; set; }
+        public ICollection<OrderDetailsItemViewModel> OrdersDetails { get; set; }
     }
 }

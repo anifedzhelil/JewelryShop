@@ -10,7 +10,7 @@
     {
         public Order()
         {
-            this.OrderDetails = new HashSet<OrderDetails>();
+            this.OrdersDetails = new HashSet<OrderDetails>();
         }
 
         public string? UserID { get; set; }
@@ -31,7 +31,7 @@
 
         public virtual ShippingAddress ShippingAddress { get; set; }
 
-        public virtual ICollection<OrderDetails> OrderDetails { get; set; }
+        public virtual ICollection<OrderDetails> OrdersDetails { get; set; }
 
         public virtual ApplicationUser User { get; set; }
     }
