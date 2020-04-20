@@ -307,5 +307,13 @@
 
             return true;
         }
+
+        public ICollection<T> GetUserAllCompletedOrders<T>(string userId)
+        {
+            return this.orderRepository.All()
+                .Where(x => x.UserID == userId && x.Status == OrderStatusType.Completed)
+                .To<T>()
+                .ToArray();
+        }
     }
 }

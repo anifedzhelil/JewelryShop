@@ -1,0 +1,30 @@
+﻿@model JewelryShop.Web.ViewModels.UserOrders.IndexViewModel
+
+@{ 
+    var num = 1;
+}
+<div class="align-content-center">
+    <h4>Моите поръчки</h4>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Дата на поръчката</th>
+      <th scope="col">Брой продукти</th>
+      <th scope="col">Сума</th>
+    </tr>
+  </thead>
+  <tbody>
+      @foreach (var item in Model.Orders)
+      {
+          <tr>
+              <th scope="row"><a asp-action="Details" asp-area="" asp-controller="UserOrders">Поръчка @num</a></th>
+              <td>@item.CompleteDate.ToLocalTime()</td>
+              <td>@item.OrdersDetailsCount</td>
+              <td>@item.TotalSum</td>
+          </tr>
+          num++;
+      }
+  </tbody>
+</table>

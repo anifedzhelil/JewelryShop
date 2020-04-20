@@ -28,5 +28,7 @@
         int GetActiveGuestOrderCount(string guestId);
 
         Task<bool> CompleteOrderAsync(int orderId, DeliveryType deliveryType, int shippingAddressId, decimal shippingPrice);
+
+        public ICollection<T> GetUserAllCompletedOrders<T>(string userId);
     }
 }
