@@ -7,6 +7,7 @@
 
     using AutoMapper;
     using JewelryShop.Data.Models;
+    using JewelryShop.Data.Models.Enums;
     using JewelryShop.Services.Mapping;
 
     public class IndexItemViewModel : IMapFrom<Order>, IHaveCustomMappings
@@ -15,7 +16,9 @@
 
         public DateTime CompleteDate { get; set; }
 
-        public int OrdersDetailsCount { get; set; }
+        public int OrderDetailsCount { get; set; }
+
+        public OrderStatusType Status { get; set; }
 
         public decimal TotalSum { get; set; }
 
@@ -24,7 +27,7 @@
             configuration.CreateMap<Order, IndexItemViewModel>()
                   .ForMember(
                     d => d.TotalSum,
-                    opt => opt.MapFrom(x => x.OrdersDetails.Sum(t => t.Price)));
+                    opt => opt.MapFrom(x => x.OrderDetails.Sum(t => t.Price) + x.ShippingPrice));
         }
     }
 }

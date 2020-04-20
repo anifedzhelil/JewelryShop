@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+
     using AutoMapper;
     using JewelryShop.Data.Models;
     using JewelryShop.Services.Mapping;

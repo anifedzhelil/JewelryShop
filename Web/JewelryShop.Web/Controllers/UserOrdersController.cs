@@ -5,9 +5,11 @@
     using JewelryShop.Data.Models;
     using JewelryShop.Services.Data;
     using JewelryShop.Web.ViewModels.UserOrders;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
+    [Authorize]
     public class UserOrdersController : Controller
     {
         private readonly IOrdersService orderService;
@@ -36,6 +38,18 @@
             }
 
             return this.View(model);
+        }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var user = await this.userManager.GetUserAsync(this.User);
+            OrderDetailsViewModel model = this.orderService.GetOrderById<OrderDetailsViewModel>(id);
+            if (user.Id == model.UserID)
+            {
+                return this.View(model);
+            }
+
+            return this.RedirectToAction("Index", "Home");
         }
     }
 }

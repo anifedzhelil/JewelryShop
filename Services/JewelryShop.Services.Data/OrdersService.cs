@@ -315,5 +315,13 @@
                 .To<T>()
                 .ToArray();
         }
+
+        public T GetOrderById<T>(int orderId)
+        {
+           return this.orderRepository.All()
+                .Where(x => x.Id == orderId)
+                .To<T>()
+                .FirstOrDefault();
+        }
     }
 }
