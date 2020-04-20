@@ -44,17 +44,22 @@
             </div>
         </nav>
     </header>
-    
+
     <div class="container">
         <partial name="_CookieConsentPartial" />
         <main role="main" class="shadow-sm p-3 mb-5 bg-white rounded">
             @this.RenderBody()
         </main>
     </div>
-    
+
     <footer class="border-top footer text-muted">
         <div class="container">
+            <div class="row">
+                <partial name="_Facebook" />
+            </div>
+            <div class="row">
             &copy; @DateTime.Now.Year - @GlobalConstants.SystemName - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </div>
         </div>
     </footer>
 
@@ -66,6 +71,7 @@
         <script src="~/js/site.js" asp-append-version="true"></script>
         <script src="~/lib/font-awesome/js/all.min.js" asp-append-version="true"></script>
         <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+        <script async defer crossorigin="anonymous" src="https://connect.facebook.net/tr_TR/sdk.js#xfbml=1&version=v6.0"></script>
     </environment>
     <environment names="Staging,Production">
         <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
@@ -75,8 +81,8 @@
         <script src="~/js/site.min.js" asp-append-version="true"></script>
         <script src="~/lib/font-awesome/js/all.min.js" asp-append-version="true"></script>
         <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+        <script async defer crossorigin="anonymous" src="https://connect.facebook.net/tr_TR/sdk.js#xfbml=1&version=v6.0"></script>
     </environment>
-
     @this.RenderSection("Scripts", required: false)
 </body>
 </html>
