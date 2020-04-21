@@ -12,8 +12,8 @@
     </div>
 }
 
-<a  asp-area="Administration" asp-controller="Jewelry" asp-action="Create">Добави продукт</a>
-
+<a  asp-area="Administration" asp-controller="Jewelry" asp-action="Create"><i class="fas fa-plus"></i> Добави продукт</a>
+<br /><br />
 
 <table class="table table-striped">
     <thead>
@@ -58,3 +58,44 @@
         }
     </tbody>
 </table>
+
+<nav>
+    <ul class="pagination justify-content-center">
+        @if (this.Model.CurrentPage == 1)
+        {
+            <li class="page-item disabled">
+                <a class="page-link" href="#">Предишен</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item">
+                <a class="page-link"
+                   asp-route-page="@(this.Model.CurrentPage - 1)">Предишен</a>
+            </li>
+        }
+
+        @for (int i = 1; i <= this.Model.PagesCount; i++)
+        {
+            var active = i == this.Model.CurrentPage ? "active" : string.Empty;
+            <li class="page-item @active">
+                <a class="page-link"
+                   asp-route-page="@i">@i</a>
+            </li>
+        }
+
+        @if (this.Model.CurrentPage == this.Model.PagesCount)
+        {
+            <li class="page-item disabled">
+                <a class="page-link" href="#">Следващ</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item">
+                <a class="page-link"
+                   asp-route-page="@(this.Model.CurrentPage + 1)">Следващ</a>
+            </li>
+        }
+    </ul>
+</nav>

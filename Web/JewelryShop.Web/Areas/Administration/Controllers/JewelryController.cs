@@ -19,6 +19,8 @@
     [Area("Administration")]
     public class JewelryController : AdministrationController
     {
+        private const int ItemsPerPage = 6;
+
         private readonly Cloudinary cloudinary;
         private readonly IJewelryService jewelryService;
         private readonly IJewelryImagesService jewelryImagesService;
@@ -30,13 +32,23 @@
             this.jewelryImagesService = jewelryImagesService;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int page = 1)
         {
+            var count = this.jewelryService.GetAdminJewelryCount();
+
             IndexViewModel viewModel = new IndexViewModel()
             {
-                Jewelry = this.jewelryService.GetAll<IndexJewelryViewModel>(),
+                Jewelry = this.jewelryService.GetAll<IndexJewelryViewModel>(ItemsPerPage, (page - 1) * ItemsPerPage),
             };
 
+            viewModel.PagesCount = (int)Math.Ceiling((double)count / ItemsPerPage);
+
+            if (viewModel.PagesCount == 0)
+            {
+                viewModel.PagesCount = 1;
+            }
+
+            viewModel.CurrentPage = page;
             return this.View(viewModel);
         }
 

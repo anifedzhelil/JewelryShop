@@ -61,13 +61,15 @@
             }
         }
 
-        public IEnumerable<T> GetAll<T>(int? count = null)
+        public IEnumerable<T> GetAll<T>(int? take = null, int skip = 0)
         {
             IQueryable<Jewel> query = this.jewelryRepository.All()
-                .OrderBy(c => c.Name);
-            if (count.HasValue)
+                .OrderBy(c => c.Name)
+                .Skip(skip);
+
+            if (take.HasValue)
             {
-                query = query.Take(count.Value);
+                query = query.Take(take.Value);
             }
 
             return query.To<T>().ToArray();
@@ -144,6 +146,11 @@
             }
 
             return this.jewelryRepository.All().Count(x => x.IsArchived == false && x.Count > 0);
+        }
+
+        public int GetAdminJewelryCount()
+        {
+            return this.jewelryRepository.All().Count();
         }
     }
 }

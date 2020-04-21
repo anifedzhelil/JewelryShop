@@ -9,7 +9,7 @@
 
     public interface IJewelryService
     {
-        IEnumerable<T> GetAll<T>(int? count = null);
+        IEnumerable<T> GetAll<T>(int? take = null, int skip = 0);
 
         IEnumerable<T> GetAllActived<T>(int? count = null);
 
@@ -24,5 +24,7 @@
         Task DeleteByIdAsync(int id);
 
         int GetCount(CategoryType? category);
+
+        int GetAdminJewelryCount();
     }
 }

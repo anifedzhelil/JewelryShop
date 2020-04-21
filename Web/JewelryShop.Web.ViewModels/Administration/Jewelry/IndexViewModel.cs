@@ -7,5 +7,9 @@
     public class IndexViewModel
     {
         public IEnumerable<IndexJewelryViewModel> Jewelry { get; set; }
+
+        public int CurrentPage { get; set; }
+
+        public int PagesCount { get; set; }
     }
 }
