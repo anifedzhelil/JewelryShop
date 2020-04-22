@@ -2,14 +2,12 @@
 @inject JewelryShop.Services.Data.IJewelryCategoriesService  jewelryCategoriesService
 @{
     this.ViewData["Title"] = "Home Page";
+    var category = (int)Model.Category;
 }
 
 <div class="text-center">
     <img src="~/images/banner.jpeg" />
 </div>
-
-<!-- /.col-lg-3 -->
-
 
 
 <div class="container">
@@ -28,23 +26,19 @@
                 }
             </div>
         </div>
-        <!-- /.col-lg-3 -->
 
         <div class="col-lg-9">
-            <div id="custom-search-input">
-                <div class="input-group">
-                    <input type="text" class="search-query form-control" value="@Model.Search" placeholder="Search" />
-                    <span class="input-group-btn">
-                        <a type="button" 
-                         asp-action="Index" asp-controller="Home" asp-route-search="@this.Model.Search"
-                            asp-route-name="@this.Model.Category"
-                            asp-route-page="@this.Model.CurrentPage"  >
-                            <span class="fa fa-search"></span>
-                        </a>
-                    </span>
+            <div class="row col-12 " style="padding-bottom:20px;">
+                <div class="col-7 input-group">
+                    <input class="form-control" type="text" placeholder="Search" aria-label="Search">
+                    <a href="#" class="btn btn-secondary"><i class="fa fa-search"></i></a>
+                </div>
+                <div class="col-4">
+                    <select class="custom-select" id="selectSort" onchange="sort(@category, @Model.CurrentPage)" title="Сортиране" style="min-width:200px;" asp-for="Sort" asp-items="@Html.GetEnumSelectList(typeof(JewelryShop.Data.Models.Enums.SortType))">
+                    </select>
                 </div>
             </div>
-            <div class="row">
+            <div class="row col-12">
                 @foreach (var item in this.Model.Jewelry)
                 {
                     <div class="col-lg-4 col-md-3 mb-4">
@@ -130,3 +124,17 @@
         }
     </ul>
 </nav>
+
+
+@section Scripts
+{
+    <script type="text/javascript">
+
+        function sort(category, page)
+        {
+            var sortValue = $("#selectSort").val();
+            window.location.href = '@Url.Action("Index", "Home")' + '?category=' + category +'&sort=' + sortValue + '&page=' + page;
+        }
+
+    </script>
+}

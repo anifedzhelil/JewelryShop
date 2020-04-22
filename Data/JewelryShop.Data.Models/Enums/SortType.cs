@@ -12,7 +12,7 @@
         Rating = 2,
         [Display(Name = "Най-висока цена")]
         HighPrice = 3,
-        [Display(Name = "Най-ниска цема")]
+        [Display(Name = "Най-ниска цена")]
         LowPrice = 4,
     }
 }

@@ -15,6 +15,8 @@
 
         public string Search { get; set; }
 
+        public SortType Sort { get; set; }
+
         public CategoryType Category { get; set; }
     }
 }

@@ -15,7 +15,7 @@
 
     public class HomeController : BaseController
     {
-        private const int ItemsPerPage = 2;
+        private const int ItemsPerPage = 3;
 
         private readonly IJewelryService jewelryService;
 
@@ -25,20 +25,52 @@
         }
 
         [HttpGet]
-        public IActionResult Index(CategoryType? category, string search, int page = 1)
+        public IActionResult Index(CategoryType? category, SortType? sort, string search, int page = 1)
         {
             var count = this.jewelryService.GetCount(category);
 
-            IndexViewModel viewModel = new IndexViewModel()
-            {
-                Jewelry = this.jewelryService.GetAllActivedByCategories<IndexJewelryViewModel>(category, search, ItemsPerPage, (page - 1) * ItemsPerPage),
-            };
+            IQueryable<IndexJewelryViewModel> query = this.jewelryService.GetAllActivedByCategories(category, search, ItemsPerPage, (page - 1) * ItemsPerPage).To<IndexJewelryViewModel>();
 
+            switch (sort)
+            {
+                case SortType.BestSelling:
+                    query = query.OrderByDescending(j => j.SoldCount);
+                    break;
+
+                case SortType.Rating:
+                    query = query.OrderByDescending(j => j.Ratings);
+                    break;
+                case SortType.HighPrice:
+                    query = query.OrderByDescending(j => j.Price);
+                    break;
+                case SortType.LowPrice:
+                    query = query.OrderBy(j => j.Price);
+                    break;
+                default:
+                    query = query.OrderByDescending(j => j.CreatedOn);
+                    break;
+            }
+
+            IndexViewModel viewModel = new IndexViewModel();
             viewModel.PagesCount = (int)Math.Ceiling((double)count / ItemsPerPage);
 
             if (viewModel.PagesCount == 0)
             {
                 viewModel.PagesCount = 1;
+            }
+
+            if (page > viewModel.PagesCount)
+            {
+                page = viewModel.PagesCount;
+            }
+
+            query = query.Skip((page - 1) * ItemsPerPage);
+
+            viewModel.Jewelry = query.Take(ItemsPerPage);
+
+            if (sort.HasValue)
+            {
+                viewModel.Sort = (SortType)sort;
             }
 
             if (category.HasValue)

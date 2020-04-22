@@ -27,6 +27,10 @@
 
         public double Ratings { get; set; }
 
+        public DateTime CreatedOn { get; set; }
+
+        public int SoldCount { get; set; }
+
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<Jewel, IndexJewelryViewModel>()
@@ -35,7 +39,10 @@
                 opt => opt.MapFrom(x => x.Images.Select(t => t.ImageUrl).FirstOrDefault()))
               .ForMember(
                d => d.Ratings,
-               opt => opt.MapFrom(x => x.Ratings.Average(t => (double)t.Type)));
+               opt => opt.MapFrom(x => x.Ratings.Average(t => (double)t.Type)))
+              .ForMember(
+                d => d.SoldCount,
+                opt => opt.MapFrom(x => x.OrderDetails.Where(x => x.Price > 0).Sum(t => t.Quantity)));
         }
     }
 }

@@ -85,7 +85,7 @@
             return query.To<T>().ToArray();
         }
 
-        public IEnumerable<T> GetAllActivedByCategories<T>(CategoryType? category, string search, int? take = null, int skip = 0)
+        public IQueryable<Jewel> GetAllActivedByCategories(CategoryType? category, string search, int? take = null, int skip = 0)
         {
             IQueryable<Jewel> query = this.jewelryRepository.All();
 
@@ -98,21 +98,16 @@
             {
                 query = query
                 .OrderBy(c => c.CreatedOn)
-                .Where(x => x.IsArchived == false && x.Category == category && x.Count > 0).Skip(skip);
+                .Where(x => x.IsArchived == false && x.Category == category && x.Count > 0);
             }
             else
             {
                 query = query
                 .OrderBy(c => c.CreatedOn)
-                .Where(x => x.IsArchived == false && x.Count > 0).Skip(skip);
+                .Where(x => x.IsArchived == false && x.Count > 0);
             }
 
-            if (take.HasValue)
-            {
-                query = query.Take(take.Value);
-            }
-
-            return query.To<T>().ToArray();
+            return query;
         }
 
         public T GetById<T>(int id)
