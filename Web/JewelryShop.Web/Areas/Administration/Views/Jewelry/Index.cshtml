@@ -1,4 +1,4 @@
-﻿@model  JewelryShop.Web.ViewModels.Administration.Jewelry.IndexViewModel
+﻿@model JewelryShop.Web.ViewModels.Administration.Jewelry.IndexViewModel
 @{
     ViewData["Title"] = "Galilani";
 }
@@ -11,9 +11,24 @@
         </button>
     </div>
 }
-
-<a  asp-area="Administration" asp-controller="Jewelry" asp-action="Create"><i class="fas fa-plus"></i> Добави продукт</a>
-<br /><br />
+<div class="container">
+    <div class="row">
+        <div class="col-lg input-group">
+            <label asp-for="Sort" class="control-label" style="width:80px">Филтър  </label>
+            <select asp-for="Filter" onchange="filter(@Model.CurrentPage)" style="width:150px" id="selectFilter" class="form-control" asp-items="@Html.GetEnumSelectList(typeof(JewelryShop.Data.Models.Enums.FilterType))">
+            </select>
+        </div>
+        <div class="col-lg input-group">
+            <label asp-for="Sort" class="control-label" style="width:80px">Сортиране  </label>
+            <select asp-for="Sort" onchange="filter(@Model.CurrentPage)" style="width:150px" id="selectSort" class="form-control" asp-items="@Html.GetEnumSelectList(typeof(JewelryShop.Data.Models.Enums.SortType))">
+            </select>
+        </div>
+        <div class="col-lg">
+            <a asp-area="Administration" asp-controller="Jewelry" asp-action="Create"><i class="fas fa-plus"></i> Добави продукт</a>
+        </div>
+    </div>
+    </div>
+<br />
 
 <table class="table table-striped">
     <thead>
@@ -28,9 +43,19 @@
                 Цена
             </th>
             <th>
-                Брой
+                Налични
             </th>
-            <th></th>
+            <th>
+                Брой продадени
+            </th>
+            <th>
+                Рейтинг
+            </th>
+            <th>
+                Архивиран
+            </th>
+            <th>
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -38,7 +63,9 @@
         {
             <tr>
                 <td>
-                    <img src="@item.ImageUr" class="img-thumbnail" style="width:120px;"/>
+                    <a asp-action="Details" asp-area="Administration" asp-controller="Jewelry" asp-route-id="@item.Id">
+                        <img src="@item.ImageUr" class="img-thumbnail" style="width:120px;" />
+                    </a>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
@@ -50,9 +77,17 @@
                     @Html.DisplayFor(modelItem => item.Count)
                 </td>
                 <td>
-                    <a asp-action="Edit"  asp-area="Administration" asp-controller="Jewelry" asp-route-id="@item.Id">Редактирай</a> |
-                    <a asp-action="Details" asp-area="Administration" asp-controller="Jewelry" asp-route-id="@item.Id">Детайл</a> |
-                    <a asp-action="Delete" asp-area="Administration" asp-controller="Jewelry" asp-route-id="@item.Id">Изтрий</a>
+                    @Html.DisplayFor(modelItem => item.SoldCount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rating)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsArchived)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-area="Administration" asp-controller="Jewelry" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a> |
+                    <a asp-action="Delete" asp-area="Administration" asp-controller="Jewelry" asp-route-id="@item.Id"><i class="fas fa-trash-alt"></i></a>
                 </td>
             </tr>
         }
@@ -71,6 +106,8 @@
         {
             <li class="page-item">
                 <a class="page-link"
+                   asp-route-sort="@Model.Sort"
+                   asp-route-filter="@Model.Filter"
                    asp-route-page="@(this.Model.CurrentPage - 1)">Предишен</a>
             </li>
         }
@@ -80,6 +117,8 @@
             var active = i == this.Model.CurrentPage ? "active" : string.Empty;
             <li class="page-item @active">
                 <a class="page-link"
+                   asp-route-sort="@Model.Sort"
+                   asp-route-filter="@Model.Filter"
                    asp-route-page="@i">@i</a>
             </li>
         }
@@ -94,8 +133,24 @@
         {
             <li class="page-item">
                 <a class="page-link"
+                   asp-route-sort="@Model.Sort"
+                   asp-route-filter="@Model.Filter"
                    asp-route-page="@(this.Model.CurrentPage + 1)">Следващ</a>
             </li>
         }
     </ul>
 </nav>
+
+@section Scripts
+{
+    <script type="text/javascript">
+
+        function filter(page)
+        {
+            var filterValue = $("#selectFilter").val();
+            var sortValue = $("#selectSort").val();
+            window.location.href = '@Url.Action("Index", "Jewelry")' + '?filter=' + filterValue +'&sort=' + sortValue + '&page=' + page;
+        }
+
+    </script>
+}

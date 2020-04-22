@@ -7,7 +7,9 @@
 
     using CloudinaryDotNet;
     using JewelryShop.Data.Models;
+    using JewelryShop.Data.Models.Enums;
     using JewelryShop.Services.Data;
+    using JewelryShop.Services.Mapping;
     using JewelryShop.Web.CloudinaryHelper;
     using JewelryShop.Web.Controllers;
     using JewelryShop.Web.ViewModels.Administration.Jewelry;
@@ -32,20 +34,81 @@
             this.jewelryImagesService = jewelryImagesService;
         }
 
-        public IActionResult Index(int page = 1)
+        public IActionResult Index(FilterType? filter, SortType? sort, int page = 1)
         {
-            var count = this.jewelryService.GetAdminJewelryCount();
-
-            IndexViewModel viewModel = new IndexViewModel()
+            var count = 0;
+            if (filter.HasValue)
             {
-                Jewelry = this.jewelryService.GetAll<IndexJewelryViewModel>(ItemsPerPage, (page - 1) * ItemsPerPage),
-            };
+                count = this.jewelryService.GetAdminJewelryCount((FilterType)filter);
+            }
+            else
+            {
+                count = this.jewelryService.GetAdminJewelryCount(FilterType.All);
+            }
+
+            IQueryable<IndexJewelryViewModel> query = this.jewelryService.GetAll().To<IndexJewelryViewModel>();
+
+            switch (filter)
+            {
+                case FilterType.Archived:
+                    query = query.Where(j => j.IsArchived == true);
+                    break;
+
+                case FilterType.OutOfStock:
+                    query = query.Where(j => j.Count == 0);
+                    break;
+                case FilterType.Stock:
+                    query = query.Where(j => j.Count > 0);
+                    break;
+            }
+
+            switch (sort)
+            {
+                case SortType.BestSelling:
+                    query = query.OrderByDescending(j => j.SoldCount);
+                    break;
+
+                case SortType.Rating:
+                    query = query.OrderByDescending(j => j.Rating);
+                    break;
+                case SortType.HighPrice:
+                    query = query.OrderByDescending(j => j.Price);
+                    break;
+                case SortType.LowPrice:
+                    query = query.OrderBy(j => j.Price);
+                    break;
+                default:
+                    query = query.OrderByDescending(j => j.CreatedOn);
+                    break;
+            }
+
+            IndexViewModel viewModel = new IndexViewModel();
 
             viewModel.PagesCount = (int)Math.Ceiling((double)count / ItemsPerPage);
+
+            if (page > viewModel.PagesCount)
+            {
+                page = viewModel.PagesCount;
+            }
+
+            query = query.Skip((page - 1) * ItemsPerPage);
+            query = query.Take(ItemsPerPage);
+
+            viewModel.Jewelry = query;
 
             if (viewModel.PagesCount == 0)
             {
                 viewModel.PagesCount = 1;
+            }
+
+            if (filter.HasValue)
+            {
+                viewModel.Filter = (FilterType)filter;
+            }
+
+            if (sort.HasValue)
+            {
+                viewModel.Sort = (SortType)sort;
             }
 
             viewModel.CurrentPage = page;

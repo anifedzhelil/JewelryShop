@@ -1,6 +1,7 @@
 ﻿namespace JewelryShop.Services.Data
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using JewelryShop.Data.Models;
@@ -9,7 +10,7 @@
 
     public interface IJewelryService
     {
-        IEnumerable<T> GetAll<T>(int? take = null, int skip = 0);
+        IQueryable<Jewel> GetAll();
 
         IEnumerable<T> GetAllActived<T>(int? count = null);
 
@@ -25,6 +26,6 @@
 
         int GetCount(CategoryType? category);
 
-        int GetAdminJewelryCount();
+        int GetAdminJewelryCount(FilterType filter);
     }
 }

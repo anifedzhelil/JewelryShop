@@ -1,8 +1,8 @@
 ﻿namespace JewelryShop.Web.ViewModels.Administration.Jewelry
 {
-    using System;
     using System.Collections.Generic;
-    using System.Text;
+
+    using JewelryShop.Data.Models.Enums;
 
     public class IndexViewModel
     {
@@ -11,5 +11,9 @@
         public int CurrentPage { get; set; }
 
         public int PagesCount { get; set; }
+
+        public FilterType Filter { get; set; }
+
+        public SortType Sort { get; set; }
     }
 }

@@ -17,18 +17,30 @@
 
         public decimal Price { get; set; }
 
-        public bool IsActive { get; set; }
+        public bool IsArchived { get; set; }
 
         public int Count { get; set; }
 
         public string ImageUr { get; set; }
 
+        public int SoldCount { get; set; }
+
+        public double Rating { get; set; }
+
+        public DateTime CreatedOn { get; set; }
+
         public void CreateMappings(IProfileExpression configuration)
         {
-                configuration.CreateMap<Jewel, IndexJewelryViewModel>()
-                .ForMember(
-                    d => d.ImageUr,
-                    opt => opt.MapFrom(x => x.Images.Select(t => t.ImageUrl).FirstOrDefault()));
+            configuration.CreateMap<Jewel, IndexJewelryViewModel>()
+            .ForMember(
+                d => d.ImageUr,
+                opt => opt.MapFrom(x => x.Images.Select(t => t.ImageUrl).FirstOrDefault()))
+            .ForMember(
+                d => d.SoldCount,
+                opt => opt.MapFrom(x => x.OrderDetails.Where(x => x.Price > 0).Sum(t => t.Quantity)))
+            .ForMember(
+                d => d.Rating,
+                opt => opt.MapFrom(x => x.Ratings.Average(t => (double)t.Type)));
         }
     }
 }

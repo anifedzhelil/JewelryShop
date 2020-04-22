@@ -13,6 +13,7 @@
         {
             this.Images = new HashSet<JewelImages>();
             this.Ratings = new HashSet<Rating>();
+            this.OrderDetails = new HashSet<OrderDetails>();
         }
 
         public string Name { get; set; }
@@ -34,5 +35,7 @@
         public virtual ICollection<JewelImages> Images { get; set; }
 
         public virtual ICollection<Rating> Ratings { get; set; }
+
+        public virtual ICollection<OrderDetails> OrderDetails { get; set; }
     }
 }

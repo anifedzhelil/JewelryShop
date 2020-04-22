@@ -275,11 +275,8 @@
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     headers: { 'X-CSRF-TOKEN': token },
-                    success: function (data) 
+                    success: function (data) {
                         window.location.href = '@Url.Action("CompleteSuccess", "ShippingAddress")';
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-
                     }
                 });
             }

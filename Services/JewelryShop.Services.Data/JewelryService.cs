@@ -14,10 +14,14 @@
     public class JewelryService : IJewelryService
     {
         private readonly IDeletableEntityRepository<Jewel> jewelryRepository;
+        private readonly IDeletableEntityRepository<OrderDetails> orderDetailsRepository;
 
-        public JewelryService(IDeletableEntityRepository<Jewel> jewelryRepository)
+        public JewelryService(
+            IDeletableEntityRepository<Jewel> jewelryRepository,
+            IDeletableEntityRepository<OrderDetails> orderDetailsRepository)
         {
             this.jewelryRepository = jewelryRepository;
+            this.orderDetailsRepository = orderDetailsRepository;
         }
 
         public async Task<int> AddAsync(CreateJewelViewModel createJewelModel)
@@ -61,18 +65,10 @@
             }
         }
 
-        public IEnumerable<T> GetAll<T>(int? take = null, int skip = 0)
+        public IQueryable<Jewel> GetAll()
         {
-            IQueryable<Jewel> query = this.jewelryRepository.All()
-                .OrderBy(c => c.Name)
-                .Skip(skip);
-
-            if (take.HasValue)
-            {
-                query = query.Take(take.Value);
-            }
-
-            return query.To<T>().ToArray();
+            return this.jewelryRepository.All()
+                .OrderBy(c => c.Name);
         }
 
         public IEnumerable<T> GetAllActived<T>(int? count = null)
@@ -132,8 +128,7 @@
             var jewel = this.jewelryRepository.All().FirstOrDefault(d => d.Id == id);
             if (jewel != null)
             {
-                jewel.IsDeleted = true;
-                this.jewelryRepository.Update(jewel);
+                this.jewelryRepository.Delete(jewel);
                 await this.jewelryRepository.SaveChangesAsync();
             }
         }
@@ -148,8 +143,18 @@
             return this.jewelryRepository.All().Count(x => x.IsArchived == false && x.Count > 0);
         }
 
-        public int GetAdminJewelryCount()
+        public int GetAdminJewelryCount(FilterType filter)
         {
+            switch (filter)
+            {
+                case FilterType.Archived:
+                    return this.jewelryRepository.All().Where(x => x.IsArchived == true).Count();
+                case FilterType.OutOfStock:
+                    return this.jewelryRepository.All().Where(x => x.Count == 0).Count();
+                case FilterType.Stock:
+                    return this.jewelryRepository.All().Where(x => x.Count > 0).Count();
+            }
+
             return this.jewelryRepository.All().Count();
         }
     }
