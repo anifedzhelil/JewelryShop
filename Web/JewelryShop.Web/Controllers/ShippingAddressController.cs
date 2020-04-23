@@ -4,9 +4,10 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using JewelryShop.Common;
     using JewelryShop.Data.Models;
     using JewelryShop.Services.Data;
+    using JewelryShop.Services.Messaging;
     using JewelryShop.Web.ViewModels.ShippingAddresses;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Cors;
@@ -19,15 +20,18 @@
         private readonly IShippingAddressService shippingAddressService;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IOrdersService ordersService;
+        private readonly IEmailSender emailSender;
 
         public ShippingAddressController(
             UserManager<ApplicationUser> userManager,
             IShippingAddressService shippingAddressService,
-            IOrdersService ordersService)
+            IOrdersService ordersService,
+            IEmailSender emailSender)
         {
             this.shippingAddressService = shippingAddressService;
             this.userManager = userManager;
             this.ordersService = ordersService;
+            this.emailSender = emailSender;
         }
 
         [Authorize]
@@ -112,8 +116,12 @@
             return this.View("Index", shippingAddressesModel);
         }
 
-        public IActionResult CompleteSuccess()
+        public async Task<IActionResult> CompleteSuccess()
         {
+            var user = await this.userManager.GetUserAsync(this.User);
+            var name = user.FirstName != null && user.LastName != null ? user.FirstName + " " + user.LastName : user.Email;
+
+            await this.emailSender.SendEmailAsync(GlobalConstants.SystemEmail, GlobalConstants.SystemNickname, user.Email, "Нова поръчка", "Здравейте " + name + "! Поръчката ви бе приета успешно! При въпроси, моля пишете ни. Благодарим ви, че пазарувате от нас!");
             return this.View();
         }
     }

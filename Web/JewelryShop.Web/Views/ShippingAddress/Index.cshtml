@@ -139,7 +139,7 @@
                             <div class="form-row">
                                 <span>Офис</span>
                                 <select id="mySelect2" class="select2" style="width:100% !important;">
-                                    <option value="-1">Изберете............................</option>
+                                    <option value="-1">Изберете...</option>
                                 </select>
                             </div>
                         </form>
@@ -224,21 +224,21 @@
             if (select < 0 && addresValue == "Speedy") {
                 $("#speedyMessage").text("Моля изберете офис на Спиди.");
                 isComplete = false;
-            }
-            else if (firstName == "") {
-                $("#speedyMessage").text("Моля въведете име.");
-                isComplete = false;
-            }
-            else if (lastName == "") {
-                $("#speedyMessage").text("Моля въведете фамилия.");
-                isComplete = false;
-            }
-            else if (phone == "") {
-                $("#speedyMessage").text("Моля въведете телефон.");
-                isComplete = false;
-            }
-            else {
-                $("#speedyMessage").text("");
+                if (firstName == "") {
+                    $("#speedyMessage").text("Моля въведете име.");
+                    isComplete = false;
+                }
+                else if (lastName == "") {
+                    $("#speedyMessage").text("Моля въведете фамилия.");
+                    isComplete = false;
+                }
+                else if (phone == "") {
+                    $("#speedyMessage").text("Моля въведете телефон.");
+                    isComplete = false;
+                }
+                else {
+                    $("#speedyMessage").text("");
+                }
             }
 
             if (isComplete)
