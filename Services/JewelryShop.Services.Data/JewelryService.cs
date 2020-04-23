@@ -85,25 +85,18 @@
             return query.To<T>().ToArray();
         }
 
-        public IQueryable<Jewel> GetAllActivedByCategories(CategoryType? category, string search, int? take = null, int skip = 0)
+        public IQueryable<Jewel> GetAllActivedByCategories(int? category)
         {
             IQueryable<Jewel> query = this.jewelryRepository.All();
-
-            if (search != null)
-            {
-                query = query.Where(x => x.Name.Contains(search) || x.Description.Contains(search));
-            }
 
             if (category > 0)
             {
                 query = query
-                .OrderBy(c => c.CreatedOn)
-                .Where(x => x.IsArchived == false && x.Category == category && x.Count > 0);
+                .Where(x => x.IsArchived == false && x.Category == (CategoryType)category && x.Count > 0);
             }
             else
             {
                 query = query
-                .OrderBy(c => c.CreatedOn)
                 .Where(x => x.IsArchived == false && x.Count > 0);
             }
 
@@ -126,16 +119,6 @@
                 this.jewelryRepository.Delete(jewel);
                 await this.jewelryRepository.SaveChangesAsync();
             }
-        }
-
-        public int GetCount(CategoryType? category)
-        {
-            if (category > 0)
-            {
-                return this.jewelryRepository.All().Count(x => x.IsArchived == false && x.Category == category && x.Count > 0);
-            }
-
-            return this.jewelryRepository.All().Count(x => x.IsArchived == false && x.Count > 0);
         }
 
         public int GetAdminJewelryCount(FilterType filter)

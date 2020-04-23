@@ -14,7 +14,7 @@
 
         IEnumerable<T> GetAllActived<T>(int? count = null);
 
-        public IQueryable<Jewel> GetAllActivedByCategories(CategoryType? category, string search, int? take = null, int skip = 0);
+        public IQueryable<Jewel> GetAllActivedByCategories(int? category);
 
         T GetById<T>(int id);
 
@@ -23,8 +23,6 @@
         Task Update(EditJewelViewModel createJewelModel);
 
         Task DeleteByIdAsync(int id);
-
-        int GetCount(CategoryType? category);
 
         int GetAdminJewelryCount(FilterType filter);
     }

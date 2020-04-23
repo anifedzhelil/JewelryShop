@@ -25,11 +25,17 @@
         }
 
         [HttpGet]
-        public IActionResult Index(CategoryType? category, SortType? sort, string search, int page = 1)
+        public IActionResult Index(int? category, SortType? sort, string search, int page = 1)
         {
-            var count = this.jewelryService.GetCount(category);
+            IQueryable<IndexJewelryViewModel> query = this.jewelryService.GetAllActivedByCategories(category).To<IndexJewelryViewModel>();
 
-            IQueryable<IndexJewelryViewModel> query = this.jewelryService.GetAllActivedByCategories(category, search, ItemsPerPage, (page - 1) * ItemsPerPage).To<IndexJewelryViewModel>();
+            var words = search?.Split(' ').Select(x => x.Trim())
+            .Where(x => !string.IsNullOrWhiteSpace(x) && x.Length >= 2).ToList();
+
+            if (words != null && words.Count > 0)
+            {
+                query = query.Where(c => EF.Functions.Like(c.Description, $"%{words[0]}%") || EF.Functions.Like(c.Name, $"%{words[0]}%"));
+            }
 
             switch (sort)
             {
@@ -52,6 +58,8 @@
             }
 
             IndexViewModel viewModel = new IndexViewModel();
+
+            var count = query.Count();
             viewModel.PagesCount = (int)Math.Ceiling((double)count / ItemsPerPage);
 
             if (viewModel.PagesCount == 0)
@@ -64,9 +72,10 @@
                 page = viewModel.PagesCount;
             }
 
-            query = query.Skip((page - 1) * ItemsPerPage);
-
-            viewModel.Jewelry = query.Take(ItemsPerPage);
+            viewModel.Jewelry = query
+                        .Skip((page - 1) * ItemsPerPage)
+                        .Take(ItemsPerPage)
+                        .ToList();
 
             if (sort.HasValue)
             {
@@ -75,7 +84,7 @@
 
             if (category.HasValue)
             {
-                viewModel.Category = (CategoryType)category;
+                viewModel.Category = (int)category;
             }
 
             viewModel.CurrentPage = page;

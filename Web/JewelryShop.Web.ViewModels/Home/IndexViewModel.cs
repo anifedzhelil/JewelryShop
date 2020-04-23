@@ -17,6 +17,6 @@
 
         public SortType Sort { get; set; }
 
-        public CategoryType Category { get; set; }
+        public int Category { get; set; }
     }
 }

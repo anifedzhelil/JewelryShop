@@ -2,7 +2,6 @@
 @inject JewelryShop.Services.Data.IJewelryCategoriesService  jewelryCategoriesService
 @{
     this.ViewData["Title"] = "Home Page";
-    var category = (int)Model.Category;
 }
 
 <div class="text-center">
@@ -28,16 +27,22 @@
         </div>
 
         <div class="col-lg-9">
-            <div class="row col-12 " style="padding-bottom:20px;">
-                <div class="col-7 input-group">
-                    <input class="form-control" type="text" placeholder="Search" aria-label="Search">
-                    <a href="#" class="btn btn-secondary"><i class="fa fa-search"></i></a>
-                </div>
-                <div class="col-4">
-                    <select class="custom-select" id="selectSort" onchange="sort(@category, @Model.CurrentPage)" title="Сортиране" style="min-width:200px;" asp-for="Sort" asp-items="@Html.GetEnumSelectList(typeof(JewelryShop.Data.Models.Enums.SortType))">
-                    </select>
+            <div class="form-group" >
+                <div class="form-row">
+                    <div class="input-group col-md-7">
+                        <input type="search" id="inputSearch" name="search" class="form-control" value="@this.Model.Search" placeholder="Търсене..." />
+                        <div class="input-group-append">
+                            <input type="button" value="Търси" class="btn btn-outline-secondary"  onclick="sort(@Model.Category, @Model.CurrentPage)" />
+                        </div>
+                    </div>
+                    <div class=" col-md-5">
+                        <select class="custom-select" id="selectSort" onchange="sort(@Model.Category, @Model.CurrentPage)" title="Сортиране"
+                                asp-for="Sort" asp-items="@Html.GetEnumSelectList(typeof(JewelryShop.Data.Models.Enums.SortType))">
+                        </select>
+                    </div>
                 </div>
             </div>
+            <br />
             <div class="row col-12">
                 @foreach (var item in this.Model.Jewelry)
                 {
@@ -75,7 +80,11 @@
                         </div>
                     </div>
                 }
-            </div>
+                @if (this.Model.Jewelry.Count() == 0)
+                { 
+                    <div class="alert-light">Не са открити продукти, отговарящи на критериите от търсенето.</div>
+                }
+                </div>
             <!-- /.row -->
         </div>
     </div>
@@ -93,7 +102,9 @@
         {
             <li class="page-item">
                 <a class="page-link"
+                   asp-route-search="@this.Model.Search"
                    asp-route-category="@this.Model.Category"
+                   asp-route-sort="@this.Model.Sort"
                    asp-route-page="@(this.Model.CurrentPage - 1)">Предишен</a>
             </li>
         }
@@ -104,6 +115,8 @@
             <li class="page-item @active">
                 <a class="page-link"
                    asp-route-category="@this.Model.Category"
+                   asp-route-search="@this.Model.Search"
+                   asp-route-sort="@this.Model.Sort"
                    asp-route-page="@i">@i</a>
             </li>
         }
@@ -119,6 +132,8 @@
             <li class="page-item">
                 <a class="page-link"
                    asp-route-name="@this.Model.Category"
+                   asp-route-search="@this.Model.Search"
+                   asp-route-sort="@this.Model.Sort"
                    asp-route-page="@(this.Model.CurrentPage + 1)">Селдващ</a>
             </li>
         }
@@ -133,7 +148,8 @@
         function sort(category, page)
         {
             var sortValue = $("#selectSort").val();
-            window.location.href = '@Url.Action("Index", "Home")' + '?category=' + category +'&sort=' + sortValue + '&page=' + page;
+            var searchValue = $("#inputSearch").val();
+            window.location.href = '@Url.Action("Index", "Home")' + '?category=' + category + '&search=' + searchValue +'&sort=' + sortValue + '&page=' + page;
         }
 
     </script>
