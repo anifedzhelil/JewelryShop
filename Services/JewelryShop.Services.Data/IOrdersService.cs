@@ -38,5 +38,7 @@
         int GetAllOrdersCount();
 
         Task ChangeStatusAsync(int id);
+
+        public bool ChechShippingAddressIsUsed(int id);
     }
 }

@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
     using JewelryShop.Common;
     using JewelryShop.Data.Models;
     using JewelryShop.Services.Data;
@@ -40,8 +41,7 @@
             var user = await this.userManager.GetUserAsync(this.User);
 
             var model = new IndexViewModel();
-            model.ShippingAddressesCollection = this.shippingAddressService.GetAllUsersShippingAddress<ShippingAddressViewModel>(user.Id);
-            model.DeliveryCheked = "uncheked";
+            model.ShippingAddressesCollection = this.shippingAddressService.GetUserAllShippingAddress<ShippingAddressViewModel>(user.Id);
             model.ShippingAddress = new InputShippingAddressModel()
             {
                 FirstName = user.FirstName,
@@ -65,7 +65,7 @@
             if (!this.ModelState.IsValid)
             {
                 var shippingAddressesModel = new IndexViewModel();
-                shippingAddressesModel.ShippingAddressesCollection = this.shippingAddressService.GetAllUsersShippingAddress<ShippingAddressViewModel>(user.Id);
+                shippingAddressesModel.ShippingAddressesCollection = this.shippingAddressService.GetUserAllShippingAddress<ShippingAddressViewModel>(user.Id);
                 shippingAddressesModel.ShippingAddress = model;
                 this.TempData["ShippingAddressIsValid"] = false;
                 return this.View("Index", shippingAddressesModel);
@@ -90,30 +90,39 @@
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
-            var model = this.shippingAddressService.GetShippingAddressById<InputShippingAddressModel>(id);
-            if (model == null)
+            var shippingAddressesModel = this.shippingAddressService.GetShippingAddressById<InputShippingAddressModel>(id);
+            if (shippingAddressesModel == null)
             {
                 return this.NotFound();
             }
 
             this.TempData["ShippingAddressIsValid"] = false;
 
-            var shippingAddressesModel = new IndexViewModel();
-            shippingAddressesModel.ShippingAddressesCollection = this.shippingAddressService.GetAllUsersShippingAddress<ShippingAddressViewModel>(user.Id);
-            shippingAddressesModel.ShippingAddress = model;
+            var model = new IndexViewModel();
+            model.ShippingAddressesCollection = this.shippingAddressService.GetUserAllShippingAddress<ShippingAddressViewModel>(user.Id);
+            model.ShippingAddress = shippingAddressesModel;
 
-            return this.View("Index", shippingAddressesModel);
+            var orderModel = this.ordersService.GetActiveOrder<OrderViewModel>(user.Id);
+            model.OrdersDetails = orderModel.OrdersDetails;
+            model.OrderId = orderModel.OrdersDetails.FirstOrDefault().OrderId;
+
+            return this.View("Index", model);
         }
 
         public async Task<IActionResult> DeleteShippingAddressAsync(int id)
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
-            await this.shippingAddressService.DeleteShippingAddress(id);
-            var shippingAddressesModel = new IndexViewModel();
-            shippingAddressesModel.ShippingAddressesCollection = this.shippingAddressService.GetAllUsersShippingAddress<ShippingAddressViewModel>(user.Id);
-            shippingAddressesModel.ShippingAddress = new InputShippingAddressModel();
-            return this.View("Index", shippingAddressesModel);
+            if (!this.ordersService.ChechShippingAddressIsUsed(id))
+            {
+                 await this.shippingAddressService.DeleteShippingAddress(id);
+            }
+            else
+            {
+                this.TempData["InfoMessage"] = "Имате поръчка с този адрес. Адресът не може да бъде изтрит.";
+            }
+
+            return this.RedirectToAction("Index");
         }
 
         public async Task<IActionResult> CompleteSuccess()

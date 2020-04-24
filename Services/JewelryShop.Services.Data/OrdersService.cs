@@ -358,5 +358,14 @@
             this.orderRepository.Update(order);
             await this.orderRepository.SaveChangesAsync();
         }
+
+        public bool ChechShippingAddressIsUsed(int id)
+        {
+            var orders = this.orderRepository.All()
+                .Where(x => x.ShippingAddressId == id)
+                .ToList();
+
+            return orders.Count != 0;
+        }
     }
 }

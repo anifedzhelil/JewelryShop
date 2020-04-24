@@ -4,200 +4,210 @@
     var numProduct = 0;
     decimal subPrice = 0;
 }
-    <div class="container-fluid">
-        <div class="row col-12">
-            <div class="col-6">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-12">
-                            <h6 class="text-info">Изберете начин на доставка:</h6>
-                        </div>
-                        <form id="myForm">
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
+@if (this.TempData["InfoMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @this.TempData["InfoMessage"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+<div class="container-fluid">
+    <div class="row col-12">
+        <div class="col-6">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <h6 class="text-info">Изберете начин на доставка:</h6>
+                    </div>
+                    <form id="myForm">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
 
-                                    <div class="custom-control custom-radio">
-                                        <input type="radio" class="custom-control-input" id="radioEcont" name="delivery" value="Econt">
-                                        <label class="custom-control-label" for="radioEcont">Еконт</label>
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-6">
-
-                                    <div class="custom-control custom-radio">
-                                        <input type="radio" class="custom-control-input" id="radioSpeedy" name="delivery" value="Speedy">
-                                        <label class="custom-control-label" for="radioSpeedy">Спиди</label>
-                                    </div>
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" class="custom-control-input" id="radioEcont" name="delivery" value="Econt">
+                                    <label class="custom-control-label" for="radioEcont">Еконт</label>
                                 </div>
                             </div>
-                        </form>
-                        <br />
-                    </div>
+                            <div class="form-group col-md-6">
+
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" class="custom-control-input" id="radioSpeedy" name="delivery" value="Speedy">
+                                    <label class="custom-control-label" for="radioSpeedy">Спиди</label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                     <br />
-                    <hr />
+                </div>
+                <br />
+                <hr />
 
 
-                    <div class="row">
-                        <h6 class="text-info">Изберете адрес за доставка:</h6>
+                <div class="row">
+                    <h6 class="text-info">Изберете адрес за доставка:</h6>
 
+                </div>
+                <div class="row">
+                    <p style="margin:10px;">
+                        Доставка до адрес
+                        <span class="text-muted">(+6 лв)</span>
+                    </p>
+                </div>
+                <div class="row">
+                    <div class=" bd-callout bd-callout-info col-12">
+                        @if (Model.ShippingAddress != null)
+                        {
+                            var num = 1;
+                            var name = "address";
+                            <div class="custom-control custom-radio">
+
+                                @foreach (var item in Model.ShippingAddressesCollection)
+                                {
+                                    name = name + num.ToString();
+                                    <div class="mb-3">
+                                        <input type="radio" onchange="changeAddress(@item.Id)" name="address" id="@name" value="@item.Id" />
+
+
+                                    </div>
+
+                                    <div class="card bg-light mb-3" style="max-width: 18rem;" for="customRadio1">
+                                        <div class="card-header">
+                                            <div>@item.FirstName @item.LastName</div>
+                                            <div align="right">
+                                                <a asp-action="EditShippingAddress" asp-route-id="@item.Id"><i class="far fa-edit"></i></a>
+                                                <a asp-action="DeleteShippingAddress" asp-route-id="@item.Id"><i class="far fa-trash-alt"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <p class="card-text">тел. @item.Phone</p>
+                                            <p class="card-text">гр./с. @item.City  П.К. @item.PostCode</p>
+                                            <p class="card-text">адрес: @item.Address</p>
+                                            @if (item.AdditioanalAddress != null)
+                                            {
+                                                <p class="card-text">@item.AdditioanalAddress</p>
+
+                                            }
+                                        </div>
+                                    </div>
+                                    num++;
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                <strong>Нямате добавен адрес.</strong> Моля добавете адрес!
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        }
+                        <div class="row">
+                            <a href="#" id="newAddress" role="button"><i class="fas fa-plus"></i> Добавете нов адрес</a>
+                        </div>
+                        <br />
+
+                        @if (this.TempData["ShippingAddressIsValid"] != null && (bool)this.TempData["ShippingAddressIsValid"] == false)
+                        {
+                            <div id="partialView" class="border col-md-12">
+                                @await this.Html.PartialAsync("_InputShippingAddress", @Model.ShippingAddress)
+                            </div>
+                        }
+                        else
+                        {
+                            <div id="partialView" style="display:none;" class="border col-md-12">
+                                @await this.Html.PartialAsync("_InputShippingAddress", @Model.ShippingAddress)
+                            </div>
+
+                        }
                     </div>
-                    <div class="row">
-                        <p style="margin:10px;">
-                            Доставка до адрес
-                            <span class="text-muted">(+6 лв)</span>
+                </div>
+                <div class="row col-12" style="display:none;" id="divSpeedy">
+                    <div class="col-12">
+                        <p style="margin:10px;" class="text-info">
+                            <input type="radio" name="address" id="speedy" value="Speedy" onchange="changeAddress('Speedy')" />
+                            Доставка до офиса на Спиди
+                            <span class="text-muted">(+4 лв)</span>
                         </p>
                     </div>
-                    <div class="row">
-                        <div class=" bd-callout bd-callout-info col-12">
-                            @if (Model.ShippingAddress != null)
-                            {
-                                var num = 1;
-                                var name = "address";
-                                <div class="custom-control custom-radio">
-
-                                    @foreach (var item in Model.ShippingAddressesCollection)
-                                    {
-                                        name = name + num.ToString();
-                                        <div class="mb-3">
-                                            <input type="radio" onchange="changeAddress(@item.Id)" name="address" id="@name" value="@item.Id" />
-
-
-                                        </div>
-
-                                        <div class="card bg-light mb-3" style="max-width: 18rem;" for="customRadio1">
-                                            <div class="card-header">
-                                                <div>@item.FirstName @item.LastName</div>
-                                                <div align="right">
-                                                    <a asp-action="EditShippingAddress" asp-route-id="@item.Id"><i class="far fa-edit"></i></a>
-                                                    <a asp-action="DeleteShippingAddress" asp-route-id="@item.Id"><i class="far fa-trash-alt"></i></a>
-                                                </div>
-                                            </div>
-                                            <div class="card-body">
-                                                <p class="card-text">тел. @item.Phone</p>
-                                                <p class="card-text">гр./с. @item.City  П.К. @item.PostCode</p>
-                                                <p class="card-text">адрес: @item.Address</p>
-                                                @if (item.AdditioanalAddress != null)
-                                                {
-                                                    <p class="card-text">@item.AdditioanalAddress</p>
-
-                                                }
-                                            </div>
-                                        </div>
-                                        num++;
-                                    }
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="alert alert-info alert-dismissible fade show" role="alert">
-                                    <strong>Нямате добавен адрес.</strong> Моля добавете адрес!
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                            }
-                            <div class="row">
-                                <a href="#" id="newAddress" role="button"><i class="fas fa-plus"></i> Добавете нов адрес</a>
-                            </div>
-                            <br />
-
-                            @if (this.TempData["ShippingAddressIsValid"] != null && (bool)this.TempData["ShippingAddressIsValid"] == false)
-                            {
-                                <div id="partialView" class="border col-md-12">
-                                    @await this.Html.PartialAsync("_InputShippingAddress", @Model.ShippingAddress)
-                                </div>
-                            }
-                            else
-                            {
-                                <div id="partialView" style="display:none;" class="border col-md-12">
-                                    @await this.Html.PartialAsync("_InputShippingAddress", @Model.ShippingAddress)
-                                </div>
-
-                            }
+                    <form class="col-md-12" id="formSpeedy" method="post">
+                        <div class="form-row">
+                            <label for="@Model.ShippingAddress.FirstName">Име</label>
+                            <input type="text" id="firstName" class="form-control" asp-for="@Model.ShippingAddress.FirstName" />
                         </div>
-                    </div>
-                    <div class="row col-12" style="display:none;" id="divSpeedy">
-                        <div class="col-12">
-                            <p style="margin:10px;" class="text-info">
-                                <input type="radio" name="address" id="speedy" value="Speedy" onchange="changeAddress('Speedy')" />
-                                Доставка до офиса на Спиди
-                                <span class="text-muted">(+4 лв)</span>
-                            </p>
+                        <div class="form-row">
+                            <label for="@Model.ShippingAddress.FirstName">Фамилия</label>
+                            <input type="text" id="lastName" class="form-control" asp-for="@Model.ShippingAddress.LastName" />
                         </div>
-                        <form class="col-md-12" id="formSpeedy" method="post">
-                            <div class="form-row">
-                                <label for="@Model.ShippingAddress.FirstName">Име</label>
-                                <input type="text" id="firstName" class="form-control" asp-for="@Model.ShippingAddress.FirstName" />
-                            </div>
-                            <div class="form-row">
-                                <label for="@Model.ShippingAddress.FirstName">Фамилия</label>
-                                <input type="text" id="lastName" class="form-control" asp-for="@Model.ShippingAddress.LastName" />
-                            </div>
-                            <div class="form-row">
-                                <label for="@Model.ShippingAddress.Phone">Телефон</label>
-                                <input class="form-control" id="phone" type="tel" asp-for="@Model.ShippingAddress.Phone" />
-                            </div>
-                            <div class="form-row">
-                                <span>Офис</span>
-                                <select id="mySelect2" class="select2" style="width:100% !important;">
-                                    <option value="-1">Изберете...</option>
-                                </select>
-                            </div>
-                        </form>
-                    </div>
+                        <div class="form-row">
+                            <label for="@Model.ShippingAddress.Phone">Телефон</label>
+                            <input class="form-control" id="phone" type="tel" title="kjkjkj" asp-for="@Model.ShippingAddress.Phone" />
+                        </div>
+                        <div class="form-row">
+                            <span>Офис</span>
+                            <select id="mySelect2" class="select2" style="width:100% !important;">
+                                <option value="-1">Изберете...</option>
+                            </select>
+                        </div>
+                    </form>
                 </div>
             </div>
-            <div class="col-6">
-                <h6 class="text-info">Вашите поръчки</h6>
-                <table class="table table-striped">
-                    <thead>
+        </div>
+        <div class="col-6">
+            <h6 class="text-info">Вашите поръчки</h6>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Продукт</th>
+                        <th scope="col">Брой</th>
+                        <th scope="col">Цена</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.OrdersDetails)
+                    {
+                        numProduct++;
                         <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Продукт</th>
-                            <th scope="col">Брой</th>
-                            <th scope="col">Цена</th>
+                            <td>@numProduct</td>
+                            <td>@item.JewelName</td>
+                            <td>@item.Quantity</td>
+                            <td>@item.CurrentPrice лв</td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.OrdersDetails)
-                        {
-                            numProduct++;
-                            <tr>
-                                <td>@numProduct</td>
-                                <td>@item.JewelName</td>
-                                <td>@item.Quantity</td>
-                                <td>@item.CurrentPrice лв</td>
-                            </tr>
-                            subPrice = (subPrice + item.Quantity * item.CurrentPrice);
-                        }
-                    <tfoot>
-                        <tr>
-                            <td colspan="3">Междинна сума</td>
-                            <td><span id="subPrice">@subPrice</span>лв</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3">Крайна сума
-                                <span class="text-muted" id="deliveryPrice"></span>
-                            </td>
-                            <td>
-                                <span id="totalPrice"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="4">
-                                <input type="hidden" id="orderId" value="@Model.OrderId"/>
-                                <input type="button" id="completeOrder"  class="btn btn-success"  value="Завърши поръчката" />
-                            </td>
-                        </tr>
-                    </tfoot>
-                </table>
-                <div>
-                    <span class="text-danger" id="selectMessage"></span>
-                    <span class="text-danger" id="speedyMessage"></span>
-                </div>
+                        subPrice = (subPrice + item.Quantity * item.CurrentPrice);
+                    }
+                <tfoot>
+                    <tr>
+                        <td colspan="3">Междинна сума</td>
+                        <td><span id="subPrice">@subPrice</span>лв</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            Крайна сума
+                            <span class="text-muted" id="deliveryPrice"></span>
+                        </td>
+                        <td>
+                            <span id="totalPrice"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <input type="hidden" id="orderId" value="@Model.OrderId" />
+                            <input type="button" id="completeOrder" class="btn btn-success" value="Завърши поръчката" />
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+            <div>
+                <span class="text-danger" id="selectMessage"></span>
+                <span class="text-danger" id="speedyMessage"></span>
+            </div>
 
-            </div>
-            </div>
+        </div>
     </div>
+</div>
 @section Scripts
 {
 
@@ -206,6 +216,7 @@
             var value = $('input[name=delivery]:checked', '#myForm').val();
             if (value == "Econt") {
                 $("#divSpeedy").hide();
+                $("#speedyMessage").text("");
             }
             else {
                 $("#divSpeedy").show();
@@ -214,17 +225,30 @@
 
         $("#completeOrder").click(function () {
             var addresValue = $('input[name="address"]:checked').val();
+            var deliveryValue = $('input[name=delivery]:checked', '#myForm').val();
+
             var select = $('.select2').val();
             var firstName = $("#firstName").val();
             var lastName = $("#lastName").val();
             var phone = $("#phone").val();
 
             var isComplete = changeAddress(addresValue);
+            var pattern = new RegExp("^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-+\s\./0-9]*$");
 
-            if (select < 0 && addresValue == "Speedy") {
-                $("#speedyMessage").text("Моля изберете офис на Спиди.");
-                isComplete = false;
-                if (firstName == "") {
+            if (addresValue == "Speedy" && deliveryValue =="Speedy") {
+                if (select == "-1") {
+                    $("#speedyMessage").text("Моля изберете офис на Спиди.");
+                    isComplete = false;
+                }
+                else if (phone == "") {
+                    $("#speedyMessage").text("Моля въведете телефон.");
+                    isComplete = false;
+                }
+                else if (!pattern.test(phone)) {
+                    $("#speedyMessage").text("Моля въведете валиден телефон.");
+                    isComplete = false;
+                }
+                else if (firstName == "") {
                     $("#speedyMessage").text("Моля въведете име.");
                     isComplete = false;
                 }
@@ -232,13 +256,11 @@
                     $("#speedyMessage").text("Моля въведете фамилия.");
                     isComplete = false;
                 }
-                else if (phone == "") {
-                    $("#speedyMessage").text("Моля въведете телефон.");
-                    isComplete = false;
-                }
                 else {
                     $("#speedyMessage").text("");
+                    isComplete = true;
                 }
+
             }
 
             if (isComplete)
@@ -292,7 +314,7 @@
             var price = parseInt($("#subPrice").text());
             var isComplete = false;
 
-            if (addresValue == undefined) {
+            if (addresValue == undefined || (addresValue == "Speedy" && deliveryValue == "Econt")) {
                 selectMessage.text("Моля изберете адрес за доставка.");
             }
             else if (deliveryValue == undefined) {
