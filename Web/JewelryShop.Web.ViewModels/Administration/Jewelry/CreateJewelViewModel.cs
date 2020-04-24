@@ -1,12 +1,10 @@
 ﻿namespace JewelryShop.Web.ViewModels.Administration.Jewelry
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    using JewelryShop.Data.Models;
     using JewelryShop.Data.Models.Enums;
-    using JewelryShop.Web.ViewModels.ValidationAttributes;
+    using JewelryShop.Web.Infrastructure.VilidationAttributes;
 
     public class CreateJewelViewModel
     {

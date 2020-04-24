@@ -1,4 +1,4 @@
-﻿namespace JewelryShop.Web.ViewModels.ValidationAttributes
+﻿namespace JewelryShop.Web.Infrastructure.VilidationAttributes
 {
     using System;
     using System.Collections.Generic;

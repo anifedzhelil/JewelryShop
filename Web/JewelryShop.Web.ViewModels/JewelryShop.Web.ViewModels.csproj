@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\JewelryShop.Data.Models\JewelryShop.Data.Models.csproj" />
     <ProjectReference Include="..\..\Services\JewelryShop.Services.Mapping\JewelryShop.Services.Mapping.csproj" />
+    <ProjectReference Include="..\JewelryShop.Web.Infrastructure\JewelryShop.Web.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
