@@ -1,0 +1,85 @@
+﻿@model JewelryShop.Web.ViewModels.Administration.Orders.IndexViewModel
+
+@{
+    var num = 1;
+}
+
+<h4>Поръчки</h4>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Потребител</th>
+            <th scope="col">Дата на поръчката</th>
+            <th scope="col">Брой продукти</th>
+            <th scope="col">Статус</th>
+            <th scope="col">Сума</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Orders)
+        {
+            <tr>
+                <th scope="row"><a asp-action="Details" asp-area="Administration" asp-route-id="@item.Id" asp-controller="Orders">Поръчка @num</a></th>
+                <td>@item.UserEmail</td>
+                <td>@item.CompleteDate.ToLocalTime()</td>
+                <td>@item.OrdersDetailsCount</td>
+                <td>
+                    @if (item.Status == JewelryShop.Data.Models.Enums.OrderStatusType.Completed)
+                    {
+                        <span>Готов (неизпратен)</span>
+                    }
+                    else
+                    {
+                        <span>Изпратен</span>
+                    }
+                </td>
+                <td>@item.TotalSum лв</td>
+            </tr>
+            num++;
+        }
+    </tbody>
+</table>
+
+
+<nav>
+    <ul class="pagination justify-content-center">
+        @if (this.Model.CurrentPage == 1)
+        {
+            <li class="page-item disabled">
+                <a class="page-link" href="#">Предишен</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item">
+                <a class="page-link"
+                   asp-route-page="@(this.Model.CurrentPage - 1)">Предишен</a>
+            </li>
+        }
+
+        @for (int i = 1; i <= this.Model.PagesCount; i++)
+        {
+            var active = i == this.Model.CurrentPage ? "active" : string.Empty;
+            <li class="page-item @active">
+                <a class="page-link"
+                   asp-route-page="@i">@i</a>
+            </li>
+        }
+
+        @if (this.Model.CurrentPage == this.Model.PagesCount)
+        {
+            <li class="page-item disabled">
+                <a class="page-link" href="#">Следващ</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item">
+                <a class="page-link"
+                   asp-route-page="@(this.Model.CurrentPage + 1)">Следващ</a>
+            </li>
+        }
+    </ul>
+</nav>

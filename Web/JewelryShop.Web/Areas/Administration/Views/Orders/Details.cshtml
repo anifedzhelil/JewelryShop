@@ -1,0 +1,85 @@
+﻿@model JewelryShop.Web.ViewModels.Administration.Orders.OrderDetailsViewModel
+@{
+    var num = 1;
+    decimal subPrice = 0;
+    decimal totalPrice = Model.ShippingPrice;
+}
+<div class="container col-8" style="margin-left:50px;">
+    <p>
+        <strong>Дата на поръчка: </strong><span>@Model.CompleteDate.ToLocalTime()</span>
+    </p>
+    <p>
+
+        @if (Model.Status == JewelryShop.Data.Models.Enums.OrderStatusType.Completed)
+        {
+            <strong>Статус: </strong> <span>Готов (неизпратен)</span>
+            <a asp-action="ChangeStatus" asp-area="Administration" asp-route-id="@Model.Id" asp-controller="Orders"><i class="fas fa-shipping-fast"></i>Изпрати</a>
+        }
+        else
+        {
+            <strong>Статус: </strong><span>Изпратен</span>
+        }
+
+    </p>
+    <p>
+        <strong>Получател :</strong><span> @Model.ShippingAddress.FirstName &nbsp; @Model.ShippingAddress.LastName </span>
+    </p>
+    <p>
+        <strong>Телефон: </strong><span> @Model.ShippingAddress.Phone</span>
+    </p>
+    <p>
+        @if (Model.ShippingAddress.OfficeAddres != null)
+        {
+            <strong>Адрес: </strong><span>@Model.ShippingAddress.OfficeAddres</span>
+        }
+        else
+        {
+            <strong>Адрес:</strong> <span>
+                @Model.ShippingAddress.Address &nbsp; <br />
+                @Model.ShippingAddress.AdditionalAddress
+                &nbsp;гр./с. &nbsp; @Model.ShippingAddress.City &nbsp; @Model.ShippingAddress.PostCode
+            </span>
+        }
+    </p>
+    <div class="row">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Продукт</th>
+                    <th scope="col">Количество</th>
+                    <th scope="col">Цена</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.OrdersDetails)
+                {
+                    <tr>
+                        <td>@num</td>
+                        <td>@item.JewelName</td>
+                        <td>@item.Quantity</td>
+                        <td>@item.Price</td>
+                    </tr>
+                    num++;
+                    subPrice += item.Price;
+                    totalPrice += item.Price;
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td></td>
+                    <td colspan="2">Междина сума:</td>
+                    <td>@subPrice</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td colspan="2">Обща сума:  <span class="text-muted">доставка (@Model.ShippingPrice лв)</span>  </td>
+                    <td>@totalPrice</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div class="align-content-end">
+        <a asp-action="Index" asp-area="" asp-controller="UserOrders"><i class="fa-arrow-right"></i> Назад</a>
+    </div>
+</div>

@@ -316,12 +316,47 @@
                 .ToArray();
         }
 
+        public ICollection<T> GetAllCompletedOrders<T>(int? take = null, int skip = 0)
+        {
+            IQueryable<Order> query = this.orderRepository.All()
+                .Where(x => x.Status == OrderStatusType.Completed || x.Status == OrderStatusType.Shipped)
+                .OrderBy(x => x.Status)
+                .Skip(skip);
+
+            if (take.HasValue)
+            {
+                query = query.Take((int)take);
+            }
+
+            return query.To<T>()
+             .ToArray();
+        }
+
         public T GetOrderById<T>(int orderId)
         {
            return this.orderRepository.All()
                 .Where(x => x.Id == orderId)
                 .To<T>()
                 .FirstOrDefault();
+        }
+
+        public int GetAllOrdersCount()
+        {
+            return this.orderRepository.All()
+                .Where(x => x.Status == OrderStatusType.Completed || x.Status == OrderStatusType.Shipped)
+                .Count();
+        }
+
+        public async Task ChangeStatusAsync(int id)
+        {
+            var order = this.orderRepository.All()
+                .Where(x => x.Id == id)
+                .FirstOrDefault();
+
+            order.Status = OrderStatusType.Shipped;
+            order.ShippedDate = DateTime.UtcNow;
+            this.orderRepository.Update(order);
+            await this.orderRepository.SaveChangesAsync();
         }
     }
 }

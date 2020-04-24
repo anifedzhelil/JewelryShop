@@ -31,6 +31,12 @@
 
         ICollection<T> GetUserAllCompletedOrders<T>(string userId);
 
+        ICollection<T> GetAllCompletedOrders<T>(int? take = null, int skip = 0);
+
         T GetOrderById<T>(int orderId);
+
+        int GetAllOrdersCount();
+
+        Task ChangeStatusAsync(int id);
     }
 }

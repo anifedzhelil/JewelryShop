@@ -15,7 +15,5 @@
         public const string SystemEmail = "anita03@abv.bg";
 
         public const string SystemNickname = "Galilani";
-
-
     }
 }
