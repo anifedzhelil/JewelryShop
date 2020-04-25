@@ -141,16 +141,3 @@
 </nav>
 
 
-@section Scripts
-{
-    <script type="text/javascript">
-
-        function sort(category, page)
-        {
-            var sortValue = $("#selectSort").val();
-            var searchValue = $("#inputSearch").val();
-            window.location.href = '@Url.Action("Index", "Home")' + '?category=' + category + '&search=' + searchValue +'&sort=' + sortValue + '&page=' + page;
-        }
-
-    </script>
-}

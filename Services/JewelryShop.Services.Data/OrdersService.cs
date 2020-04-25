@@ -311,7 +311,7 @@
         public ICollection<T> GetUserAllCompletedOrders<T>(string userId)
         {
             return this.orderRepository.All()
-                .Where(x => x.UserID == userId && x.Status == OrderStatusType.Completed)
+                .Where(x => x.UserID == userId && ( x.Status == OrderStatusType.Completed || x.Status == OrderStatusType.Shipped))
                 .To<T>()
                 .ToArray();
         }
