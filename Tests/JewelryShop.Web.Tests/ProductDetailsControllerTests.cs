@@ -1,19 +1,15 @@
-﻿using JewelryShop.Data.Models;
-using JewelryShop.Data.Models.Enums;
-using JewelryShop.Services.Data;
-using JewelryShop.Web.Controllers;
-using JewelryShop.Web.ViewModels.ProductDetails;
-using JewelryShop.Web.ViewModels.Ratings;
-using Microsoft.AspNetCore.Mvc;
-using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Xunit;
-
-namespace JewelryShop.Web.Tests
+﻿namespace JewelryShop.Web.Tests
 {
+    using JewelryShop.Data.Models;
+    using JewelryShop.Data.Models.Enums;
+    using JewelryShop.Services.Data;
+    using JewelryShop.Web.Controllers;
+    using JewelryShop.Web.ViewModels.ProductDetails;
+    using JewelryShop.Web.ViewModels.Ratings;
+    using Microsoft.AspNetCore.Mvc;
+    using Moq;
+    using Xunit;
+
     public class ProductDetailsControllerTests
     {
         [Fact]
@@ -39,5 +35,4 @@ namespace JewelryShop.Web.Tests
             mockService.Verify(x => x.GetById<IndexViewModel>(5));
         }
     }
-
 }

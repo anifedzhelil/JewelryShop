@@ -1,9 +1,10 @@
 ﻿namespace JewelryShop.Services.Data
 {
-    using JewelryShop.Data.Models.Enums;
     using System.Collections.Generic;
     using System.Text;
     using System.Threading.Tasks;
+
+    using JewelryShop.Data.Models.Enums;
 
     public interface IRatingService
     {

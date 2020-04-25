@@ -1,7 +1,7 @@
-﻿using JewelryShop.Data.Models.Enums;
-
-namespace JewelryShop.Web.ViewModels.Ratings
+﻿namespace JewelryShop.Web.ViewModels.Ratings
 {
+    using JewelryShop.Data.Models.Enums;
+
     public class CreateRatingViewModel
     {
         public int JewelId { get; set; }
