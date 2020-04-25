@@ -23,6 +23,8 @@
 
         public DateTime SaleDate { get; set; }
 
+        public string ImageUrlOrDefault => this.ImageUrl ?? "/images/default.png";
+
         public string ImageUrl { get; set; }
 
         public double Ratings { get; set; }

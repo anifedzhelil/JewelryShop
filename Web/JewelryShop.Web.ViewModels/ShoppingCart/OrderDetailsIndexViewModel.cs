@@ -23,6 +23,8 @@
 
         public string ImageUrl { get; set; }
 
+        public string ImageUrlOrDefault => this.ImageUrl ?? "/images/default.png";
+
         public int Quantity { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)

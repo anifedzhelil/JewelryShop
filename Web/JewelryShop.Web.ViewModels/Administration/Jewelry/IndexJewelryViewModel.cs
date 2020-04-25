@@ -21,7 +21,9 @@
 
         public int Count { get; set; }
 
-        public string ImageUr { get; set; }
+        public string ImageUrl { get; set; }
+
+        public string ImageUrlOrDefault => this.ImageUrl ?? "/images/default.png";
 
         public int SoldCount { get; set; }
 
@@ -33,7 +35,7 @@
         {
             configuration.CreateMap<Jewel, IndexJewelryViewModel>()
             .ForMember(
-                d => d.ImageUr,
+                d => d.ImageUrl,
                 opt => opt.MapFrom(x => x.Images.Select(t => t.ImageUrl).FirstOrDefault()))
             .ForMember(
                 d => d.SoldCount,

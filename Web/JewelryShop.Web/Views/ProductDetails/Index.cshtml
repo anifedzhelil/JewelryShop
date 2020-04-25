@@ -5,12 +5,13 @@
     var num = 0;
     var imageCount = Model.Images.Count();
     var thumbnImageId = "thumbn";
+    var firstImageUrl = imageCount > 0 ? @Model.Images.ElementAt(0) : "/images/default.png";
 }
 <div class="container" style="margin:30px;">
     <div class="row">
         <div class="col-md-6">
             <div class="row">
-                <img src="@Model.Images.ElementAt(0)" id="mainImage" class="img-fluid" style="width:100%">
+                <img src="@firstImageUrl" id="mainImage" class="img-fluid" style="width:100%">
             </div>
             <div class="row">
                 @if (imageCount > 1)

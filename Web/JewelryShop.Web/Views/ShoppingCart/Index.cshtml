@@ -22,7 +22,7 @@
                 subtotal += item.CurrentPrice*item.Quantity;
             <tr>
                 <td>
-                    <img id="shoppingImage" src="@item.ImageUrl" alt="..." class="img-responsive" />
+                    <img id="shoppingImage" src="@item.ImageUrlOrDefault" alt="..." class="img-responsive" />
                 </td>
                 <td data-th="Продукт">
                     <a class="fa-linkedin" asp-action="Index" asp-route-id="@item.JewelId" asp-controller="ProductDetails">@item.JewelName</a>                     
@@ -42,11 +42,11 @@
         </tbody>
         <tfoot>
             <tr>
-                <td><a href="#" class="btn btn-warning"><i class="fa fa-angle-left"></i> Continue Shopping</a></td>
+                <td><a href="#" class="btn btn-primary btn-block"><i class="fa fa-angle-left"></i>Продължи пазаруването</a></td>
                 <td></td>
                 <td class="hidden-xs text-right"><strong>Сума @subtotal лв</strong></td>
-                <td colspan="2"><a asp-action="Index" asp-controller="ShippingAddress" class="btn btn-success btn-block">Checkout <i class="fa fa-angle-right"></i></a></td>
+                <td colspan="2"><a asp-action="Index" asp-controller="ShippingAddress" class="btn btn-success btn-block">Поръчайте<i class="fa fa-angle-right"></i></a></td>
             </tr>
         </tfoot>
     </table>
-</div>-**9lllllllllllllll./oooooooooooooooooooooooooooooooooooooooooooooooooooo
+</div>
