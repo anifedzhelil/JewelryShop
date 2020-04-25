@@ -19,14 +19,14 @@
             this.ratingsRepository = ratingsRepository;
         }
 
-        public async Task RateAsync(int jewelId, string userId, int ratingType, string review)
+        public async Task RateAsync(int jewelId, string userId, RatingType ratingType, string review)
         {
             var rating = this.ratingsRepository.All()
                 .FirstOrDefault(x => x.JewelId == jewelId && x.UserId == userId);
-            var type = (RatingType)Enum.ToObject(typeof(RatingType), ratingType);
+
             if (rating != null)
             {
-                rating.Type = type;
+                rating.Type = ratingType;
 
                 if (review != null)
                 {
@@ -39,7 +39,7 @@
                 {
                     JewelId = jewelId,
                     UserId = userId,
-                    Type = type,
+                    Type = ratingType,
                     Review = review,
                 };
 
