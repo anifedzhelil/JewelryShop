@@ -1,9 +1,18 @@
 ﻿@model JewelryShop.Web.ViewModels.ShoppingCart.IndexViewModel
-    <h3>
-        Съдържание на кошницата
-    </h3>
+@if (this.TempData["StockMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @this.TempData["StockMessage"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+<h3>
+    Съдържание на кошницата
+</h3>
 
-@{ 
+@{
     decimal subtotal = 0;
 }
 <div class="container">
@@ -19,25 +28,25 @@
         <tbody>
             @foreach (var item in Model.OrdersDetails)
             {
-                subtotal += item.CurrentPrice*item.Quantity;
-            <tr>
-                <td>
-                    <img id="shoppingImage" src="@item.ImageUrlOrDefault" alt="..." class="img-responsive" />
-                </td>
-                <td data-th="Продукт">
-                    <a class="fa-linkedin" asp-action="Index" asp-route-id="@item.JewelId" asp-controller="ProductDetails">@item.JewelName</a>                     
-                </td>
-                <td data-th="Цена"><span id="price">@item.CurrentPrice</span></td>
-                <td data-th="Количество">
-                    <form method="post" asp-area="" asp-route-id="@item.Id">
-                        <div class="row">
-                            <input type="number" id="quantity" name="quantity" class="form-control form-control-sm col-sm-3" min="0" max="@item.JewelCount" value="@item.Quantity">
-                            <button class="btn btn-info btn-sm" type="submit" asp-action="EditQuantity" asp-controller="ShoppingCart" asp-route-id="@item.Id" asp-route-quantity="quantity"><i class="fas fa-sync-alt"></i></button>
-                            <button class="btn btn-danger btn-sm" asp-controller="ShoppingCart" asp-action="DeleteOrder" asp-route-id="@item.Id"><i class="fas fa-trash-alt"></i></button>
-                        </div>
-                    </form>
-                </td>
-            </tr>
+                subtotal += item.CurrentPrice * item.Quantity;
+                <tr>
+                    <td>
+                        <img id="shoppingImage" src="@item.ImageUrlOrDefault" alt="..." class="img-responsive" />
+                    </td>
+                    <td data-th="Продукт">
+                        <a class="fa-linkedin" asp-action="Index" asp-route-id="@item.JewelId" asp-controller="ProductDetails">@item.JewelName</a>
+                    </td>
+                    <td data-th="Цена"><span id="price">@item.CurrentPrice</span></td>
+                    <td data-th="Количество">
+                        <form method="post" asp-area="" asp-route-id="@item.Id">
+                            <div class="row">
+                                <input type="number" id="quantity" name="quantity" class="form-control form-control-sm col-sm-3" min="0" max="@item.JewelCount" value="@item.Quantity">
+                                <button class="btn btn-info btn-sm" type="submit" asp-action="EditQuantity" asp-controller="ShoppingCart" asp-route-id="@item.Id" asp-route-quantity="quantity"><i class="fas fa-sync-alt"></i></button>
+                                <button class="btn btn-danger btn-sm" asp-controller="ShoppingCart" asp-action="DeleteOrder" asp-route-id="@item.Id"><i class="fas fa-trash-alt"></i></button>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
             }
         </tbody>
         <tfoot>

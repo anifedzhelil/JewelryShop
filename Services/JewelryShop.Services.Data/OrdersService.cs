@@ -213,6 +213,52 @@
                  .FirstOrDefault();
         }
 
+        public async Task<StockType> CheckJewelQuantityAsync(int orderId)
+        {
+            var orderDetails = this.orderDetailsRepository.All()
+                .Where(x => x.OrderId == orderId)
+                .ToArray();
+
+            StockType result = StockType.Available;
+
+            foreach (var item in orderDetails)
+            {
+                var jewel = this.jewelRepository.All()
+                    .Where(x => x.Id == item.JewelId)
+                    .FirstOrDefault();
+                if (jewel != null)
+                {
+                     if (jewel.Count == 0)
+                    {
+                        this.orderDetailsRepository.Delete(item);
+                        await this.orderDetailsRepository.SaveChangesAsync();
+                        result = StockType.OutOfStock;
+                    }
+                    else if (item.Quantity > jewel.Count)
+                    {
+                        item.Quantity = jewel.Count;
+                        this.orderDetailsRepository.Update(item);
+                        await this.orderDetailsRepository.SaveChangesAsync();
+                        result = StockType.LowAvailability;
+                    }
+                }
+            }
+
+            orderDetails = this.orderDetailsRepository.All()
+              .Where(x => x.OrderId == orderId)
+              .ToArray();
+            if (orderDetails == null)
+            {
+                var order = this.orderRepository.All()
+                    .Where(x => x.Id == orderId)
+                    .FirstOrDefault();
+                this.orderRepository.Delete(order);
+                result = StockType.OutOfStock;
+            }
+
+            return result;
+        }
+
         public async Task DeleteOrderDetail(int orderDetailsId)
         {
             var orderDetail = this.orderDetailsRepository.All()
@@ -311,7 +357,7 @@
         public ICollection<T> GetUserAllCompletedOrders<T>(string userId)
         {
             return this.orderRepository.All()
-                .Where(x => x.UserID == userId && ( x.Status == OrderStatusType.Completed || x.Status == OrderStatusType.Shipped))
+                .Where(x => x.UserID == userId && (x.Status == OrderStatusType.Completed || x.Status == OrderStatusType.Shipped))
                 .To<T>()
                 .ToArray();
         }

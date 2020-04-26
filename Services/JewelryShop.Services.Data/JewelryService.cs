@@ -111,13 +111,26 @@
                 .FirstOrDefault();
         }
 
-        public async Task DeleteByIdAsync(int id)
+        public async Task<bool> DeleteByIdAsync(int id)
         {
-            var jewel = this.jewelryRepository.All().FirstOrDefault(d => d.Id == id);
-            if (jewel != null)
+            var order = this.orderDetailsRepository.All()
+                .Where(x => x.JewelId == id)
+                .ToList();
+
+            if (order.Count > 0)
             {
-                this.jewelryRepository.Delete(jewel);
-                await this.jewelryRepository.SaveChangesAsync();
+                return false;
+            }
+            else
+            {
+                var jewel = this.jewelryRepository.All().FirstOrDefault(d => d.Id == id);
+                if (jewel != null)
+                {
+                    this.jewelryRepository.Delete(jewel);
+                    await this.jewelryRepository.SaveChangesAsync();
+                }
+
+                return true;
             }
         }
 

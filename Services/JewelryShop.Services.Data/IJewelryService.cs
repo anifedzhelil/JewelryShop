@@ -22,7 +22,7 @@
 
         Task Update(EditJewelViewModel createJewelModel);
 
-        Task DeleteByIdAsync(int id);
+        Task<bool> DeleteByIdAsync(int id);
 
         int GetAdminJewelryCount(FilterType filter);
     }

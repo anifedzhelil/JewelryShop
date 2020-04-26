@@ -40,5 +40,7 @@
         Task ChangeStatusAsync(int id);
 
         public bool ChechShippingAddressIsUsed(int id);
+
+        Task<StockType> CheckJewelQuantityAsync(int orderId);
     }
 }

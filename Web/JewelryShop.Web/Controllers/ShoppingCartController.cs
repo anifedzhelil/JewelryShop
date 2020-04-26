@@ -8,6 +8,7 @@
 
     using JewelryShop.Common;
     using JewelryShop.Data.Models;
+    using JewelryShop.Data.Models.Enums;
     using JewelryShop.Services.Data;
     using JewelryShop.Web.ViewModels.ShoppingCart;
     using Microsoft.AspNetCore.Authorization;
@@ -33,6 +34,7 @@
             var model = new IndexViewModel();
             var user = await this.userManager.GetUserAsync(this.User);
 
+            List<KeyValuePair<string, int>> listJewelryMessage = new List<KeyValuePair<string, int>>();
             if (user == null)
             {
                 if (this.Request.Cookies[GlobalConstants.GuestId] != null)
@@ -47,6 +49,17 @@
 
             if (model != null && model.OrdersDetails != null)
             {
+                var result = await this.ordersService.CheckJewelQuantityAsync(model.Id);
+                if (result == StockType.LowAvailability)
+                {
+                    this.TempData["StockMessage"] = "Поради недостатъчна наличност броят на продуктите в кошницата е намален.";
+                }
+                else if (result == StockType.OutOfStock)
+                {
+                    this.TempData["StockMessage"] = "Продуктите, които сте добавили в кошницата са изчерпани.";
+                    return this.View("Empty");
+                }
+
                 return this.View(model);
             }
             else

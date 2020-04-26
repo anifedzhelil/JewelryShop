@@ -186,8 +186,16 @@
 
         public async Task<RedirectToActionResult> DeleteAsync(int id)
         {
-            await this.jewelryService.DeleteByIdAsync(id);
-            this.TempData["InfoMessage"] = "Продуктът е изтрит.";
+            var result = await this.jewelryService.DeleteByIdAsync(id);
+            if (result)
+            {
+                this.TempData["InfoMessage"] = "Продуктът е изтрит.";
+            }
+            else
+            {
+                this.TempData["DeleteMessage"] = "Продуктът не може да бъде изтрит! Този продукт е поръчан.";
+            }
+
             return this.RedirectToAction("Index");
         }
     }

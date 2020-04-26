@@ -10,5 +10,7 @@
     public class IndexViewModel : IMapFrom<Order>
     {
         public IEnumerable<OrderDetailsIndexViewModel> OrdersDetails { get; set; }
+
+        public int Id { get; set; }
     }
 }

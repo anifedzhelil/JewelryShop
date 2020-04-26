@@ -1,4 +1,13 @@
 ﻿<div class="container">
+    @if (this.TempData["StockMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @this.TempData["StockMessage"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
     <h1>
         Кошницата е празна...
     </h1>
