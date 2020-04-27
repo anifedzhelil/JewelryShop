@@ -102,6 +102,18 @@
             return this.RedirectToAction("Index", "ProductDetails", new { id });
         }
 
+        public IActionResult HttpError(int statusCode)
+        {
+            if (statusCode == 404)
+            {
+                return this.View("Error404", statusCode);
+            }
+            else
+            {
+                return this.View("Error");
+            }
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
