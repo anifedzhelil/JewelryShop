@@ -31,6 +31,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\JewelryShop.Data\JewelryShop.Data.csproj" />
     <ProjectReference Include="..\..\Services\JewelryShop.Services.Data\JewelryShop.Services.Data.csproj" />
+    <ProjectReference Include="..\..\Services\JewelryShop.Services.Messaging\JewelryShop.Services.Messaging.csproj" />
+    <ProjectReference Include="..\..\Web\JewelryShop.Web\JewelryShop.Web.csproj" />
   </ItemGroup>
 
 </Project>

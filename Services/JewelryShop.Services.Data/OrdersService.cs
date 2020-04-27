@@ -30,43 +30,6 @@
             this.jewelRepository = jewelRepository;
         }
 
-        public async Task AddOrderDetailAsync(int orderId, int jewelId, int quantity)
-        {
-            var orderDetails = this.orderDetailsRepository.All()
-                .Where(x => x.OrderId == orderId && x.JewelId == jewelId)
-                .FirstOrDefault();
-
-            if (orderDetails == null)
-            {
-                orderDetails = new OrderDetails()
-                {
-                    OrderId = orderId,
-                    JewelId = jewelId,
-                    Quantity = quantity,
-                };
-                await this.orderDetailsRepository.AddAsync(orderDetails);
-            }
-            else
-            {
-                var jewel = this.jewelRepository.All()
-                    .Where(x => x.Id == jewelId)
-                    .FirstOrDefault();
-
-                if (jewel.Count >= (quantity + orderDetails.Quantity))
-                {
-                    orderDetails.Quantity += quantity;
-                }
-                else
-                {
-                    orderDetails.Quantity = jewel.Count;
-                }
-
-                this.orderDetailsRepository.Update(orderDetails);
-            }
-
-            await this.orderDetailsRepository.SaveChangesAsync();
-        }
-
         public async Task AddGuestProductAsync(string guestId, int jewelId, int quantity)
         {
             var order = this.orderRepository.All()
@@ -123,6 +86,8 @@
                 if (userOrder == null)
                 {
                     guestUserOrder.UserID = user.Id;
+                    this.orderRepository.Update(guestUserOrder);
+                    await this.orderRepository.SaveChangesAsync();
                 }
                 else
                 {
@@ -132,26 +97,14 @@
                     foreach (var item in guestOrderDetails)
                     {
                         var currentOrderDetail = this.orderDetailsRepository.All()
-                            .Where(x => x.OrderId == guestUserOrder.Id && x.JewelId == item.JewelId)
+                            .Where(x => x.OrderId == userOrder.Id && x.JewelId == item.JewelId)
                             .FirstOrDefault();
 
                         if (currentOrderDetail != null)
                         {
-                            var count = this.jewelRepository.All()
-                            .Where(x => x.Id == item.JewelId)
-                            .Select(x => x.Count)
-                            .FirstOrDefault();
-
-                            if (item.Quantity + currentOrderDetail.Quantity < count)
-                            {
-                                currentOrderDetail.Quantity += item.Quantity;
-                            }
-                            else
-                            {
-                                currentOrderDetail.Quantity = count;
-                            }
-
+                            currentOrderDetail.Quantity = this.GetExistOrderDetailsQuantity(item.JewelId, currentOrderDetail.Quantity, item.Quantity);
                             this.orderDetailsRepository.Update(currentOrderDetail);
+                            this.orderDetailsRepository.Delete(item);
                         }
                         else
                         {
@@ -159,10 +112,9 @@
                             this.orderDetailsRepository.Update(item);
                         }
                     }
-                }
 
-                await this.orderRepository.SaveChangesAsync();
-                await this.orderDetailsRepository.SaveChangesAsync();
+                    await this.orderDetailsRepository.SaveChangesAsync();
+                }
             }
         }
 
@@ -232,7 +184,7 @@
                     {
                         this.orderDetailsRepository.Delete(item);
                         await this.orderDetailsRepository.SaveChangesAsync();
-                        result = StockType.OutOfStock;
+                        result = StockType.LowAvailability;
                     }
                     else if (item.Quantity > jewel.Count)
                     {
@@ -247,12 +199,13 @@
             orderDetails = this.orderDetailsRepository.All()
               .Where(x => x.OrderId == orderId)
               .ToArray();
-            if (orderDetails == null)
+            if (orderDetails.Length == 0)
             {
                 var order = this.orderRepository.All()
                     .Where(x => x.Id == orderId)
                     .FirstOrDefault();
                 this.orderRepository.Delete(order);
+                await this.orderRepository.SaveChangesAsync();
                 result = StockType.OutOfStock;
             }
 
@@ -412,6 +365,77 @@
                 .ToList();
 
             return orders.Count != 0;
+        }
+
+        private int GetNewOrderDetailsQuantity(int jewelId, int quantity)
+        {
+            var jewel = this.jewelRepository.All()
+                   .Where(x => x.Id == jewelId)
+                   .FirstOrDefault();
+
+            if (jewel == null)
+            {
+                return 0;
+            }
+            else
+            {
+                if (jewel.Count >= quantity)
+                {
+                    return quantity;
+                }
+                else
+                {
+                    return jewel.Count;
+                }
+            }
+        }
+
+        private int GetExistOrderDetailsQuantity(int jewelId, int oldQuantity, int newQuantity)
+        {
+            var jewel = this.jewelRepository.All()
+                   .Where(x => x.Id == jewelId)
+                   .FirstOrDefault();
+
+            if (jewel == null)
+            {
+                return 0;
+            }
+            else
+            {
+                if (jewel.Count >= (newQuantity + oldQuantity))
+                {
+                    return newQuantity + oldQuantity;
+                }
+                else
+                {
+                    return jewel.Count;
+                }
+            }
+        }
+
+        private async Task AddOrderDetailAsync(int orderId, int jewelId, int quantity)
+        {
+            var orderDetails = this.orderDetailsRepository.All()
+                .Where(x => x.OrderId == orderId && x.JewelId == jewelId)
+                .FirstOrDefault();
+
+            if (orderDetails == null)
+            {
+                orderDetails = new OrderDetails()
+                {
+                    OrderId = orderId,
+                    JewelId = jewelId,
+                    Quantity = this.GetNewOrderDetailsQuantity(jewelId, quantity),
+                };
+                await this.orderDetailsRepository.AddAsync(orderDetails);
+            }
+            else
+            {
+                orderDetails.Quantity = this.GetExistOrderDetailsQuantity(jewelId, orderDetails.Quantity, quantity);
+                this.orderDetailsRepository.Update(orderDetails);
+            }
+
+            await this.orderDetailsRepository.SaveChangesAsync();
         }
     }
 }

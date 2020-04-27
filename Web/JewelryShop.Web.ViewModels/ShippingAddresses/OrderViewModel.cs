@@ -7,6 +7,6 @@
 
     public class OrderViewModel : IMapFrom<Order>
     {
-        public IEnumerable<OrderDetailsViewModel> OrdersDetails { get; set; }
+        public ICollection<OrderDetailsViewModel> OrdersDetails { get; set; }
     }
 }

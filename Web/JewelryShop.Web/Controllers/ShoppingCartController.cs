@@ -34,7 +34,6 @@
             var model = new IndexViewModel();
             var user = await this.userManager.GetUserAsync(this.User);
 
-            List<KeyValuePair<string, int>> listJewelryMessage = new List<KeyValuePair<string, int>>();
             if (user == null)
             {
                 if (this.Request.Cookies[GlobalConstants.GuestId] != null)
