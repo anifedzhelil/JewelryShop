@@ -1,6 +1,7 @@
 ﻿namespace JewelryShop.Web.ViewModels.Administration.Orders
 {
     using System;
+    using System.Globalization;
     using System.Linq;
 
     using AutoMapper;
@@ -13,6 +14,11 @@
         public int Id { get; set; }
 
         public DateTime CompleteDate { get; set; }
+
+        public string CompleteDateOnAsString =>
+       this.CompleteDate.Hour == 0 && this.CompleteDate.Minute == 0
+           ? this.CompleteDate.ToString("ddd, dd MMM yyyy", new CultureInfo("bg-BG"))
+           : this.CompleteDate.ToString("ddd, dd MMM yyyy HH:mm", new CultureInfo("bg-BG"));
 
         public int OrdersDetailsCount { get; set; }
 

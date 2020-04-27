@@ -21,6 +21,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
+                <a class="display-4" asp-controller="Home" asp-area="" asp-action="Index" id="shopName">@GlobalConstants.WebsiteTitle</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -29,9 +30,6 @@
                     <partial name="_Logout" />
                     <ul class="nav nav-pills flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark font-weight-light text-primary" asp-area="" asp-controller="Home" asp-action="Index" id="shopName">@GlobalConstants.WebsiteTitle</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link text-dark font-weight-bold " asp-area="Administration" asp-controller="Jewelry" asp-action="Index">Продукти</a>
                         </li>
                         <li class="nav-item">
@@ -39,7 +37,7 @@
                         </li>
                     </ul>
 
-</div>
+                </div>
             </div>
         </nav>
     </header>

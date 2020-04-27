@@ -97,6 +97,11 @@
             return this.View();
         }
 
+        public IActionResult Contact()
+        {
+            return this.View();
+        }
+
         public IActionResult Details(int id)
         {
             return this.RedirectToAction("Index", "ProductDetails", new { id });

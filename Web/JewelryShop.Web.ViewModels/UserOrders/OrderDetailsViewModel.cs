@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-
+    using System.Globalization;
     using JewelryShop.Data.Models;
     using JewelryShop.Data.Models.Enums;
     using JewelryShop.Services.Mapping;
@@ -12,6 +12,11 @@
         public string UserID { get; set; }
 
         public DateTime CompleteDate { get; set; }
+
+        public string CompleteDateOnAsString =>
+        this.CompleteDate.Hour == 0 && this.CompleteDate.Minute == 0
+           ? this.CompleteDate.ToString("ddd, dd MMM yyyy", new CultureInfo("bg-BG"))
+           : this.CompleteDate.ToString("ddd, dd MMM yyyy HH:mm", new CultureInfo("bg-BG"));
 
         public DateTime ShippingDate { get; set; }
 

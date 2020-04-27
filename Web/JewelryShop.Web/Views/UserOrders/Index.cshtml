@@ -21,7 +21,7 @@
       {
           <tr>
               <th scope="row"><a asp-action="Details" asp-area="" asp-route-id="@item.Id" asp-controller="UserOrders">Поръчка @num</a></th>
-              <td>@item.CompleteDate.ToLocalTime()</td>
+              <td>@item.CompleteDateOnAsString</td>
               <td>@item.OrdersDetailsCount</td>
               <td>
                   @if (item.Status == JewelryShop.Data.Models.Enums.OrderStatusType.Completed)

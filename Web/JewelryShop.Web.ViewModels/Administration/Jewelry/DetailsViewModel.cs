@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
 
     using AutoMapper;
@@ -20,7 +21,17 @@
 
         public DateTime CreatedOn { get; set; }
 
+        public string CreatedOnAsString =>
+        this.CreatedOn.Hour == 0 && this.CreatedOn.Minute == 0
+        ? this.CreatedOn.ToString("ddd, dd MMM yyyy", new CultureInfo("bg-BG"))
+        : this.CreatedOn.ToString("ddd, dd MMM yyyy HH:mm", new CultureInfo("bg-BG"));
+
         public DateTime ModifiedOn { get; set; }
+
+        public string ModifiedOnAsString =>
+        this.ModifiedOn.Hour == 0 && this.ModifiedOn.Minute == 0
+        ? this.ModifiedOn.ToString("ddd, dd MMM yyyy", new CultureInfo("bg-BG"))
+        : this.ModifiedOn.ToString("ddd, dd MMM yyyy HH:mm", new CultureInfo("bg-BG"));
 
         public decimal Price { get; set; }
 
