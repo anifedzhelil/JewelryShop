@@ -33,33 +33,54 @@
         {
             var model = new IndexViewModel();
             var user = await this.userManager.GetUserAsync(this.User);
+            var stockType = StockType.Available;
 
             if (user == null)
             {
-                if (this.Request.Cookies[GlobalConstants.GuestId] != null)
+                string guestId = this.Request.Cookies[GlobalConstants.GuestId];
+
+                if (guestId != null)
                 {
-                    model = this.ordersService.GetActiveGuestOrder<IndexViewModel>(this.Request.Cookies[GlobalConstants.GuestId].ToString());
+                    var guestOrderId = this.ordersService.GetActiveOrderGuestId(guestId);
+
+                    if (guestOrderId > 0)
+                    {
+                        stockType = await this.ordersService.CheckJewelQuantityAsync(guestOrderId);
+
+                        if (stockType != StockType.OutOfStock)
+                        {
+                            model = this.ordersService.GetActiveGuestOrder<IndexViewModel>(this.Request.Cookies[GlobalConstants.GuestId].ToString());
+                        }
+                    }
                 }
             }
             else
             {
-                model = this.ordersService.GetActiveOrder<IndexViewModel>(user.Id);
+                var orderId = this.ordersService.GetActiveOrderUserId(user.Id);
+                if (orderId > 0)
+                {
+                    stockType = await this.ordersService.CheckJewelQuantityAsync(orderId);
+
+                    if (stockType != StockType.OutOfStock)
+                    {
+                        model = this.ordersService.GetActiveOrder<IndexViewModel>(user.Id);
+                    }
+                }
             }
 
             if (model != null && model.OrdersDetails != null)
             {
-                var result = await this.ordersService.CheckJewelQuantityAsync(model.Id);
-                if (result == StockType.LowAvailability)
+                if (stockType == StockType.LowAvailability)
                 {
                     this.TempData["StockMessage"] = "Поради недостатъчна наличност броят на продуктите в кошницата е намален.";
                 }
-                else if (result == StockType.OutOfStock)
-                {
-                    this.TempData["StockMessage"] = "Продуктите, които сте добавили в кошницата са изчерпани.";
-                    return this.View("Empty");
-                }
 
                 return this.View(model);
+            }
+            else if (stockType == StockType.OutOfStock)
+            {
+                this.TempData["StockMessage"] = "Продуктите, които сте добавили в кошницата са изчерпани.";
+                return this.View("Empty");
             }
             else
             {

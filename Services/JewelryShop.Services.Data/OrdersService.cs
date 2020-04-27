@@ -243,6 +243,38 @@
             }
         }
 
+        public int GetActiveOrderUserId(string userId)
+        {
+            var order = this.orderRepository.All()
+                .Where(x => x.UserID == userId  && x.Status == OrderStatusType.Created)
+                .FirstOrDefault();
+
+            if (order != null)
+            {
+                return order.Id;
+            }
+            else
+            {
+                return -1;
+            }
+        }
+
+        public int GetActiveOrderGuestId(string userId)
+        {
+            var order = this.orderRepository.All()
+                .Where(x => x.GuestId == userId  && x.Status==OrderStatusType.Created)
+                .FirstOrDefault();
+
+            if (order != null)
+            {
+                return order.Id;
+            }
+            else
+            {
+                return -1;
+            }
+        }
+
         public async Task UpdateOrderDetailQuantityAsync(int orderDetailId, int quantity)
         {
             var orderDetail = this.orderDetailsRepository.All()
