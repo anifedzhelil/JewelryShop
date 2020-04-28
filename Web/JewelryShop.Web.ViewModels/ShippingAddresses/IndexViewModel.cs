@@ -10,7 +10,7 @@
     {
         public int OrderId { get; set; }
 
-        public IEnumerable<ShippingAddressViewModel> ShippingAddressesCollection { get; set; }
+        public ICollection<ShippingAddressViewModel> ShippingAddressesCollection { get; set; }
 
         public InputShippingAddressModel ShippingAddress { get; set; }
 

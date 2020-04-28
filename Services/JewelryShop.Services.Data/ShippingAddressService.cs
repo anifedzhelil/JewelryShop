@@ -74,7 +74,7 @@
             }
         }
 
-        public IEnumerable<T> GetUserAllShippingAddress<T>(string userId)
+        public ICollection<T> GetUserAllShippingAddress<T>(string userId)
         {
             return this.shippingAddressRepository.All()
                  .Where(x => x.UserID == userId)

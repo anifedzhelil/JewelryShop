@@ -13,7 +13,7 @@
 
         Task UpdateAsync(InputShippingAddressModel model);
 
-        IEnumerable<T> GetUserAllShippingAddress<T>(string userId);
+        ICollection<T> GetUserAllShippingAddress<T>(string userId);
 
         T GetShippingAddressById<T>(int shippingAddressId);
 
