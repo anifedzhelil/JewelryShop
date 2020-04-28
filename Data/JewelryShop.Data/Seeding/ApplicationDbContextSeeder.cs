@@ -27,6 +27,8 @@
                           {
                               new RolesSeeder(),
                               new SettingsSeeder(),
+                              new JewelrySeeder(),
+                              new JewelryImagesSeeder(),
                           };
 
             foreach (var seeder in seeders)

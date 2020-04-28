@@ -15,8 +15,10 @@
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {
             var roleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
+            var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
             await SeedRoleAsync(roleManager, GlobalConstants.AdministratorRoleName);
+            await SeedUserAsync(userManager, GlobalConstants.AdministratorRoleName);
         }
 
         private static async Task SeedRoleAsync(RoleManager<ApplicationRole> roleManager, string roleName)
@@ -28,6 +30,28 @@
                 if (!result.Succeeded)
                 {
                     throw new Exception(string.Join(Environment.NewLine, result.Errors.Select(e => e.Description)));
+                }
+            }
+        }
+
+        private static async Task SeedUserAsync(UserManager<ApplicationUser> userManager, string roleName)
+        {
+            if (!userManager.Users.Any())
+            {
+                var user = new ApplicationUser
+                {
+                    UserName = "galilanijewellery@gmail.com",
+                    Email = "galilanijewellery@gmail.com",
+                    EmailConfirmed = true,
+                };
+
+                var password = "galilani";
+
+                var result = await userManager.CreateAsync(user, password);
+
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(user, roleName);
                 }
             }
         }
