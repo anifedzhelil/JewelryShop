@@ -6,7 +6,7 @@
     using System.Linq;
     using System.Text.Encodings.Web;
     using System.Threading.Tasks;
-
+    using JewelryShop.Common;
     using JewelryShop.Data.Models;
     using JewelryShop.Services.Data;
     using Microsoft.AspNetCore.Authentication;
@@ -22,8 +22,6 @@
     public class LoginModel : PageModel
 #pragma warning restore SA1649 // File name should match first type name
     {
-        private const string GuestId = "guest_id";
-
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly ILogger<LoginModel> logger;
         private readonly IOrdersService orderService;
@@ -93,12 +91,12 @@
 
                 if (result.Succeeded)
                 {
-                    var guestUserId = this.Request.Cookies[GuestId];
+                    var guestUserId = this.Request.Cookies[GlobalConstants.GuestId];
 
                     if (guestUserId != null)
                     {
                         await this.orderService.UpdateUserOrderAsync(this.Input.Email, guestUserId);
-                        this.Response.Cookies.Delete(GuestId);
+                        this.Response.Cookies.Delete(GlobalConstants.GuestId);
                     }
 
                     this.logger.LogInformation("User logged in.");

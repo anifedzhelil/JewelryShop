@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using JewelryShop.Common;
     using JewelryShop.Data.Models;
     using JewelryShop.Services.Data;
     using JewelryShop.Web.Components;
@@ -15,7 +15,6 @@
 
     public class OrdersController : Controller
     {
-        private const string GuestId = "guest_id";
         private readonly IOrdersService ordersService;
         private readonly UserManager<ApplicationUser> userManager;
 
@@ -34,15 +33,15 @@
                 option.Expires = DateTime.Now.AddDays(30);
                 option.IsEssential = true;
 
-                if (this.Request.Cookies[GuestId] == null)
+                if (this.Request.Cookies[GlobalConstants.GuestId] == null)
                 {
                     var guest_id = Guid.NewGuid();
-                    this.Response.Cookies.Append(GuestId, guest_id.ToString(), option);
+                    this.Response.Cookies.Append(GlobalConstants.GuestId, guest_id.ToString(), option);
                     await this.ordersService.AddGuestProductAsync(guest_id.ToString(), id, quantity);
                 }
                 else
                 {
-                    await this.ordersService.AddGuestProductAsync(this.Request.Cookies[GuestId], id, quantity);
+                    await this.ordersService.AddGuestProductAsync(this.Request.Cookies[GlobalConstants.GuestId], id, quantity);
                 }
             }
             else
