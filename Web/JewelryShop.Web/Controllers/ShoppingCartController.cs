@@ -14,7 +14,6 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using OfficeOpenXml;
 
     public class ShoppingCartController : BaseController
     {

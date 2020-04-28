@@ -12,8 +12,6 @@
     {
         IQueryable<Jewel> GetAll();
 
-        IEnumerable<T> GetAllActived<T>(int? count = null);
-
         public IQueryable<Jewel> GetAllActivedByCategories(int? category);
 
         T GetById<T>(int id);

@@ -71,20 +71,6 @@
                 .OrderBy(c => c.Name);
         }
 
-        public IEnumerable<T> GetAllActived<T>(int? count = null)
-        {
-            IQueryable<Jewel> query = this.jewelryRepository.All()
-             .OrderBy(c => c.CreatedOn)
-             .Where(x => x.IsArchived == false);
-
-            if (count.HasValue)
-            {
-                query = query.Take(count.Value);
-            }
-
-            return query.To<T>().ToArray();
-        }
-
         public IQueryable<Jewel> GetAllActivedByCategories(int? category)
         {
             IQueryable<Jewel> query = this.jewelryRepository.All();
