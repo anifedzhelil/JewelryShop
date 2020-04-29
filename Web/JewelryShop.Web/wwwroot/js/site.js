@@ -27,6 +27,11 @@ function changeImage(image) {
     image.src = mainImage;
 }
 
+function showRateError()
+{
+    $("#alertLogin").css('visibility', 'visible');
+}
+
 function rate(id) {
 
     var radios = document.getElementsByName('rating');
@@ -42,7 +47,6 @@ function rate(id) {
     var review = document.getElementById("review").value;
     var token = $("#ratingsForm input[name=__RequestVerificationToken]").val();
     var json = { jewelId: id, rating: parseInt(selected_value), review: review };
-
     $.ajax({
         url: "/api/ratings",
         type: "POST",
@@ -301,27 +305,32 @@ function changeAddress(addresValue) {
 
 
 $(document).ready(function () {
-    $('.select2').select2();
-});
+    if ($("#mySelect2").length) {
+        $('.select2').select2();
 
-// Fetch the preselected item, and add to the control
-var token = $("#formSpeedy input[name=__RequestVerificationToken]").val();
-var officeSelect = $('#mySelect2');
+        // Fetch the preselected item, and add to the control
+        var token = $("#formSpeedy input[name=__RequestVerificationToken]").val();
+        var officeSelect = $('#mySelect2');
 
-$.ajax({
-    url: "/api/speedy",
-    type: "POST",
-    contentType: "application/json; charset=utf-8",
-    dataType: "json",
-    headers: { 'X-CSRF-TOKEN': token },
-}).then(function (data) {
-    // create the option and append to Select2
-    for (var num = 0; num < data.addresses.length; num++) {
-        var option = new Option(data.addresses[num].fullAddress, data.addresses[num].id, false, false);
-        officeSelect.append($("<option />").val(data.addresses[num].id).text(data.addresses[num].fullAddress));
+        $.ajax({
+            url: "/api/speedy",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            headers: { 'X-CSRF-TOKEN': token },
+        }).then(function (data) {
+            // create the option and append to Select2
+            for (var num = 0; num < data.addresses.length; num++) {
+                var option = new Option(data.addresses[num].fullAddress, data.addresses[num].id, false, false);
+                officeSelect.append($("<option />").val(data.addresses[num].id).text(data.addresses[num].fullAddress));
+            }
+
+        });
+
+
     }
-
 });
+
 
 $(document).ready(function () {
     $("#newAddress").click(function () {

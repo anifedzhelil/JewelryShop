@@ -130,8 +130,15 @@
                             </div>
                             <textarea id="review" class="form-control" rows="3" cols="50" placeholder="write a comment..."></textarea>
                             <br>
-                            <input type="submit" class="btn btn-info pull-right" onclick="rate(@Model.Id)" />
-                            <div class="alert alert-danger alert-dismissible" id="alertLogin" style="visibility:hidden;">
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <input type="submit" class="btn btn-info pull-right" onclick="rate(@Model.Id)" value="Гласувай" />
+                            }
+                            else
+                            { 
+                                <input type="submit" class="btn btn-info pull-right" onclick="showRateError()" value="Гласувай" />
+                            }
+                                <div class="alert alert-danger alert-dismissible" id="alertLogin" style="visibility:hidden;">
                                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                                 <strong>За да оставите отзив, моля влезте във Вашия профил!</strong> .
                             </div>
