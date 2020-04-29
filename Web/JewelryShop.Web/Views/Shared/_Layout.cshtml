@@ -35,9 +35,6 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Contact">Контакти</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
                             @await Component.InvokeAsync(typeof(JewelryShop.Web.Components.ShoppingCartComponent))
 
                         </li>
@@ -61,7 +58,7 @@
                 <partial name="_Facebook" />
             </div>
             <div class="row">
-            &copy; @DateTime.Now.Year - @GlobalConstants.SystemName - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; @DateTime.Now.Year - @GlobalConstants.SystemName - <a asp-area="" asp-controller="Home" asp-action="Privacy">Политика на поверителност</a>
             </div>
         </div>
     </footer>
