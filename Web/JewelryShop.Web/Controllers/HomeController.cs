@@ -34,7 +34,7 @@
 
             if (words != null && words.Count > 0)
             {
-                query = query.Where(c => EF.Functions.Like(c.Description, $"%{words[0]}%") || EF.Functions.Like(c.Name, $"%{words[0]}%"));
+                query = query.Where(c => c.Description.Contains(words[0]) || c.Description.Contains(words[0]));
             }
 
             switch (sort)
